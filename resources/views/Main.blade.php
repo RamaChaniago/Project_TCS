@@ -11,6 +11,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -19,11 +20,47 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        .dropdown {
-            position: relative;
-            display: inline-block;
+        :root {
+            --primary-color: #3f51b5;
+            --secondary-color: #f50057;
+            --light-bg: #f8f9fa;
+            --dark-bg: #212529;
+            --text-color: #333;
+            --hover-color: #303f9f;
         }
 
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-color);
+            font-weight: 500;
+            margin: 0 10px;
+            position: relative;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        /* Dropdown */
         .dropdown-content {
             display: none;
             position: absolute;
@@ -31,38 +68,65 @@
             left: 0;
             background-color: white;
             min-width: 250px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             z-index: 50;
             border-radius: 8px;
             overflow: hidden;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .dropdown:hover .dropdown-content {
             display: block;
-            animation: fadeIn 0.3s ease;
         }
 
-        .marquee {
+        .dropdown-item {
+            padding: 10px 15px;
+            transition: background 0.3s ease-in-out;
+            border-radius: 5px;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(63, 81, 181, 0.1);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 25px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Splash Screen */
+        .splash-container {
+            position: fixed;
             width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+            color: white;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out;
         }
 
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 20s linear infinite;
+        .splash-logo {
+            width: 150px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
         }
 
-        @keyframes marquee {
-            0% {
-                transform: translateX(100%);
-            }
-
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
+        /* Animations */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -75,38 +139,57 @@
             }
         }
 
-        .nav-link {
-            position: relative;
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
         }
 
-        .nav-link:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background-color: #4F46E5;
-            transition: width 0.3s ease;
-        }
+        /* Responsive */
+        @media (max-width: 992px) {
+            .navbar-collapse {
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
 
-        .nav-link:hover:after {
-            width: 100%;
-        }
-
-        .btn-primary {
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            .content-container {
+                padding: 20px;
+            }
         }
     </style>
 
 </head>
 
 <body class="bg-gray-50 font-sans">
+    <!-- Splash Screen -->
+    <div class="splash-container fade-out" id="splashScreen">
+        <div class="logo">
+            <div class="logo-text">T</div>
+        </div>
+        <h1 class="app-name">TOEFL Test Application</h1>
+        <p class="app-description">Sistem ujian TOEFL online berbasis web untuk meningkatkan kemampuan bahasa Inggris
+            Anda</p>
+        <div class="d-flex">
+            <div class="spinner-grow text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="bg-white shadow-md fixed w-full top-0 z-50">
         <div class="container mx-auto px-6 py-3">
