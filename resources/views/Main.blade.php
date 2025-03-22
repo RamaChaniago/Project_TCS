@@ -1,351 +1,406 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-{{-- Ini adalah halaman utama web D'Waroeng --}}
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'TOEFL Academy - Belajar TOEFL dengan Mudah')</title>
-    <!-- CSS & JS Libraries -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-    {{-- Bootstrap Icons --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>ToeflPCT - TOEFL Training & Certification</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <style>
-        :root {
-            --primary-color: #3f51b5;
-            --secondary-color: #f50057;
-            --light-bg: #f8f9fa;
-            --dark-bg: #212529;
-            --text-color: #333;
-            --hover-color: #303f9f;
-        }
-
+        /* Base Styles */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--light-bg);
-            color: var(--text-color);
+            color: #333;
             overflow-x: hidden;
+            padding-top: 70px;
+            /* Sesuaikan dengan tinggi navbar */
         }
 
-        /* Navbar */
+        /* Navbar Styles */
         .navbar {
-            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1050;
+            /* Pastikan lebih tinggi dari elemen lain */
             padding: 15px 0;
+            background-color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
         }
+
 
         .navbar-brand img {
-            height: 40px;
+            height: 45px;
         }
 
-        .navbar-nav .nav-link {
-            color: var(--text-color);
+        .nav-link {
             font-weight: 500;
+            color: #333 !important;
             margin: 0 10px;
             position: relative;
-            transition: color 0.3s ease-in-out;
         }
 
-        .navbar-nav .nav-link:hover {
-            color: var(--primary-color);
+        .nav-link:hover,
+        .nav-link.active {
+            color: #0066cc !important;
         }
 
-        /* Dropdown */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: white;
-            min-width: 250px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            z-index: 50;
-            border-radius: 8px;
-            overflow: hidden;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
 
         .dropdown-item {
-            padding: 10px 15px;
-            transition: background 0.3s ease-in-out;
-            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
         }
 
         .dropdown-item:hover {
-            background-color: rgba(63, 81, 181, 0.1);
+            background-color: #f0f7ff;
+            color: #0066cc;
         }
 
-        /* Buttons */
+        /* Button Styles */
         .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 25px;
+            background-color: #0066cc;
+            border: none;
             padding: 10px 25px;
+            border-radius: 50px;
             font-weight: 500;
-            transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
-            background-color: var(--hover-color);
+            background-color: #0055b3;
             transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid #0066cc;
+            color: #0066cc;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #0066cc;
+            color: white;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #0d1b2a;
+            color: #fff;
+            padding: 60px 0 20px;
+        }
+
+        footer h5 {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        footer ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        footer ul li {
+            margin-bottom: 10px;
+        }
+
+        footer ul li a {
+            color: #d0d0d0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer ul li a:hover {
+            color: #fff;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            color: #fff;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background-color: #0066cc;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
         }
 
         /* Splash Screen */
-        .splash-container {
+        .splash-screen {
             position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100vh;
+            height: 100%;
+            background-color: #ffffff;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
-            color: white;
             z-index: 9999;
-            transition: opacity 0.5s ease-in-out;
+            transition: all 0.5s ease;
+        }
+
+        .splash-content {
+            text-align: center;
         }
 
         .splash-logo {
-            width: 150px;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
+            width: 160px;
+            animation: pulse 1s infinite;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background-color: #0066cc;
+            animation: loading 2s ease-in-out forwards;
         }
 
         @keyframes pulse {
-
-            0%,
-            100% {
+            0% {
                 transform: scale(1);
             }
 
             50% {
-                transform: scale(1.1);
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
             }
         }
 
-        /* Responsive */
-        @media (max-width: 992px) {
-            .navbar-collapse {
-                background-color: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        @keyframes loading {
+            0% {
+                width: 0;
             }
 
-            .content-container {
-                padding: 20px;
+            100% {
+                width: 100%;
             }
         }
     </style>
-
 </head>
 
-<body class="bg-gray-50 font-sans">
+<body>
     <!-- Splash Screen -->
-    <div class="splash-container fade-out" id="splashScreen">
-        <div class="logo">
-            <div class="logo-text">T</div>
-        </div>
-        <h1 class="app-name">TOEFL Test Application</h1>
-        <p class="app-description">Sistem ujian TOEFL online berbasis web untuk meningkatkan kemampuan bahasa Inggris
-            Anda</p>
-        <div class="d-flex">
-            <div class="spinner-grow text-light" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-grow text-light" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-grow text-light" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+    <div class="splash-screen">
+        <div class="splash-content">
+            <img src="{{ asset('img/logo.png') }}" alt="ToeflPCT Logo" class="splash-logo">
+            <div class="loading-bar"></div>
+            <p>Loading amazing TOEFL courses for you...</p>
         </div>
     </div>
 
     <!-- Navbar -->
-    <nav class="bg-white shadow-md fixed w-full top-0 z-50">
-        <div class="container mx-auto px-6 py-3">
-            <div class="flex justify-between items-center">
-                <!-- Logo -->
-                <a href="/" class="flex items-center">
-                    <img src="/images/toefl-logo.png" alt="TOEFL Academy Logo" class="h-10">
-                    <span class="ml-3 text-xl font-bold text-indigo-700">TOEFL Academy</span>
-                </a>
-
-                <!-- Navigation Items -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/" class="nav-link text-gray-700 hover:text-indigo-600 font-medium">Beranda</a>
-
-                    <!-- Dropdown for Daftar Kursus -->
-                    <div class="dropdown">
-                        <a href="#"
-                            class="nav-link text-gray-700 hover:text-indigo-600 font-medium flex items-center">
-                            Daftar Kursus <i class="fas fa-chevron-down ml-1 text-xs"></i>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="{{ asset('img/logo.png') }}" alt="ToeflPCT Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Beranda</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Daftar Kursus
                         </a>
-                        <div class="dropdown-content rounded-lg mt-2">
-                            <div class="p-4 grid grid-cols-2 gap-2">
-                                <a href="/kursus/live-class" class="p-3 rounded-lg hover:bg-indigo-50 flex items-start">
-                                    <div class="p-2 rounded-full bg-indigo-100 mr-3">
-                                        <i class="fas fa-video text-indigo-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Live Class</p>
-                                        <p class="text-xs text-gray-600">Belajar langsung dengan instruktur</p>
-                                    </div>
-                                </a>
-                                <a href="/kursus/one-on-one" class="p-3 rounded-lg hover:bg-indigo-50 flex items-start">
-                                    <div class="p-2 rounded-full bg-indigo-100 mr-3">
-                                        <i class="fas fa-user-friends text-indigo-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">One on One</p>
-                                        <p class="text-xs text-gray-600">Bimbingan privat personal</p>
-                                    </div>
-                                </a>
-                                <a href="/kursus/certification-test"
-                                    class="p-3 rounded-lg hover:bg-indigo-50 flex items-start">
-                                    <div class="p-2 rounded-full bg-indigo-100 mr-3">
-                                        <i class="fas fa-certificate text-indigo-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Certification Test</p>
-                                        <p class="text-xs text-gray-600">Ujian sertifikasi resmi</p>
-                                    </div>
-                                </a>
-                                <a href="/kursus/learning-package"
-                                    class="p-3 rounded-lg hover:bg-indigo-50 flex items-start">
-                                    <div class="p-2 rounded-full bg-indigo-100 mr-3">
-                                        <i class="fas fa-box text-indigo-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Learning Package</p>
-                                        <p class="text-xs text-gray-600">Paket pembelajaran lengkap</p>
-                                    </div>
-                                </a>
-                                <a href="/kursus/smart-book" class="p-3 rounded-lg hover:bg-indigo-50 flex items-start">
-                                    <div class="p-2 rounded-full bg-indigo-100 mr-3">
-                                        <i class="fas fa-book text-indigo-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Smart Book</p>
-                                        <p class="text-xs text-gray-600">Materi pembelajaran digital</p>
-                                    </div>
-                                </a>
-                                <a href="/kursus/subscription"
-                                    class="p-3 rounded-lg hover:bg-indigo-50 flex items-start">
-                                    <div class="p-2 rounded-full bg-indigo-100 mr-3">
-                                        <i class="fas fa-sync-alt text-indigo-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Subscription</p>
-                                        <p class="text-xs text-gray-600">Akses semua konten premium</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <a href="/blog" class="nav-link text-gray-700 hover:text-indigo-600 font-medium">Blog</a>
-                    <a href="/promo" class="nav-link text-gray-700 hover:text-indigo-600 font-medium">Promo</a>
-                    <a href="/karir" class="nav-link text-gray-700 hover:text-indigo-600 font-medium">Karir</a>
-                </div>
-
-                <!-- Login Button -->
-                <a href="/login"
-                    class="btn-primary bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full flex items-center">
-                    <span>Masuk</span>
-                    <i class="fas fa-arrow-right ml-2"></i>
-                </a>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-500 hover:text-indigo-600 focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mobile Menu -->
-            <div id="mobile-menu" class="md:hidden hidden mt-4 pb-4">
-                <a href="/" class="block py-2 hover:bg-indigo-50 px-4 rounded">Beranda</a>
-                <div class="py-2 px-4">
-                    <button id="mobile-dropdown-btn" class="flex justify-between items-center w-full text-left">
-                        Daftar Kursus <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div id="mobile-dropdown" class="hidden mt-2 pl-4 border-l-2 border-indigo-200">
-                        <a href="/kursus/live-class" class="block py-2">Live Class</a>
-                        <a href="/kursus/one-on-one" class="block py-2">One on One</a>
-                        <a href="/kursus/certification-test" class="block py-2">Certification Test</a>
-                        <a href="/kursus/learning-package" class="block py-2">Learning Package</a>
-                        <a href="/kursus/smart-book" class="block py-2">Smart Book</a>
-                        <a href="/kursus/subscription" class="block py-2">Subscription</a>
-                    </div>
-                </div>
-                <a href="/blog" class="block py-2 hover:bg-indigo-50 px-4 rounded">Blog</a>
-                <a href="/promo" class="block py-2 hover:bg-indigo-50 px-4 rounded">Promo</a>
-                <a href="/karir" class="block py-2 hover:bg-indigo-50 px-4 rounded">Karir</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/courses.one-on-one">One on One</a></li>
+                            <li><a class="dropdown-item" href="/courses.certification-test">Certification Test</a></li>
+                            <li><a class="dropdown-item" href="/courses.live-class">Live Class</a></li>
+                            <li><a class="dropdown-item" href="/courses.learning-package">Learning Package</a></li>
+                            <li><a class="dropdown-item" href="/courses.smart-book">Smart Book</a></li>
+                            <li><a class="dropdown-item" href="/courses.subscription">Subscription</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Blog">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Promo">Promo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/karir">Karir</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="/login">Masuk</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
+    <!-- Main Content -->
+    @yield('content')
 
 
 
-    <div class="container-fluid">
-        @yield('content')
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Owl Carousel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Custom JS -->
     <script>
-        // Initialize AOS
+        // Splash Screen Animation
+        $(window).on('load', function() {
+            setTimeout(function() {
+                $('.splash-screen').fadeOut(500);
+            }, 2500);
+        });
+
+        // Initialize AOS Animation
         AOS.init({
             duration: 800,
             easing: 'ease-in-out',
             once: true
         });
 
-        // Mobile Menu Toggle
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+        // Navbar Scroll Effect
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 50) {
+                $('.navbar').addClass('scrolled');
+            } else {
+                $('.navbar').removeClass('scrolled');
+            }
         });
 
-        // Mobile Dropdown Toggle
-        document.getElementById('mobile-dropdown-btn').addEventListener('click', function() {
-            document.getElementById('mobile-dropdown').classList.toggle('hidden');
+        // Testimonial Carousel
+        $('.testimonial-carousel').owlCarousel({
+            loop: true,
+            margin: 30,
+            nav: false,
+            dots: true,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                992: {
+                    items: 3
+                }
+            }
         });
 
-        // Initialize any other custom scripts here
-        @yield('scripts')
+        // Logo Carousel (Partners)
+        $('.logo-carousel').owlCarousel({
+            loop: true,
+            margin: 30,
+            nav: false,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            autoplaySpeed: 2000,
+            responsive: {
+                0: {
+                    items: 2
+                },
+                576: {
+                    items: 3
+                },
+                768: {
+                    items: 4
+                },
+                992: {
+                    items: 5
+                }
+            }
+        });
+
+        // Blog Carousel
+        $('.blog-carousel').owlCarousel({
+            loop: true,
+            margin: 30,
+            nav: true,
+            navText: ['<i class="fas fa-arrow-left"></i>', '<i class="fas fa-arrow-right"></i>'],
+            dots: false,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                992: {
+                    items: 3
+                }
+            }
+        });
+
+        // FAQ Accordion
+        $('.faq-item').click(function() {
+            $(this).toggleClass('active');
+            $(this).find('.faq-answer').slideToggle();
+        });
     </script>
 </body>
 
