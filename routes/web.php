@@ -15,9 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('Main');
+Route::get('/member', function () {
+    return view('Member.MainDashboardMember');
+});
+Route::get('/login', function () {
+    return view('Auth.Login');
+});
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/login', [AuthController::class, 'index'])->name('Login');
+// Route::get('/login', [AuthController::class, 'index'])->name('Login');
 // Route::post('/login', [AuthController::class, 'proses_login']);
