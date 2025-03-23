@@ -17,15 +17,15 @@ Route::get('/admin', function () {
 });
 Route::get('/login', function () {
     return view('Auth.Login');
-});
-// Route::get('/', [HomeController::class, 'index']);
+})->name('login');
+Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/Karir', [KarirController::class, 'index']);
 
 
 
 Route::controller(screenController::class)->group(function(){
-    Route::get('/', 'home');
+    // Route::get('/', 'home');
     Route::get('/service', 'service');
     Route::get('/blog', 'blog');
     Route::get('/sertifikasi', 'sertifikasi');

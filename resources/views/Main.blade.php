@@ -250,7 +250,7 @@
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <img src="{{ asset('img/logo.png') }}" alt="ToeflPCT Logo">
+                <img src="{{ asset('assets/images/logo_speakout.png') }}" alt="ToeflPCT Logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -282,7 +282,7 @@
                         <a class="nav-link" href="/Promo">Promo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/karir">Karir</a>
+                        <a class="nav-link" href="/Karir">Karir</a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-primary" href="/login">Masuk</a>
