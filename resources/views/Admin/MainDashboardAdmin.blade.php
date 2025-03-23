@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Member - ToeflPCT</title>
+    <title>Dashboard Admin - ToeflPCT</title>
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -226,6 +226,16 @@
             object-fit: cover;
         }
 
+        /* Admin badge styling */
+        .admin-badge {
+            background-color: #dc3545;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+
         /* Content Area Adjustment */
         #content {
             margin-left: 250px;
@@ -358,11 +368,11 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Beranda</a>
+                        <a class="nav-link" href="#">Dashboard</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button">
-                            Daftar Kursus
+                            Kursus Management
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Live Class</a></li>
@@ -374,34 +384,25 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Blog</a>
+                        <a class="nav-link" href="#">Users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Promo</a>
+                        <a class="nav-link" href="#">Reports</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Karir</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Kelas Saya</a>
-                    </li>
-                    <li class="nav-item me-2">
-                        <a class="nav-link cart-button" href="#">
-                            <i class="bi bi-cart fs-5"></i>
-                            <span class="cart-count">3</span>
-                        </a>
+                        <a class="nav-link" href="#">Settings</a>
                     </li>
                     <li class="nav-item dropdown user-profile-nav active">
                         <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
-                            <img src="images/user-avatar.jpg" alt="User Profile">
+                            <img src="images/admin-avatar.jpg" alt="Admin Profile">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profil Saya</a></li>
-                            <li><a class="dropdown-item" href="#">Pengaturan</a></li>
+                            <li><a class="dropdown-item" href="#">Admin Profile</a></li>
+                            <li><a class="dropdown-item" href="#">System Settings</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Keluar</a></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -417,9 +418,9 @@
 
         <!-- Profile Section -->
         <div class="sidebar-profile">
-            <img src="images/user-avatar.jpg" alt="User Profile" class="rounded-circle">
+            <img src="images/admin-avatar.jpg" alt="Admin Profile" class="rounded-circle">
             <div class="sidebar-profile-text">
-                <h6 class="mb-1">John Doe</h6>
+                <h6 class="mb-0">Admin User <span class="admin-badge">Admin</span></h6>
                 <a href="#" class="text-decoration-none small">View Profile</a>
             </div>
         </div>
@@ -429,32 +430,56 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a href="#" class="nav-link active">
-                        <i class="bi bi-receipt"></i>
-                        <span class="sidebar-item-text">Transaction</span>
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="sidebar-item-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-people"></i>
+                        <span class="sidebar-item-text">User Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="bi bi-book"></i>
-                        <span class="sidebar-item-text">Learning Package</span>
+                        <span class="sidebar-item-text">Course Management</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-receipt"></i>
+                        <span class="sidebar-item-text">Transactions</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="bi bi-award"></i>
-                        <span class="sidebar-item-text">Certification Test</span>
+                        <span class="sidebar-item-text">Certifications</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="bi bi-journal-text"></i>
-                        <span class="sidebar-item-text">Smart Book</span>
+                        <span class="sidebar-item-text">Content Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="bi bi-patch-check"></i>
-                        <span class="sidebar-item-text">Sertifikat</span>
+                        <i class="bi bi-percent"></i>
+                        <span class="sidebar-item-text">Promo Management</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-graph-up"></i>
+                        <span class="sidebar-item-text">Reports & Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-gear"></i>
+                        <span class="sidebar-item-text">System Settings</span>
                     </a>
                 </li>
             </ul>
@@ -464,8 +489,8 @@
     <!-- Main Content Area -->
     <div id="content">
         <div class="container-fluid p-4">
-            <h1>Dashboard Content</h1>
-            <p>This is a placeholder for the dashboard content. The actual content will be added separately.</p>
+            <h1>Admin Dashboard</h1>
+            <p>This is a placeholder for the admin dashboard content. The actual content will be added separately.</p>
         </div>
     </div>
 
