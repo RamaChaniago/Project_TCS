@@ -18,7 +18,8 @@ Route::get('/admin', function () {
 Route::get('/login', function () {
     return view('Auth.Login');
 });
-Route::get('/', [HomeController::class, 'index']);
+// Route::get('/', [HomeController::class, 'index']);
+
 Route::get('/Karir', [KarirController::class, 'index']);
 
 
