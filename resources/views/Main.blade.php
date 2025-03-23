@@ -238,13 +238,13 @@
 
 <body>
     <!-- Splash Screen -->
-    <div class="splash-screen">
+    {{-- <div class="splash-screen">
         <div class="splash-content">
             <img src="{{ asset('img/logo.png') }}" alt="ToeflPCT Logo" class="splash-logo">
             <div class="loading-bar"></div>
             <p>Loading amazing TOEFL courses for you...</p>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">

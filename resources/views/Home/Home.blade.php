@@ -64,7 +64,7 @@
         }
     </style>
     <!-- Hero Section -->
-    <section class="hero-section" style="background-image: url('{{ asset('img/hero-bg.jpg') }}');">
+    <section class="hero-section bg-danger" style="background-image: url('{{ asset('img/hero-bg.jpg') }}');">
         <div class="container">
             <div class="row align-items-center min-vh-75">
                 <div class="col-lg-6" data-aos="fade-right">
