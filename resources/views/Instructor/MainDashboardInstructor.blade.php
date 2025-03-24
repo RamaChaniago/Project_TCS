@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - ToeflPCT</title>
+    <title>Dashboard Instructor - ToeflPCT</title>
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -226,9 +226,9 @@
             object-fit: cover;
         }
 
-        /* Admin badge styling */
-        .admin-badge {
-            background-color: #dc3545;
+        /* Instructor badge styling */
+        .instructor-badge {
+            background-color: #28a745;
             color: white;
             font-size: 10px;
             padding: 2px 6px;
@@ -372,33 +372,31 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button">
-                            Kursus Management
+                            My Courses
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Live Class</a></li>
-                            <li><a class="dropdown-item" href="#">One on One</a></li>
-                            <li><a class="dropdown-item" href="#">Certification Test</a></li>
-                            <li><a class="dropdown-item" href="#">Learning Package</a></li>
-                            <li><a class="dropdown-item" href="#">Smart Book</a></li>
-                            <li><a class="dropdown-item" href="#">Subscription</a></li>
+                            <li><a class="dropdown-item" href="#">Live Classes</a></li>
+                            <li><a class="dropdown-item" href="#">One on One Sessions</a></li>
+                            <li><a class="dropdown-item" href="#">Practice Tests</a></li>
+                            <li><a class="dropdown-item" href="#">Learning Materials</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Users</a>
+                        <a class="nav-link" href="#">Students</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Reports</a>
+                        <a class="nav-link" href="#">Schedule</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Settings</a>
+                        <a class="nav-link" href="#">Resources</a>
                     </li>
                     <li class="nav-item dropdown user-profile-nav active">
                         <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
-                            <img src="images/admin-avatar.jpg" alt="Admin Profile">
+                            <img src="images/instructor-avatar.jpg" alt="Instructor Profile">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Admin Profile</a></li>
-                            <li><a class="dropdown-item" href="#">System Settings</a></li>
+                            <li><a class="dropdown-item" href="#">My Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Account Settings</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -418,9 +416,9 @@
 
         <!-- Profile Section -->
         <div class="sidebar-profile">
-            <img src="images/admin-avatar.jpg" alt="Admin Profile" class="rounded-circle">
+            <img src="images/instructor-avatar.jpg" alt="Instructor Profile" class="rounded-circle">
             <div class="sidebar-profile-text">
-                <h6 class="mb-0">Admin User <span class="admin-badge">Admin</span></h6>
+                <h6 class="mb-0">John Doe <span class="instructor-badge">Instructor</span></h6>
                 <a href="#" class="text-decoration-none small">View Profile</a>
             </div>
         </div>
@@ -436,50 +434,56 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
+                        <i class="bi bi-calendar-check"></i>
+                        <span class="sidebar-item-text">My Schedule</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-person-video3"></i>
+                        <span class="sidebar-item-text">Live Classes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-person"></i>
+                        <span class="sidebar-item-text">One on One</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
                         <i class="bi bi-people"></i>
-                        <span class="sidebar-item-text">User Management</span>
+                        <span class="sidebar-item-text">My Students</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="bi bi-book"></i>
-                        <span class="sidebar-item-text">Course Management</span>
+                        <i class="bi bi-file-earmark-text"></i>
+                        <span class="sidebar-item-text">Assignments</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="bi bi-receipt"></i>
-                        <span class="sidebar-item-text">Transactions</span>
+                        <i class="bi bi-journal-check"></i>
+                        <span class="sidebar-item-text">Assessments</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="bi bi-award"></i>
-                        <span class="sidebar-item-text">Certifications</span>
+                        <i class="bi bi-chat-dots"></i>
+                        <span class="sidebar-item-text">Messages</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="bi bi-journal-text"></i>
-                        <span class="sidebar-item-text">Content Management</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-percent"></i>
-                        <span class="sidebar-item-text">Promo Management</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-graph-up"></i>
-                        <span class="sidebar-item-text">Reports & Analytics</span>
+                        <i class="bi bi-file-earmark-richtext"></i>
+                        <span class="sidebar-item-text">Teaching Materials</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="bi bi-gear"></i>
-                        <span class="sidebar-item-text">System Settings</span>
+                        <span class="sidebar-item-text">Settings</span>
                     </a>
                 </li>
             </ul>
@@ -489,8 +493,8 @@
     <!-- Main Content Area -->
     <div id="content">
         <div class="container-fluid p-4">
-            <h1>Admin Dashboard</h1>
-            <p>This is a placeholder for the admin dashboard content. The actual content will be added separately.</p>
+            <h1>Instructor Dashboard</h1>
+            <p>This is a placeholder for the instructor dashboard content. The actual content will be added separately.</p>
         </div>
     </div>
 

@@ -1,8 +1,8 @@
 @extends('Main')
 
-@section('title') 
+@section('title')
 Login
-@endsection 
+@endsection
 
 @section('content')
 <div class="container py-5">
@@ -61,7 +61,7 @@ Login
                     </form>
                 </div>
                 <div class="card-footer bg-white text-center border-0 p-4">
-                    <p class="mb-0">Belum punya akun? <a href="" class="text-decoration-none fw-bold">Daftar sekarang</a></p>
+                    <p class="mb-0">Belum punya akun? <a href="/register" class="text-decoration-none fw-bold">Daftar sekarang</a></p>
                 </div>
             </div>
         </div>

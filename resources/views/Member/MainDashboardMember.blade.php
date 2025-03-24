@@ -428,31 +428,31 @@
         <div class="sidebar-menu">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active">
+                    <a href="/transaction" class="nav-link">
                         <i class="bi bi-receipt"></i>
                         <span class="sidebar-item-text">Transaction</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/learning-package" class="nav-link">
                         <i class="bi bi-book"></i>
                         <span class="sidebar-item-text">Learning Package</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/certification-test" class="nav-link">
                         <i class="bi bi-award"></i>
                         <span class="sidebar-item-text">Certification Test</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/smart-book" class="nav-link">
                         <i class="bi bi-journal-text"></i>
                         <span class="sidebar-item-text">Smart Book</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/sertifikat" class="nav-link">
                         <i class="bi bi-patch-check"></i>
                         <span class="sidebar-item-text">Sertifikat</span>
                     </a>
@@ -464,10 +464,13 @@
     <!-- Main Content Area -->
     <div id="content">
         <div class="container-fluid p-4">
-            <h1>Dashboard Content</h1>
-            <p>This is a placeholder for the dashboard content. The actual content will be added separately.</p>
+            @yield('content')
         </div>
     </div>
+
+    <!-- Main Content -->
+    {{-- @yield('content') --}}
+
 
 
     <!-- Bootstrap JS Bundle with Popper -->
@@ -532,6 +535,22 @@
 
             // Check on window resize
             window.addEventListener('resize', handleResponsiveLayout);
+            const navLinks = document.querySelectorAll('.sidebar-menu .nav-link');
+            const currentPath = window.location.pathname;
+
+            console.log("Current Path:", currentPath);
+
+            navLinks.forEach(link => {
+                const linkPath = link.getAttribute('href');
+                console.log("Checking:", linkPath);
+
+                // Pastikan path cocok sepenuhnya atau dengan pola
+                if (currentPath === linkPath || currentPath.startsWith(linkPath)) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
         });
     </script>
 

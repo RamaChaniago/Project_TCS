@@ -1,8 +1,8 @@
 @extends('Main')
 
-@section('title') 
+@section('title')
 Register
-@endsection 
+@endsection
 
 @section('content')
 <div class="container py-5">
@@ -25,43 +25,44 @@ Register
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('register') }}">
+                    <!-- Form register sementara dikomentari agar tidak error -->
+                    {{-- <form method="POST" action="{{ route('register') }}">
                         @csrf
 
                         <!-- Name -->
                         <div class="mb-3">
                             <label for="name" class="form-label">Nama Lengkap</label>
-                            <!-- <input type="text" class="form-control rounded-pill" id="name" name="name" value="{{ old('name') }}" required autofocus> -->
+                            <input type="text" class="form-control rounded-pill" id="name" name="name" value="{{ old('name') }}" required autofocus>
                         </div>
 
                         <!-- Email Address -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <!-- <input type="email" class="form-control rounded-pill" id="email" name="email" value="{{ old('email') }}" required> -->
+                            <input type="email" class="form-control rounded-pill" id="email" name="email" value="{{ old('email') }}" required>
                         </div>
 
                         <!-- Phone Number -->
                         <div class="mb-3">
                             <label for="phone" class="form-label">Nomor Telepon</label>
-                            <!-- <input type="tel" class="form-control rounded-pill" id="phone" name="phone" value="{{ old('phone') }}"> -->
+                            <input type="tel" class="form-control rounded-pill" id="phone" name="phone" value="{{ old('phone') }}">
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <!-- <input type="password" class="form-control rounded-pill" id="password" name="password" required autocomplete="new-password"> -->
+                            <input type="password" class="form-control rounded-pill" id="password" name="password" required autocomplete="new-password">
                             <div class="form-text">Minimal 8 karakter</div>
                         </div>
 
                         <!-- Confirm Password -->
                         <div class="mb-3">
                             <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                            <!-- <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" required> -->
+                            <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" required>
                         </div>
 
                         <!-- Terms and Conditions -->
                         <div class="mb-3 form-check">
-                            <!-- <input type="checkbox" class="form-check-input" id="terms" name="terms" required> -->
+                            <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
                             <label class="form-check-label" for="terms">
                                 Saya setuju dengan <a href="#" class="text-decoration-none">Syarat & Ketentuan</a> dan <a href="#" class="text-decoration-none">Kebijakan Privasi</a>
                             </label>
@@ -70,10 +71,10 @@ Register
                         <div class="d-grid gap-2 mb-3">
                             <button type="submit" class="btn btn-primary py-2 rounded-pill">Daftar Sekarang</button>
                         </div>
-                    </form>
+                    </form> --}}
                 </div>
                 <div class="card-footer bg-white text-center border-0 p-4">
-                    <p class="mb-0">Sudah punya akun? <a href="{{ route('login') }}" class="text-decoration-none fw-bold">Masuk di sini</a></p>
+                    <p class="mb-0">Sudah punya akun? <a href="/login" class="text-decoration-none fw-bold">Masuk di sini</a></p>
                 </div>
             </div>
         </div>
