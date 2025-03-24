@@ -64,7 +64,7 @@
         }
     </style>
     <!-- Hero Section -->
-    <section class="hero-section" style="background-image: url('{{ asset('img/hero-bg.jpg') }}');">
+    <section class="hero-section" style="background-image: url('{{ asset('assets/images/4.') }}');">
         <div class="container">
             <div class="row align-items-center min-vh-75">
                 <div class="col-lg-6" data-aos="fade-right">
@@ -90,7 +90,7 @@
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
                     <div class="hero-image text-center">
-                        <img src="{{ asset('img/hero-image.png') }}" alt="TOEFL Preparation" class="img-fluid">
+                        <img src="{{ asset('assets/images/speakout1.png') }}" alt="TOEFL Preparation" class="img-fluid" width="75%">
                     </div>
                 </div>
             </div>
@@ -771,7 +771,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-                    <img src="{{ asset('img/logo-white.png') }}" alt="ToeflPCT Logo" class="mb-4" width="150">
+                    <img src="{{ asset('assets/images/logo_speakout.png') }}" alt="ToeflPCT Logo" class="mb-4" width="150">
                     <p>ToeflPCT adalah platform belajar bahasa Inggris dan persiapan TOEFL terkemuka di Indonesia dengan
                         berbagai program yang disesuaikan untuk kebutuhan Anda.</p>
                     <div class="social-icons mt-4">

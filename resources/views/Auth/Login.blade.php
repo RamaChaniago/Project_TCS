@@ -38,19 +38,13 @@ Login
                         <!-- Email Address -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <!-- <input type="email" class="form-control rounded-pill" id="email" name="email" value="{{ old('email') }}" required autofocus> -->
+                            <input type="email" class="form-control rounded-pill" id="email" name="email" value="{{ old('email') }}" required autofocus>
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <!-- <input type="password" class="form-control rounded-pill" id="password" name="password" required autocomplete="current-password"> -->
-                        </div>
-
-                        <!-- Remember Me -->
-                        <div class="mb-3 form-check">
-                            <!-- <input type="checkbox" class="form-check-input" id="remember_me" name="remember"> -->
-                            <label class="form-check-label" for="remember_me">Ingat saya</label>
+                            <input type="password" class="form-control rounded-pill" id="password" name="password" required autocomplete="current-password">
                         </div>
 
                         <div class="d-grid gap-2 mb-3">
@@ -67,7 +61,7 @@ Login
                     </form>
                 </div>
                 <div class="card-footer bg-white text-center border-0 p-4">
-                    <p class="mb-0">Belum punya akun? <a href="{{ route('register') }}" class="text-decoration-none fw-bold">Daftar sekarang</a></p>
+                    <p class="mb-0">Belum punya akun? <a href="" class="text-decoration-none fw-bold">Daftar sekarang</a></p>
                 </div>
             </div>
         </div>
