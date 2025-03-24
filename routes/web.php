@@ -26,7 +26,7 @@ Route::get('/login', function () {
     return view('Auth.Login');
 });
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/Karir', [KarirController::class, 'index']);
+Route::get('/Karir', [KarirController::class, 'inde00x']);
 
 // Route::get('/login', [AuthController::class, 'index'])->name('Login');
 // Route::post('/login', [AuthController::class, 'proses_login']);
