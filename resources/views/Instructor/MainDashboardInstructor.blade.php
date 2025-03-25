@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Member - ToeflPCT</title>
+    <title>Dashboard Instructor - ToeflPCT</title>
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -226,6 +226,16 @@
             object-fit: cover;
         }
 
+        /* Instructor badge styling */
+        .instructor-badge {
+            background-color: #28a745;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+
         /* Content Area Adjustment */
         #content {
             margin-left: 250px;
@@ -347,7 +357,7 @@
 
 <body>
     <!-- Navbar -->
-    {{-- <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
         <div class="container-fluid">
             <a class="navbar-brand ms-3" href="#">
                 <img src="images/ToeflPCT-logo.png" alt="ToeflPCT Logo" height="40">
@@ -358,57 +368,45 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Beranda</a>
+                        <a class="nav-link" href="#">Dashboard</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button">
-                            Daftar Kursus
+                            My Courses
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Live Class</a></li>
-                            <li><a class="dropdown-item" href="#">One on One</a></li>
-                            <li><a class="dropdown-item" href="#">Certification Test</a></li>
-                            <li><a class="dropdown-item" href="#">Learning Package</a></li>
-                            <li><a class="dropdown-item" href="#">Smart Book</a></li>
-                            <li><a class="dropdown-item" href="#">Subscription</a></li>
+                            <li><a class="dropdown-item" href="#">Live Classes</a></li>
+                            <li><a class="dropdown-item" href="#">One on One Sessions</a></li>
+                            <li><a class="dropdown-item" href="#">Practice Tests</a></li>
+                            <li><a class="dropdown-item" href="#">Learning Materials</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Blog</a>
+                        <a class="nav-link" href="#">Students</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Promo</a>
+                        <a class="nav-link" href="#">Schedule</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Karir</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Kelas Saya</a>
-                    </li>
-                    <li class="nav-item me-2">
-                        <a class="nav-link cart-button" href="#">
-                            <i class="bi bi-cart fs-5"></i>
-                            <span class="cart-count">3</span>
-                        </a>
+                        <a class="nav-link" href="#">Resources</a>
                     </li>
                     <li class="nav-item dropdown user-profile-nav active">
                         <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
-                            <img src="{{ asset('assets/images/profile.jpg') }}" alt="User Profile">
+                            <img src="images/instructor-avatar.jpg" alt="Instructor Profile">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profil Saya</a></li>
-                            <li><a class="dropdown-item" href="#">Pengaturan</a></li>
+                            <li><a class="dropdown-item" href="#">My Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Account Settings</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Keluar</a></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
-    </nav> --}}
-    @include('Main')
+    </nav>
     <!-- Sidebar -->
     <div id="sidebar">
         <!-- Toggle Sidebar Button (moved inside the sidebar) -->
@@ -418,9 +416,9 @@
 
         <!-- Profile Section -->
         <div class="sidebar-profile">
-            <img src="{{ asset('assets/images/profile.jpg') }}" alt="User Profile" class="rounded-circle">
+            <img src="images/instructor-avatar.jpg" alt="Instructor Profile" class="rounded-circle">
             <div class="sidebar-profile-text">
-                <h6 class="mb-1">John Doe</h6>
+                <h6 class="mb-0">John Doe <span class="instructor-badge">Instructor</span></h6>
                 <a href="#" class="text-decoration-none small">View Profile</a>
             </div>
         </div>
@@ -429,33 +427,63 @@
         <div class="sidebar-menu">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="/transaction" class="nav-link">
-                        <i class="bi bi-receipt"></i>
-                        <span class="sidebar-item-text">Transaction</span>
+                    <a href="#" class="nav-link active">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="sidebar-item-text">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/learning-package" class="nav-link">
-                        <i class="bi bi-book"></i>
-                        <span class="sidebar-item-text">Learning Package</span>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-calendar-check"></i>
+                        <span class="sidebar-item-text">My Schedule</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/certification-test" class="nav-link">
-                        <i class="bi bi-award"></i>
-                        <span class="sidebar-item-text">Certification Test</span>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-person-video3"></i>
+                        <span class="sidebar-item-text">Live Classes</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/smart-book" class="nav-link">
-                        <i class="bi bi-journal-text"></i>
-                        <span class="sidebar-item-text">Smart Book</span>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-person"></i>
+                        <span class="sidebar-item-text">One on One</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/sertifikat" class="nav-link">
-                        <i class="bi bi-patch-check"></i>
-                        <span class="sidebar-item-text">Sertifikat</span>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-people"></i>
+                        <span class="sidebar-item-text">My Students</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-file-earmark-text"></i>
+                        <span class="sidebar-item-text">Assignments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-journal-check"></i>
+                        <span class="sidebar-item-text">Assessments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-chat-dots"></i>
+                        <span class="sidebar-item-text">Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-file-earmark-richtext"></i>
+                        <span class="sidebar-item-text">Teaching Materials</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-gear"></i>
+                        <span class="sidebar-item-text">Settings</span>
                     </a>
                 </li>
             </ul>
@@ -465,13 +493,10 @@
     <!-- Main Content Area -->
     <div id="content">
         <div class="container-fluid p-4">
-            @yield('content')
+            <h1>Instructor Dashboard</h1>
+            <p>This is a placeholder for the instructor dashboard content. The actual content will be added separately.</p>
         </div>
     </div>
-
-    <!-- Main Content -->
-    {{-- @yield('content') --}}
-
 
 
     <!-- Bootstrap JS Bundle with Popper -->

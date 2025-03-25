@@ -360,7 +360,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
         <div class="container-fluid">
             <a class="navbar-brand ms-3" href="#">
-                <img src="images/ToeflPCT-logo.png" alt="ToeflPCT Logo" height="40">
+                <img src="{{ asset('assets/images/logo_speakout.png') }}" alt="ToeflPCT Logo" height="40">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
                 <span class="navbar-toggler-icon"></span>
@@ -368,7 +368,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Dashboard</a>
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button">
@@ -394,7 +394,7 @@
                     </li>
                     <li class="nav-item dropdown user-profile-nav active">
                         <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
-                            <img src="images/admin-avatar.jpg" alt="Admin Profile">
+                            <img src="{{ asset('assets/images/profile2.jpeg') }}" alt="Admin Profile">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">Admin Profile</a></li>
@@ -409,6 +409,7 @@
             </div>
         </div>
     </nav>
+    
     <!-- Sidebar -->
     <div id="sidebar">
         <!-- Toggle Sidebar Button (moved inside the sidebar) -->
@@ -418,7 +419,7 @@
 
         <!-- Profile Section -->
         <div class="sidebar-profile">
-            <img src="images/admin-avatar.jpg" alt="Admin Profile" class="rounded-circle">
+            <img src="{{ asset('assets/images/profile2.jpeg') }}" alt="Admin Profile" class="rounded-circle">
             <div class="sidebar-profile-text">
                 <h6 class="mb-0">Admin User <span class="admin-badge">Admin</span></h6>
                 <a href="#" class="text-decoration-none small">View Profile</a>
@@ -429,55 +430,55 @@
         <div class="sidebar-menu">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active">
+                    <a href="/dashboard" class="nav-link">
                         <i class="bi bi-speedometer2"></i>
                         <span class="sidebar-item-text">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/user-management" class="nav-link">
                         <i class="bi bi-people"></i>
                         <span class="sidebar-item-text">User Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/course-management" class="nav-link">
                         <i class="bi bi-book"></i>
                         <span class="sidebar-item-text">Course Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/admin-transaction" class="nav-link">
                         <i class="bi bi-receipt"></i>
                         <span class="sidebar-item-text">Transactions</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/certifications" class="nav-link">
                         <i class="bi bi-award"></i>
                         <span class="sidebar-item-text">Certifications</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/content-management" class="nav-link">
                         <i class="bi bi-journal-text"></i>
                         <span class="sidebar-item-text">Content Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/promo-management" class="nav-link">
                         <i class="bi bi-percent"></i>
                         <span class="sidebar-item-text">Promo Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/reports-analytics" class="nav-link">
                         <i class="bi bi-graph-up"></i>
                         <span class="sidebar-item-text">Reports & Analytics</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="system-settings" class="nav-link">
                         <i class="bi bi-gear"></i>
                         <span class="sidebar-item-text">System Settings</span>
                     </a>
@@ -489,8 +490,7 @@
     <!-- Main Content Area -->
     <div id="content">
         <div class="container-fluid p-4">
-            <h1>Admin Dashboard</h1>
-            <p>This is a placeholder for the admin dashboard content. The actual content will be added separately.</p>
+            @yield('content')
         </div>
     </div>
 
@@ -557,6 +557,22 @@
 
             // Check on window resize
             window.addEventListener('resize', handleResponsiveLayout);
+            const navLinks = document.querySelectorAll('.sidebar-menu .nav-link');
+            const currentPath = window.location.pathname;
+
+            console.log("Current Path:", currentPath);
+
+            navLinks.forEach(link => {
+                const linkPath = link.getAttribute('href');
+                console.log("Checking:", linkPath);
+
+                // Pastikan path cocok sepenuhnya atau dengan pola
+                if (currentPath === linkPath || currentPath.startsWith(linkPath)) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
         });
     </script>
 

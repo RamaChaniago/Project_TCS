@@ -23,6 +23,14 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
     <style>
         /* Base Styles */
         body {
@@ -233,6 +241,20 @@
                 width: 100%;
             }
         }
+
+        .navbar-nav .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .user-profile-nav img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -284,9 +306,39 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/Karir">Karir</a>
                     </li>
+
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/member">Kelas Saya</a>
+                    </li>
+
+
+                    <li class="nav-item me-2">
+                        <a class="nav-link cart-button" href="#">
+                            <i class="bi bi-cart fs-5"></i>
+                            <span class="cart-count">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown user-profile-nav active">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
+                            <img src="{{ asset('assets/images/profile.jpg') }}" width="10%" alt="profile">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profil Saya</a></li>
+                            <li><a class="dropdown-item" href="#">Pengaturan</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Keluar</a></li>
+                        </ul>
+                    </li>
+
+                    
+
                     <li class="nav-item">
                         <a class="btn btn-primary" href="/login">Masuk</a>
                     </li>
+
                 </ul>
             </div>
         </div>
@@ -294,6 +346,11 @@
 
     <!-- Main Content -->
     @yield('content')
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 
 
