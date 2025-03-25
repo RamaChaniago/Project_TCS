@@ -31,6 +31,36 @@ Route::get('/sertifikat', function () {
 Route::get('/admin', function () {
     return view('Admin.MainDashboardAdmin');
 });
+Route::get('/dashboard', function () {
+    return view('Admin.Dashboard');
+});
+Route::get('/user-management', function () {
+    return view('Admin.User-Management');
+});
+Route::get('/course-management', function () {
+    return view('Admin.Course-Management');
+});
+Route::get('/admin-transaction', function () {
+    return view('Admin.Transaction');
+});
+Route::get('/admin', function () {
+    return view('Admin.MainDashboardAdmin');
+});
+Route::get('/admin', function () {
+    return view('Admin.MainDashboardAdmin');
+});
+Route::get('/admin', function () {
+    return view('Admin.MainDashboardAdmin');
+});
+Route::get('/admin', function () {
+    return view('Admin.MainDashboardAdmin');
+});
+Route::get('/admin', function () {
+    return view('Admin.MainDashboardAdmin');
+});
+
+
+
 Route::get('/instructor', function () {
     return view('Instructor.MainDashboardInstructor');
 });

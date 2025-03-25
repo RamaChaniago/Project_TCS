@@ -429,55 +429,55 @@
         <div class="sidebar-menu">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active">
+                    <a href="/dashboard" class="nav-link">
                         <i class="bi bi-speedometer2"></i>
                         <span class="sidebar-item-text">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/user-management" class="nav-link">
                         <i class="bi bi-people"></i>
                         <span class="sidebar-item-text">User Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/course-management" class="nav-link">
                         <i class="bi bi-book"></i>
                         <span class="sidebar-item-text">Course Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/admin-transaction" class="nav-link">
                         <i class="bi bi-receipt"></i>
                         <span class="sidebar-item-text">Transactions</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/certifications" class="nav-link">
                         <i class="bi bi-award"></i>
                         <span class="sidebar-item-text">Certifications</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/content-management" class="nav-link">
                         <i class="bi bi-journal-text"></i>
                         <span class="sidebar-item-text">Content Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/promo-management" class="nav-link">
                         <i class="bi bi-percent"></i>
                         <span class="sidebar-item-text">Promo Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/reports-analytics" class="nav-link">
                         <i class="bi bi-graph-up"></i>
                         <span class="sidebar-item-text">Reports & Analytics</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="system-settings" class="nav-link">
                         <i class="bi bi-gear"></i>
                         <span class="sidebar-item-text">System Settings</span>
                     </a>
@@ -489,8 +489,7 @@
     <!-- Main Content Area -->
     <div id="content">
         <div class="container-fluid p-4">
-            <h1>Admin Dashboard</h1>
-            <p>This is a placeholder for the admin dashboard content. The actual content will be added separately.</p>
+            @yield('content')
         </div>
     </div>
 
