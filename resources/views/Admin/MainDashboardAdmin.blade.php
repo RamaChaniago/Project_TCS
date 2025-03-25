@@ -10,13 +10,17 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
-        /* Font dan Warna Dasar */
+        /* ============================= */
+        /* 1. Font dan Warna Dasar       */
+        /* ============================= */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f8f9fa;
         }
 
-        /* Navbar Styling */
+        /* ============================= */
+        /* 2. Navbar Styling             */
+        /* ============================= */
         .navbar {
             position: fixed;
             top: 0;
@@ -32,7 +36,6 @@
             height: 45px;
         }
 
-        /* Vertically center align navbar items */
         .navbar-nav {
             display: flex;
             align-items: center;
@@ -53,7 +56,9 @@
             color: #0066cc !important;
         }
 
-        /* Dropdown hover functionality */
+        /* ============================= */
+        /* 3. Dropdown Styling           */
+        /* ============================= */
         .navbar-nav .dropdown:hover .dropdown-menu {
             display: block;
             opacity: 1;
@@ -70,7 +75,6 @@
             background-color: white;
             border-radius: 5px;
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 0;
         }
 
         .navbar-nav .dropdown-item {
@@ -85,12 +89,13 @@
             transform: translateX(5px);
         }
 
-        /* Sidebar Styling with Smooth Transitions */
+        /* ============================= */
+        /* 4. Sidebar Styling            */
+        /* ============================= */
         #sidebar {
             width: 250px;
             position: fixed;
             top: 85px;
-            /* Adjusted to account for navbar height */
             left: 0;
             height: calc(100vh - 85px);
             background: white;
@@ -107,12 +112,12 @@
             padding-right: 0;
         }
 
+        /* Profil Sidebar */
         .sidebar-profile {
             display: flex;
             align-items: center;
             padding: 15px;
             border-bottom: 1px solid #eee;
-            transition: all 0.3s ease-in-out;
             white-space: nowrap;
         }
 
@@ -121,12 +126,10 @@
             height: 45px;
             border-radius: 50%;
             border: 2px solid #f0f0f0;
-            flex-shrink: 0;
         }
 
         .sidebar-profile-text {
             margin-left: 15px;
-            transition: all 0.3s ease-in-out;
             white-space: nowrap;
         }
 
@@ -139,6 +142,7 @@
             display: none;
         }
 
+        /* Menu Sidebar */
         .sidebar-menu .nav-link {
             display: flex;
             align-items: center;
@@ -168,7 +172,6 @@
             background-color: #e6f0ff;
             color: #0066cc !important;
             transform: translateX(5px);
-            /* Improved contrast for hover state */
             border-left: 3px solid #0066cc;
         }
 
@@ -181,19 +184,11 @@
             font-size: 18px;
             min-width: 24px;
             text-align: center;
-            flex-shrink: 0;
         }
 
-        .sidebar-item-text {
-            transition: opacity 0.2s ease-in-out;
-            opacity: 1;
-        }
-
-        #sidebar.collapsed .sidebar-item-text {
-            display: none;
-        }
-
-        /* Toggle Sidebar Button */
+        /* ============================= */
+        /* 5. Toggle Sidebar Button      */
+        /* ============================= */
         .toggle-sidebar {
             position: absolute;
             top: 10px;
@@ -218,7 +213,23 @@
             transform: scale(1.1);
         }
 
-        /* User profile styling in navbar */
+        /* ============================= */
+        /* 6. Content Area Adjustment    */
+        /* ============================= */
+        #content {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease-in-out;
+            min-height: 100vh;
+            padding-top: 85px;
+        }
+
+        #content.expanded {
+            margin-left: 70px;
+        }
+
+        /* ============================= */
+        /* 7. User Profile di Navbar     */
+        /* ============================= */
         .user-profile-nav img {
             width: 32px;
             height: 32px;
@@ -226,7 +237,9 @@
             object-fit: cover;
         }
 
-        /* Admin badge styling */
+        /* ============================= */
+        /* 8. Admin Badge Styling        */
+        /* ============================= */
         .admin-badge {
             background-color: #dc3545;
             color: white;
@@ -236,20 +249,9 @@
             margin-left: 5px;
         }
 
-        /* Content Area Adjustment */
-        #content {
-            margin-left: 250px;
-            transition: margin-left 0.3s ease-in-out;
-            min-height: 100vh;
-            padding-top: 85px;
-            /* Adjusted to account for navbar height */
-        }
-
-        #content.expanded {
-            margin-left: 70px;
-        }
-
-        /* Mobile View Responsiveness */
+        /* ============================= */
+        /* 9. Responsive Design          */
+        /* ============================= */
         @media (max-width: 992px) {
             #sidebar {
                 width: 70px;
@@ -267,50 +269,19 @@
                 margin-left: 250px;
             }
 
-            #sidebar .sidebar-profile-text {
-                display: none;
-            }
-
-            #sidebar.expanded .sidebar-profile-text {
-                display: block;
-            }
-
+            #sidebar .sidebar-profile-text,
             #sidebar .sidebar-item-text {
                 display: none;
             }
 
+            #sidebar.expanded .sidebar-profile-text,
             #sidebar.expanded .sidebar-item-text {
                 display: block;
             }
 
-            #sidebar .sidebar-profile {
-                justify-content: center;
-                padding: 15px 5px;
-            }
-
-            #sidebar.expanded .sidebar-profile {
-                justify-content: flex-start;
-                padding: 15px;
-            }
-
-            #sidebar .sidebar-menu .nav-link {
-                justify-content: center;
-                padding: 12px;
-                margin: 5px;
-            }
-
-            #sidebar.expanded .sidebar-menu .nav-link {
-                justify-content: flex-start;
-                padding: 12px 20px;
-                margin: 5px 10px;
-            }
-
-            /* For mobile view, revert to click dropdown since hover doesn't work well on touch */
+            /* Dropdown di navbar untuk mobile */
             .navbar-nav .dropdown:hover .dropdown-menu {
                 display: none;
-                opacity: 0;
-                transform: translateY(10px);
-                pointer-events: none;
             }
 
             .navbar-nav .dropdown.show .dropdown-menu {
@@ -321,34 +292,27 @@
             }
         }
 
-        /* Add this to your existing CSS in the style section */
         @media (min-width: 992px) {
             .user-profile-nav .dropdown-menu {
                 right: 0;
                 left: auto;
                 min-width: 180px;
-                /* Control the width */
                 max-width: 200px;
-                /* Limit maximum width */
                 margin-top: 10px;
-                /* Create some space from the navbar */
             }
         }
 
-        /* For mobile views */
         @media (max-width: 991.98px) {
             .user-profile-nav .dropdown-menu {
                 position: absolute;
                 right: 0;
                 left: auto;
                 width: 180px;
-                /* Fixed width for mobile */
                 transform: none !important;
-                /* Prevent any transformations that might cause issues */
             }
         }
 
-        /* Add a position relative to ensure dropdown positioning context */
+        /* Pastikan dropdown positioning context */
         .user-profile-nav {
             position: relative;
         }
@@ -409,7 +373,7 @@
             </div>
         </div>
     </nav>
-    
+
     <!-- Sidebar -->
     <div id="sidebar">
         <!-- Toggle Sidebar Button (moved inside the sidebar) -->
@@ -454,7 +418,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/certifications" class="nav-link">
+                    <a href="/certificate-admin" class="nav-link">
                         <i class="bi bi-award"></i>
                         <span class="sidebar-item-text">Certifications</span>
                     </a>
@@ -478,7 +442,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="system-settings" class="nav-link">
+                    <a href="/system-settings" class="nav-link">
                         <i class="bi bi-gear"></i>
                         <span class="sidebar-item-text">System Settings</span>
                     </a>

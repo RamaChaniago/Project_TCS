@@ -23,16 +23,18 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-    
+
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
     <style>
-        /* Base Styles */
+        /* ==========================
+   Base Styles
+   ========================== */
         body {
             font-family: 'Poppins', sans-serif;
             color: #333;
@@ -41,7 +43,9 @@
             /* Sesuaikan dengan tinggi navbar */
         }
 
-        /* Navbar Styles */
+        /* ==========================
+   Navbar Styles
+   ========================== */
         .navbar {
             position: fixed;
             top: 0;
@@ -53,7 +57,6 @@
             background-color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
 
         .navbar-brand img {
             height: 45px;
@@ -71,6 +74,23 @@
             color: #0066cc !important;
         }
 
+        .navbar-nav .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .user-profile-nav img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* ==========================
+   Dropdown Styles
+   ========================== */
         .dropdown-menu {
             border: none;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -87,7 +107,9 @@
             color: #0066cc;
         }
 
-        /* Button Styles */
+        /* ==========================
+   Button Styles
+   ========================== */
         .btn-primary {
             background-color: #0066cc;
             border: none;
@@ -117,7 +139,9 @@
             color: white;
         }
 
-        /* Footer Styles */
+        /* ==========================
+   Footer Styles
+   ========================== */
         footer {
             background-color: #0d1b2a;
             color: #fff;
@@ -149,6 +173,15 @@
             color: #fff;
         }
 
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+
+        /* ==========================
+   Social Media Icons
+   ========================== */
         .social-icons a {
             display: inline-block;
             width: 40px;
@@ -167,13 +200,9 @@
             transform: translateY(-3px);
         }
 
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 20px;
-            margin-top: 30px;
-        }
-
-        /* Splash Screen */
+        /* ==========================
+   Splash Screen Styles
+   ========================== */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -218,6 +247,9 @@
             animation: loading 2s ease-in-out forwards;
         }
 
+        /* ==========================
+   Animations
+   ========================== */
         @keyframes pulse {
             0% {
                 transform: scale(1);
@@ -240,20 +272,6 @@
             100% {
                 width: 100%;
             }
-        }
-
-        .navbar-nav .dropdown:hover .dropdown-menu {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .user-profile-nav img {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
         }
     </style>
 </head>
@@ -307,7 +325,7 @@
                         <a class="nav-link" href="/Karir">Karir</a>
                     </li>
 
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="/member">Kelas Saya</a>
                     </li>
@@ -333,7 +351,7 @@
                         </ul>
                     </li>
 
-                    
+
 
                     <li class="nav-item">
                         <a class="btn btn-primary" href="/login">Masuk</a>

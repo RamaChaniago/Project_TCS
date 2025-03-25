@@ -53,7 +53,7 @@
             color: #0066cc !important;
         }
 
-        /* Dropdown hover functionality */
+        /* Dropdown Styling */
         .navbar-nav .dropdown:hover .dropdown-menu {
             display: block;
             opacity: 1;
@@ -85,12 +85,11 @@
             transform: translateX(5px);
         }
 
-        /* Sidebar Styling with Smooth Transitions */
+        /* Sidebar Styling */
         #sidebar {
             width: 250px;
             position: fixed;
             top: 85px;
-            /* Adjusted to account for navbar height */
             left: 0;
             height: calc(100vh - 85px);
             background: white;
@@ -107,6 +106,7 @@
             padding-right: 0;
         }
 
+        /* Sidebar Profile */
         .sidebar-profile {
             display: flex;
             align-items: center;
@@ -139,6 +139,7 @@
             display: none;
         }
 
+        /* Sidebar Menu */
         .sidebar-menu .nav-link {
             display: flex;
             align-items: center;
@@ -168,7 +169,6 @@
             background-color: #e6f0ff;
             color: #0066cc !important;
             transform: translateX(5px);
-            /* Improved contrast for hover state */
             border-left: 3px solid #0066cc;
         }
 
@@ -226,14 +226,23 @@
             object-fit: cover;
         }
 
-        /* Instructor badge styling */
-        .instructor-badge {
-            background-color: #28a745;
-            color: white;
+        /* Role Badge Styling */
+        .instructor-badge,
+        .admin-badge {
             font-size: 10px;
             padding: 2px 6px;
             border-radius: 10px;
             margin-left: 5px;
+        }
+
+        .instructor-badge {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .admin-badge {
+            background-color: #dc3545;
+            color: white;
         }
 
         /* Content Area Adjustment */
@@ -242,14 +251,13 @@
             transition: margin-left 0.3s ease-in-out;
             min-height: 100vh;
             padding-top: 85px;
-            /* Adjusted to account for navbar height */
         }
 
         #content.expanded {
             margin-left: 70px;
         }
 
-        /* Mobile View Responsiveness */
+        /* Responsive Design */
         @media (max-width: 992px) {
             #sidebar {
                 width: 70px;
@@ -267,45 +275,17 @@
                 margin-left: 250px;
             }
 
-            #sidebar .sidebar-profile-text {
-                display: none;
-            }
-
-            #sidebar.expanded .sidebar-profile-text {
-                display: block;
-            }
-
+            #sidebar .sidebar-profile-text,
             #sidebar .sidebar-item-text {
                 display: none;
             }
 
+            #sidebar.expanded .sidebar-profile-text,
             #sidebar.expanded .sidebar-item-text {
                 display: block;
             }
 
-            #sidebar .sidebar-profile {
-                justify-content: center;
-                padding: 15px 5px;
-            }
-
-            #sidebar.expanded .sidebar-profile {
-                justify-content: flex-start;
-                padding: 15px;
-            }
-
-            #sidebar .sidebar-menu .nav-link {
-                justify-content: center;
-                padding: 12px;
-                margin: 5px;
-            }
-
-            #sidebar.expanded .sidebar-menu .nav-link {
-                justify-content: flex-start;
-                padding: 12px 20px;
-                margin: 5px 10px;
-            }
-
-            /* For mobile view, revert to click dropdown since hover doesn't work well on touch */
+            /* Navbar Dropdown for Mobile */
             .navbar-nav .dropdown:hover .dropdown-menu {
                 display: none;
                 opacity: 0;
@@ -321,34 +301,27 @@
             }
         }
 
-        /* Add this to your existing CSS in the style section */
+        /* User Profile Dropdown Positioning */
         @media (min-width: 992px) {
             .user-profile-nav .dropdown-menu {
                 right: 0;
                 left: auto;
                 min-width: 180px;
-                /* Control the width */
                 max-width: 200px;
-                /* Limit maximum width */
                 margin-top: 10px;
-                /* Create some space from the navbar */
             }
         }
 
-        /* For mobile views */
         @media (max-width: 991.98px) {
             .user-profile-nav .dropdown-menu {
                 position: absolute;
                 right: 0;
                 left: auto;
                 width: 180px;
-                /* Fixed width for mobile */
                 transform: none !important;
-                /* Prevent any transformations that might cause issues */
             }
         }
 
-        /* Add a position relative to ensure dropdown positioning context */
         .user-profile-nav {
             position: relative;
         }
@@ -494,7 +467,8 @@
     <div id="content">
         <div class="container-fluid p-4">
             <h1>Instructor Dashboard</h1>
-            <p>This is a placeholder for the instructor dashboard content. The actual content will be added separately.</p>
+            <p>This is a placeholder for the instructor dashboard content. The actual content will be added separately.
+            </p>
         </div>
     </div>
 

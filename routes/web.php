@@ -40,20 +40,20 @@ Route::get('/course-management', function () {
 Route::get('/admin-transaction', function () {
     return view('Admin.Transaction');
 });
-Route::get('/admin', function () {
-    return view('Admin.MainDashboardAdmin');
+Route::get('/certificate-admin', function () {
+    return view('Admin.Certification');
+});
+Route::get('/content-management', function () {
+    return view('Admin.Content-Management');
 });
 Route::get('/admin', function () {
     return view('Admin.MainDashboardAdmin');
 });
-Route::get('/admin', function () {
-    return view('Admin.MainDashboardAdmin');
+Route::get('/reports-analytics', function () {
+    return view('Admin.Reports-Analytics');
 });
-Route::get('/admin', function () {
-    return view('Admin.MainDashboardAdmin');
-});
-Route::get('/admin', function () {
-    return view('Admin.MainDashboardAdmin');
+Route::get('/system-settings', function () {
+    return view('Admin.System-Settings');
 });
 
 
