@@ -95,7 +95,7 @@
 
 
                 <li class="nav-item me-2">
-                    <a class="nav-link cart-button" href="#">
+                    <a class="nav-link cart-button" href="/checkout">
                         <i class="bi bi-cart fs-5"></i>
                         <span class="cart-count">3</span>
                     </a>

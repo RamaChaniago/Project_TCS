@@ -136,6 +136,12 @@ Route::get('/settings-instructor', function () {
 
 
 
+Route::get('/checkout', function () {
+    return view('Checkout.Checkout');
+});
+
+
+
 
 
 Route::get('/Karir', [KarirController::class, 'index']);
