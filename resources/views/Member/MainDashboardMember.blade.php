@@ -408,6 +408,10 @@
             </div>
         </div>
     </nav> --}}
+    @include('Main')
+    
+    @include('sweetalert::alert')
+
     @include('Home.section.navbar')
     <!-- Sidebar -->
     <div id="sidebar">

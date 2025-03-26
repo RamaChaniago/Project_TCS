@@ -1,6 +1,9 @@
 <?php
 
+
 use App\Http\Controllers\CertificationTestController;
+use App\Http\Controllers\Auth\authController;
+use App\Http\Controllers\Auth\registerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KarirController;
 use App\Http\Controllers\LearningPackageController;
@@ -11,6 +14,37 @@ use App\Http\Controllers\SmartBookController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
+
+//Jngan diganggu dalam tahap pengembangan
+Route::get('/', [HomeController::class, 'index']);
+
+Route::get('/login', function () {
+    return view('Auth.Login');
+})->name('login');
+Route::post('/login', [authController::class, 'store']);
+
+
+Route::get('/register', function () {
+    return view('Auth.Register');
+})-> name('register');
+Route::post('/register', [registerController::class, 'store']);
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+
+//Route For Admin
+
+
+
+
+
+//Route For Member
+
+
+
+
+//Route For Instruktur
 
 Route::get('/member', function () {
     return view('Member.MainDashboardMember');
@@ -57,9 +91,6 @@ Route::get('/certificate-admin', function () {
 Route::get('/content-management', function () {
     return view('Admin.Content-Management');
 });
-Route::get('/admin', function () {
-    return view('Admin.MainDashboardAdmin');
-});
 Route::get('/reports-analytics', function () {
     return view('Admin.Reports-Analytics');
 });
@@ -105,23 +136,20 @@ Route::get('/settings-instructor', function () {
 
 
 
-Route::get('/login', function () {
-    return view('Auth.Login');
-})->name('login');
-
-
-Route::get('/register', function () {
-    return view('Auth.Register');
-})->name('Register');
-
-Route::get('/', [HomeController::class, 'index']);
 
 
 Route::get('/Karir', [KarirController::class, 'index']);
 Route::get('/Promo', [PromoController::class, 'index']);
+
 Route::get('/courses-one-on-one', [OneOnOneController::class, 'index']);
 Route::get('/courses-certification-test', [CertificationTestController::class, 'index']);
 Route::get('/courses-live-class', [LiveClassesController::class, 'index']);
 Route::get('/courses-learning-package', [LearningPackageController::class, 'index']);
 Route::get('/courses-smart-book', [SmartBookController::class, 'index']);
 Route::get('/courses-subscription', [SubscriptionController::class, 'index']);
+
+Route::get('/Karir', [KarirController::class, 'index']);
+
+Route::middleware(['auth', 'cekRole:admin'])->group(function(){
+
+});

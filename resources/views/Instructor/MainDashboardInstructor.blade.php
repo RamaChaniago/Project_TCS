@@ -329,6 +329,8 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
         <div class="container-fluid">
@@ -373,7 +375,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
