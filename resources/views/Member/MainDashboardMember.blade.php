@@ -408,7 +408,7 @@
             </div>
         </div>
     </nav> --}}
-    @include('Main')
+    @include('Home.section.navbar')
     <!-- Sidebar -->
     <div id="sidebar">
         <!-- Toggle Sidebar Button (moved inside the sidebar) -->
@@ -421,7 +421,7 @@
             <img src="{{ asset('assets/images/profile.jpg') }}" alt="User Profile" class="rounded-circle">
             <div class="sidebar-profile-text">
                 <h6 class="mb-1">Oline Manuel Chay</h6>
-                <a href="#" class="text-decoration-none small">View Profile</a>
+                <a href="/profile-member" class="text-decoration-none small">View Profile</a>
             </div>
         </div>
 

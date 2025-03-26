@@ -81,6 +81,13 @@
             pointer-events: auto;
         }
 
+        /* navbar-active.css */
+        .navbar-nav .nav-link.active {
+            color: #007bff !important;
+            /* Warna biru Bootstrap */
+            font-weight: bold;
+        }
+
         .user-profile-nav img {
             width: 32px;
             height: 32px;
@@ -177,6 +184,10 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 20px;
             margin-top: 30px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         /* ==========================
@@ -372,6 +383,7 @@
 
 
 
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS Bundle -->
@@ -475,6 +487,25 @@
         $('.faq-item').click(function() {
             $(this).toggleClass('active');
             $(this).find('.faq-answer').slideToggle();
+        });
+
+        // navbar-active.js
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dapatkan URL saat ini
+            const currentLocation = window.location.pathname;
+
+            // Pilih semua nav links
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+            navLinks.forEach(link => {
+                // Hapus kelas active dari semua link
+                link.classList.remove('active');
+
+                // Periksa apakah href link cocok dengan URL saat ini
+                if (link.getAttribute('href') === currentLocation) {
+                    link.classList.add('active');
+                }
+            });
         });
     </script>
 </body>
