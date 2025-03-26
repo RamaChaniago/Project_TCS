@@ -444,12 +444,12 @@
                         <span class="sidebar-item-text">Assessments</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="/messages-instructor" class="nav-link">
                         <i class="bi bi-chat-dots"></i>
                         <span class="sidebar-item-text">Messages</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a href="/materials" class="nav-link">
                         <i class="bi bi-file-earmark-richtext"></i>
@@ -469,8 +469,7 @@
     <!-- Main Content Area -->
     <div id="content">
         <div class="container-fluid p-4">
-            <h1>Instructor Dashboard</h1>
-            <p>This is a placeholder for the instructor dashboard content. The actual content will be added separately.
+            @yield('content')
             </p>
         </div>
     </div>

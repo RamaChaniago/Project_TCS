@@ -1,20 +1,32 @@
 <style>
-    .social-icons a {
-    display: inline-block;
-    font-size: 20px;
-    color: white; /* Sesuaikan warna ikon */
-    margin-right: 10px;
-    text-decoration: none;
-    transition: color 0.3s ease;
+.social-icons {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+}
+
+.social-icons a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: all 0.3s ease;
 }
 
 .social-icons a:hover {
-    color: #007bff; /* Warna saat hover */
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.1);
 }
 
 .social-icons a i {
-    background: none !important; /* Memastikan tidak ada background */
-    border-radius: 0 !important;
+    font-size: 20px;
+    margin: 0;
     padding: 0;
 }
 

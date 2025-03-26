@@ -57,6 +57,11 @@ Route::get('/smart-book', function () {
 Route::get('/sertifikat', function () {
     return view('Member.Sertifikat');
 });
+Route::get('/profile-member', function () {
+    return view('Profile.Profile_Member.MainProfil');
+});
+
+
 
 Route::get('/admin', function () {
     return view('Admin.MainDashboardAdmin');
@@ -95,7 +100,7 @@ Route::get('/dashboard-instructor', function () {
     return view('Instructor.Dashboard');
 });
 Route::get('/schedule-instructor', function () {
-    return view('Instructor.MainDashboardInstructor');
+    return view('Instructor.Schedule');
 });
 Route::get('/live-classes-instructor', function () {
     return view('Instructor.MainDashboardInstructor');
@@ -104,22 +109,22 @@ Route::get('/one-on-one-instructor', function () {
     return view('Instructor.MainDashboardInstructor');
 });
 Route::get('/students-instructor', function () {
-    return view('Instructor.MainDashboardInstructor');
+    return view('Instructor.MyStudent');
 });
 Route::get('/assignments-instructor', function () {
-    return view('Instructor.MainDashboardInstructor');
+    return view('Instructor.Assignment');
 });
-Route::get('/assessment-instructor', function () {
-    return view('Instructor.MainDashboardInstructor');
+Route::get('/assessments-instructor', function () {
+    return view('Instructor.Assessment');
 });
 Route::get('/messages-instructor', function () {
     return view('Instructor.MainDashboardInstructor');
 });
 Route::get('/materials', function () {
-    return view('Instructor.MainDashboardInstructor');
+    return view('Instructor.TeachingMaterial');
 });
 Route::get('/settings-instructor', function () {
-    return view('Instructor.MainDashboardInstructor');
+    return view('Instructor.Settings');
 });
 
 
