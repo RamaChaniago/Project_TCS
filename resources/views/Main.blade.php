@@ -318,12 +318,12 @@
                             Daftar Kursus
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/courses.one-on-one">One on One</a></li>
-                            <li><a class="dropdown-item" href="/courses.certification-test">Certification Test</a></li>
-                            <li><a class="dropdown-item" href="/courses.live-class">Live Class</a></li>
-                            <li><a class="dropdown-item" href="/courses.learning-package">Learning Package</a></li>
-                            <li><a class="dropdown-item" href="/courses.smart-book">Smart Book</a></li>
-                            <li><a class="dropdown-item" href="/courses.subscription">Subscription</a></li>
+                            <li><a class="dropdown-item" href="/courses-one-on-one">One on One</a></li>
+                            <li><a class="dropdown-item" href="/courses-certification-test">Certification Test</a></li>
+                            <li><a class="dropdown-item" href="/courses-live-class">Live Class</a></li>
+                            <li><a class="dropdown-item" href="/courses-learning-package">Learning Package</a></li>
+                            <li><a class="dropdown-item" href="/courses-smart-book">Smart Book</a></li>
+                            <li><a class="dropdown-item" href="/courses-subscription">Subscription</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

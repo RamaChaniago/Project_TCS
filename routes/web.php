@@ -1,8 +1,14 @@
 <?php
 
+use App\Http\Controllers\CertificationTestController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KarirController;
+use App\Http\Controllers\LearningPackageController;
+use App\Http\Controllers\LiveClassesController;
+use App\Http\Controllers\OneOnOneController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\SmartBookController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -113,7 +119,9 @@ Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/Karir', [KarirController::class, 'index']);
 Route::get('/Promo', [PromoController::class, 'index']);
-
-Route::get('/Karir', [KarirController::class, 'index']);
-
-
+Route::get('/courses-one-on-one', [OneOnOneController::class, 'index']);
+Route::get('/courses-certification-test', [CertificationTestController::class, 'index']);
+Route::get('/courses-live-class', [LiveClassesController::class, 'index']);
+Route::get('/courses-learning-package', [LearningPackageController::class, 'index']);
+Route::get('/courses-smart-book', [SmartBookController::class, 'index']);
+Route::get('/courses-subscription', [SubscriptionController::class, 'index']);
