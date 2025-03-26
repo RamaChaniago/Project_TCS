@@ -61,6 +61,38 @@ Route::get('/system-settings', function () {
 Route::get('/instructor', function () {
     return view('Instructor.MainDashboardInstructor');
 });
+Route::get('/dashboard-instructor', function () {
+    return view('Instructor.Dashboard');
+});
+Route::get('/schedule-instructor', function () {
+    return view('Instructor.MainDashboardInstructor');
+});
+Route::get('/live-classes-instructor', function () {
+    return view('Instructor.MainDashboardInstructor');
+});
+Route::get('/one-on-one-instructor', function () {
+    return view('Instructor.MainDashboardInstructor');
+});
+Route::get('/students-instructor', function () {
+    return view('Instructor.MainDashboardInstructor');
+});
+Route::get('/assignments-instructor', function () {
+    return view('Instructor.MainDashboardInstructor');
+});
+Route::get('/assessment-instructor', function () {
+    return view('Instructor.MainDashboardInstructor');
+});
+Route::get('/messages-instructor', function () {
+    return view('Instructor.MainDashboardInstructor');
+});
+Route::get('/materials', function () {
+    return view('Instructor.MainDashboardInstructor');
+});
+Route::get('/settings-instructor', function () {
+    return view('Instructor.MainDashboardInstructor');
+});
+
+
 
 Route::get('/login', function () {
     return view('Auth.Login');

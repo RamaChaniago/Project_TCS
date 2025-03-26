@@ -385,8 +385,9 @@
         <div class="sidebar-profile">
             <img src="{{ asset('assets/images/profile2.jpeg') }}" alt="Admin Profile" class="rounded-circle">
             <div class="sidebar-profile-text">
-                <h6 class="mb-0">Admin User <span class="admin-badge">Admin</span></h6>
+                <h6 class="mb-0"> Rosemerian Chay</h6>
                 <a href="#" class="text-decoration-none small">View Profile</a>
+                <span class="admin-badge">Admin</span>
             </div>
         </div>
 

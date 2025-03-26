@@ -420,7 +420,7 @@
         <div class="sidebar-profile">
             <img src="{{ asset('assets/images/profile.jpg') }}" alt="User Profile" class="rounded-circle">
             <div class="sidebar-profile-text">
-                <h6 class="mb-1">John Doe</h6>
+                <h6 class="mb-1">Oline Manuel Chay</h6>
                 <a href="#" class="text-decoration-none small">View Profile</a>
             </div>
         </div>

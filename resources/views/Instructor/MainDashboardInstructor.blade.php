@@ -333,7 +333,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
         <div class="container-fluid">
             <a class="navbar-brand ms-3" href="#">
-                <img src="images/ToeflPCT-logo.png" alt="ToeflPCT Logo" height="40">
+                <img src="{{ asset('assets/images/logo_speakout.png') }}" alt="ToeflPCT Logo" height="40">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
                 <span class="navbar-toggler-icon"></span>
@@ -365,7 +365,7 @@
                     </li>
                     <li class="nav-item dropdown user-profile-nav active">
                         <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
-                            <img src="images/instructor-avatar.jpg" alt="Instructor Profile">
+                            <img src="{{ asset('assets/images/profile2.jpeg') }}" alt="Instructor Profile">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">My Profile</a></li>
@@ -389,10 +389,11 @@
 
         <!-- Profile Section -->
         <div class="sidebar-profile">
-            <img src="images/instructor-avatar.jpg" alt="Instructor Profile" class="rounded-circle">
+            <img src="{{ asset('assets/images/profile2.jpeg') }}" alt="Instructor Profile" class="rounded-circle">
             <div class="sidebar-profile-text">
-                <h6 class="mb-0">John Doe <span class="instructor-badge">Instructor</span></h6>
+                <h6 class="mb-0">Fritzy Rosemerian </h6>
                 <a href="#" class="text-decoration-none small">View Profile</a>
+                <span class="instructor-badge">Instructor</span>
             </div>
         </div>
 
@@ -400,61 +401,61 @@
         <div class="sidebar-menu">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active">
+                    <a href="/dashboard-instructor" class="nav-link active">
                         <i class="bi bi-speedometer2"></i>
                         <span class="sidebar-item-text">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/schedule-instructor" class="nav-link">
                         <i class="bi bi-calendar-check"></i>
                         <span class="sidebar-item-text">My Schedule</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/live-classes-instructor" class="nav-link">
                         <i class="bi bi-person-video3"></i>
                         <span class="sidebar-item-text">Live Classes</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/one-on-one-instructor" class="nav-link">
                         <i class="bi bi-person"></i>
                         <span class="sidebar-item-text">One on One</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/students-instructor" class="nav-link">
                         <i class="bi bi-people"></i>
                         <span class="sidebar-item-text">My Students</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/assignments-instructor" class="nav-link">
                         <i class="bi bi-file-earmark-text"></i>
                         <span class="sidebar-item-text">Assignments</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/assessments-instructor" class="nav-link">
                         <i class="bi bi-journal-check"></i>
                         <span class="sidebar-item-text">Assessments</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/messages-instructor" class="nav-link">
                         <i class="bi bi-chat-dots"></i>
                         <span class="sidebar-item-text">Messages</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/materials" class="nav-link">
                         <i class="bi bi-file-earmark-richtext"></i>
                         <span class="sidebar-item-text">Teaching Materials</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/settings-instructor" class="nav-link">
                         <i class="bi bi-gear"></i>
                         <span class="sidebar-item-text">Settings</span>
                     </a>
