@@ -14,13 +14,6 @@ Login
                     <p class="text-muted mb-0">Akses semua kursus dan materi TOEFL Anda</p>
                 </div>
                 <div class="card-body p-4">
-                    <!-- Session Status -->
-                    @if (session('status'))
-                        <div class="alert alert-success mb-3">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
                     <!-- Validation Errors -->
                     @if ($errors->any())
                         <div class="alert alert-danger mb-3">
@@ -38,26 +31,36 @@ Login
                         <!-- Email Address -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control rounded-pill" id="email" name="email" value="{{ old('email') }}" required autofocus>
+                            <input type="email" class="form-control rounded-pill @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" autofocus>
+                            @error('email')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control rounded-pill" id="password" name="password" required autocomplete="current-password">
+                            <input type="password" class="form-control rounded-pill @error('password') is-invalid @enderror" id="password" name="password" autocomplete="current-password">
+                            @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="d-grid gap-2 mb-3">
                             <button type="submit" class="btn btn-primary py-2 rounded-pill">Masuk</button>
                         </div>
 
-                        <div class="text-center">
+                        {{-- <div class="text-center">
                             @if (Route::has('password.request'))
                                 <a href="{{ route('password.request') }}" class="text-decoration-none">
                                     Lupa password?
                                 </a>
                             @endif
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
                 <div class="card-footer bg-white text-center border-0 p-4">

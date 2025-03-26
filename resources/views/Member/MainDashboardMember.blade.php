@@ -409,6 +409,9 @@
         </div>
     </nav> --}}
     @include('Main')
+    
+    @include('sweetalert::alert')
+
     <!-- Sidebar -->
     <div id="sidebar">
         <!-- Toggle Sidebar Button (moved inside the sidebar) -->
