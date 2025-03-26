@@ -297,95 +297,17 @@
         </div>
     </div> --}}
 
-    @include('sweetalert::alert')
+    {{-- @include('sweetalert::alert') --}}
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <img src="{{ asset('assets/images/logo_speakout.png') }}" alt="ToeflPCT Logo">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/">Beranda</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Daftar Kursus
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/courses-one-on-one">One on One</a></li>
-                            <li><a class="dropdown-item" href="/courses-certification-test">Certification Test</a></li>
-                            <li><a class="dropdown-item" href="/courses-live-class">Live Class</a></li>
-                            <li><a class="dropdown-item" href="/courses-learning-package">Learning Package</a></li>
-                            <li><a class="dropdown-item" href="/courses-smart-book">Smart Book</a></li>
-                            <li><a class="dropdown-item" href="/courses-subscription">Subscription</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Blog">Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Promo">Promo</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Karir">Karir</a>
-                    </li>
-
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="/member">Kelas Saya</a>
-                    </li>
-
-
-                    <li class="nav-item me-2">
-                        <a class="nav-link cart-button" href="#">
-                            <i class="bi bi-cart fs-5"></i>
-                            <span class="cart-count">3</span>
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown user-profile-nav active">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
-                            <img src="{{ asset('assets/images/profile.jpg') }}" width="10%" alt="profile">
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profil Saya</a></li>
-                            <li><a class="dropdown-item" href="#">Pengaturan</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                        </ul>
-                    </li>
-
-
-
-                    <li class="nav-item">
-                        <a class="btn btn-primary" href="/login">Masuk</a>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+    
+    @include('Home.section.navbar')
     <!-- Main Content -->
     @yield('content')
 
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
-
-
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS Bundle -->

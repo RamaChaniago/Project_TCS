@@ -320,7 +320,7 @@
 </head>
 
 <body>
-    @include('sweetalert::alert')
+    {{-- @include('sweetalert::alert') --}}
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
