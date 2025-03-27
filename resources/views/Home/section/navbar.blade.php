@@ -78,9 +78,9 @@
                         <li><a class="dropdown-item" href="/courses-subscription">Subscription</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="/Blog">Blog</a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a class="nav-link" href="/Promo">Promo</a>
                 </li>

@@ -426,12 +426,12 @@
                         <span class="sidebar-item-text">Certifications</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="/content-management" class="nav-link">
                         <i class="bi bi-journal-text"></i>
                         <span class="sidebar-item-text">Content Management</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a href="/promo-management" class="nav-link">
                         <i class="bi bi-percent"></i>
