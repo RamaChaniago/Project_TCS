@@ -54,13 +54,6 @@ Login
                             <button type="submit" class="btn btn-primary py-2 rounded-pill">Masuk</button>
                         </div>
 
-                        {{-- <div class="text-center">
-                            @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="text-decoration-none">
-                                    Lupa password?
-                                </a>
-                            @endif
-                        </div> --}}
                     </form>
                 </div>
                 <div class="card-footer bg-white text-center border-0 p-4">
