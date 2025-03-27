@@ -185,8 +185,8 @@ return [
         /*
          * Package Service Providers...
          */
-        // RealRashid\SweetAlert\SweetAlertServiceProvider::class,
-        // RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
 
 

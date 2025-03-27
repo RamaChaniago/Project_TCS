@@ -26,7 +26,6 @@
             padding: 15px 0;
             background-color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
         }
 
         .navbar-brand img {
@@ -46,11 +45,7 @@
             position: relative;
             display: flex;
             align-items: center;
-        }
-
-        .navbar.scrolled {
-            padding: 10px 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100%;
         }
 
         .nav-link:hover,
@@ -59,8 +54,7 @@
         }
 
         /* Dropdown hover functionality */
-        .navbar-nav .dropdown:hover .dropdown-menu,
-        .navbar-nav .dropdown.show .dropdown-menu {
+        .navbar-nav .dropdown:hover .dropdown-menu {
             display: block;
             opacity: 1;
             transform: translateY(0);
@@ -76,12 +70,12 @@
             background-color: white;
             border-radius: 5px;
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-            /* margin-top: 0; */
+            margin-top: 0;
         }
 
         .navbar-nav .dropdown-item {
-            /* border: none;
-            padding: 8px 16px; */
+            border: none;
+            padding: 8px 16px;
             transition: all 0.2s ease;
         }
 
@@ -89,36 +83,6 @@
             background-color: #f0f7ff;
             color: #0066cc;
             transform: translateX(5px);
-        }
-
-        /* Button Styles */
-        .btn-primary {
-            background-color: #0066cc;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #0055b3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
-        }
-
-        .btn-outline-primary {
-            border: 2px solid #0066cc;
-            color: #0066cc;
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: #0066cc;
-            color: white;
         }
 
         /* Sidebar Styling with Smooth Transitions */
@@ -333,34 +297,17 @@
 
             /* For mobile view, revert to click dropdown since hover doesn't work well on touch */
             .navbar-nav .dropdown:hover .dropdown-menu {
+                display: none;
+                opacity: 0;
+                transform: translateY(10px);
+                pointer-events: none;
+            }
+
+            .navbar-nav .dropdown.show .dropdown-menu {
                 display: block;
                 opacity: 1;
                 transform: translateY(0);
                 pointer-events: auto;
-            }
-
-            .navbar-nav .dropdown-menu {
-                display: block;
-                opacity: 0;
-                transform: translateY(10px);
-                pointer-events: none;
-                transition: all 0.3s ease;
-                background-color: white;
-                border-radius: 5px;
-                box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-                margin-top: 0;
-            }
-
-            .navbar-nav .dropdown-item {
-                border: none;
-                padding: 8px 16px;
-                transition: all 0.2s ease;
-            }
-
-            .navbar-nav .dropdown-item:hover {
-                background-color: #f0f7ff;
-                color: #0066cc;
-                transform: translateX(5px);
             }
         }
 
@@ -395,26 +342,76 @@
         .user-profile-nav {
             position: relative;
         }
-
-        @media (max-width: 992px) {
-            .navbar-nav .dropdown:hover .dropdown-menu {
-                display: none;
-                opacity: 0;
-                transform: translateY(10px);
-                pointer-events: none;
-            }
-            .navbar-nav .dropdown.show .dropdown-menu {
-                display: block;
-                opacity: 1;
-                transform: translateY(0);
-                pointer-events: auto;
-            }
     </style>
 </head>
 
 <body>
-    {{-- @include('sweetalert::alert') --}}
     <!-- Navbar -->
+    {{-- <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-3" href="#">
+                <img src="images/ToeflPCT-logo.png" alt="ToeflPCT Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Beranda</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button">
+                            Daftar Kursus
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Live Class</a></li>
+                            <li><a class="dropdown-item" href="#">One on One</a></li>
+                            <li><a class="dropdown-item" href="#">Certification Test</a></li>
+                            <li><a class="dropdown-item" href="#">Learning Package</a></li>
+                            <li><a class="dropdown-item" href="#">Smart Book</a></li>
+                            <li><a class="dropdown-item" href="#">Subscription</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Promo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Karir</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Kelas Saya</a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <a class="nav-link cart-button" href="#">
+                            <i class="bi bi-cart fs-5"></i>
+                            <span class="cart-count">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown user-profile-nav active">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
+                            <img src="{{ asset('assets/images/profile.jpg') }}" alt="User Profile">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profil Saya</a></li>
+                            <li><a class="dropdown-item" href="#">Pengaturan</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Keluar</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav> --}}
+    @include('Main')
+    
+    @include('sweetalert::alert')
+
     @include('Home.section.navbar')
     <!-- Sidebar -->
     <div id="sidebar">
@@ -494,9 +491,13 @@
 
             // Function to toggle sidebar visibility with smooth animation
             function toggleSidebar() {
+                // Toggle sidebar collapsed state
                 sidebar.classList.toggle('collapsed');
+
+                // Toggle content expanded state
                 content.classList.toggle('expanded');
 
+                // Toggle icon direction
                 if (sidebar.classList.contains('collapsed')) {
                     toggleIcon.classList.remove('bi-chevron-left');
                     toggleIcon.classList.add('bi-chevron-right');
@@ -525,6 +526,7 @@
             function handleResponsiveLayout() {
                 if (window.innerWidth < 992) {
                     if (!sidebar.classList.contains('collapsed') && !sidebar.classList.contains('expanded')) {
+                        // Auto-collapse sidebar on small screens but still show icons
                         sidebar.classList.add('collapsed');
                         content.classList.add('expanded');
                         toggleIcon.classList.remove('bi-chevron-left');
