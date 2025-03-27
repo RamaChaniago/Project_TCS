@@ -297,10 +297,10 @@
         </div>
     </div> --}}
 
-    {{-- @include('sweetalert::alert') --}}
+    @include('sweetalert::alert')
 
     <!-- Navbar -->
-    
+
     @include('Home.section.navbar')
     <!-- Main Content -->
     @yield('content')
