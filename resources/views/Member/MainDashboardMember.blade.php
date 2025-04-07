@@ -33,7 +33,6 @@
             height: 45px;
         }
 
-        /* Vertically center align navbar items */
         .navbar-nav {
             display: flex;
             align-items: center;
@@ -44,8 +43,6 @@
             color: #333 !important;
             margin: 0 10px;
             position: relative;
-            display: flex;
-            align-items: center;
         }
 
         .navbar.scrolled {
@@ -58,37 +55,48 @@
             color: #0066cc !important;
         }
 
-        /* Dropdown hover functionality */
-        .navbar-nav .dropdown:hover .dropdown-menu,
-        .navbar-nav .dropdown.show .dropdown-menu {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .navbar-nav .dropdown-menu {
-            display: block;
-            opacity: 0;
-            transform: translateY(10px);
-            pointer-events: none;
+        /* Dropdown Styles */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: none;
             transition: all 0.3s ease;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-            /* margin-top: 0; */
         }
 
-        .navbar-nav .dropdown-item {
-            /* border: none;
-            padding: 8px 16px; */
-            transition: all 0.2s ease;
+        .dropdown-item {
+            padding: 10px 20px;
+            font-size: 0.9rem;
         }
 
-        .navbar-nav .dropdown-item:hover {
+        .dropdown-item:hover {
             background-color: #f0f7ff;
             color: #0066cc;
-            transform: translateX(5px);
+        }
+
+        /* Desktop dropdown hover functionality */
+        @media (min-width: 992px) {
+            .navbar-nav .dropdown:hover .dropdown-menu {
+                display: block;
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+
+            .navbar-nav .dropdown-menu {
+                display: block;
+                opacity: 0;
+                transform: translateY(10px);
+                pointer-events: none;
+                transition: all 0.3s ease;
+                background-color: white;
+                border-radius: 5px;
+                box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .dropdown-item:hover {
+                transform: translateX(5px);
+            }
         }
 
         /* Button Styles */
@@ -255,6 +263,10 @@
         }
 
         /* User profile styling in navbar */
+        .user-profile-nav {
+            position: relative;
+        }
+
         .user-profile-nav img {
             width: 32px;
             height: 32px;
@@ -276,7 +288,7 @@
         }
 
         /* Mobile View Responsiveness */
-        @media (max-width: 992px) {
+        @media (max-width: 991.98px) {
             #sidebar {
                 width: 70px;
             }
@@ -331,84 +343,60 @@
                 margin: 5px 10px;
             }
 
-            /* For mobile view, revert to click dropdown since hover doesn't work well on touch */
-            .navbar-nav .dropdown:hover .dropdown-menu {
-                display: block;
-                opacity: 1;
-                transform: translateY(0);
-                pointer-events: auto;
-            }
-
-            .navbar-nav .dropdown-menu {
-                display: block;
-                opacity: 0;
-                transform: translateY(10px);
-                pointer-events: none;
-                transition: all 0.3s ease;
+            /* Mobile nav adjustments - left aligned items */
+            .navbar-collapse {
                 background-color: white;
-                border-radius: 5px;
-                box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-                margin-top: 0;
+                padding: 15px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
             }
 
-            .navbar-nav .dropdown-item {
-                border: none;
-                padding: 8px 16px;
-                transition: all 0.2s ease;
+            .navbar-nav {
+                align-items: flex-start;
             }
 
-            .navbar-nav .dropdown-item:hover {
-                background-color: #f0f7ff;
-                color: #0066cc;
-                transform: translateX(5px);
+            .navbar-nav .nav-item {
+                width: 100%;
+                margin: 5px 0;
             }
-        }
 
-        /* Add this to your existing CSS in the style section */
-        @media (min-width: 992px) {
-            .user-profile-nav .dropdown-menu {
-                right: 0;
-                left: auto;
-                min-width: 180px;
-                /* Control the width */
-                max-width: 200px;
-                /* Limit maximum width */
-                margin-top: 10px;
-                /* Create some space from the navbar */
+            .navbar-nav .nav-link {
+                padding: 10px 15px;
+                width: 100%;
+                display: block;
+                margin: 0;
             }
-        }
 
-        /* For mobile views */
-        @media (max-width: 991.98px) {
-            .user-profile-nav .dropdown-menu {
-                position: absolute;
-                right: 0;
-                left: auto;
-                width: 180px;
-                /* Fixed width for mobile */
-                transform: none !important;
-                /* Prevent any transformations that might cause issues */
-            }
-        }
-
-        /* Add a position relative to ensure dropdown positioning context */
-        .user-profile-nav {
-            position: relative;
-        }
-
-        @media (max-width: 992px) {
+            /* Important: In mobile view, disable hover dropdown activation */
             .navbar-nav .dropdown:hover .dropdown-menu {
                 display: none;
-                opacity: 0;
-                transform: translateY(10px);
-                pointer-events: none;
             }
+
+            /* Only show dropdowns when clicked in mobile view */
             .navbar-nav .dropdown.show .dropdown-menu {
                 display: block;
                 opacity: 1;
                 transform: translateY(0);
                 pointer-events: auto;
+                position: static;
+                float: none;
+                width: 100%;
+                margin-top: 0;
+                background-color: #f8f9fa;
+                border-radius: 0;
+                box-shadow: none;
+                padding-left: 15px;
             }
+
+            /* Fix user profile dropdown on mobile */
+            .user-profile-nav .dropdown-menu {
+                position: absolute;
+                right: 0;
+                left: auto;
+                width: 180px;
+                background-color: white;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+        }
     </style>
 </head>
 
@@ -468,7 +456,6 @@
             </ul>
         </div>
     </div>
-
     <!-- Main Content Area -->
     <div id="content">
         <div class="container-fluid p-4">
@@ -478,84 +465,116 @@
 
     <!-- Main Content -->
     {{-- @yield('content') --}}
+ <!-- Bootstrap JS Bundle with Popper -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+ <!-- Custom JavaScript -->
+ <script>
+     document.addEventListener('DOMContentLoaded', function() {
+         const sidebar = document.getElementById('sidebar');
+         const content = document.getElementById('content');
+         const toggleButton = document.getElementById('toggle-sidebar-btn');
+         const toggleIcon = toggleButton.querySelector('i');
 
+         // Function to toggle sidebar visibility with smooth animation
+         function toggleSidebar() {
+             sidebar.classList.toggle('collapsed');
+             content.classList.toggle('expanded');
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+             if (sidebar.classList.contains('collapsed')) {
+                 toggleIcon.classList.remove('bi-chevron-left');
+                 toggleIcon.classList.add('bi-chevron-right');
+             } else {
+                 toggleIcon.classList.remove('bi-chevron-right');
+                 toggleIcon.classList.add('bi-chevron-left');
+             }
+         }
 
-    <!-- Custom JavaScript -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-            const toggleButton = document.getElementById('toggle-sidebar-btn');
-            const toggleIcon = toggleButton.querySelector('i');
+         // Add click event listener to toggle button
+         toggleButton.addEventListener('click', toggleSidebar);
 
-            // Function to toggle sidebar visibility with smooth animation
-            function toggleSidebar() {
-                sidebar.classList.toggle('collapsed');
-                content.classList.toggle('expanded');
+         // Handle dropdown behavior based on screen size
+         function handleDropdowns() {
+             const dropdowns = document.querySelectorAll('.navbar-nav .dropdown');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    toggleIcon.classList.remove('bi-chevron-left');
-                    toggleIcon.classList.add('bi-chevron-right');
-                } else {
-                    toggleIcon.classList.remove('bi-chevron-right');
-                    toggleIcon.classList.add('bi-chevron-left');
-                }
-            }
+             // Clear existing event listeners (important when resizing)
+             dropdowns.forEach(dropdown => {
+                 const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+                 if (dropdownToggle) {
+                     const newToggle = dropdownToggle.cloneNode(true);
+                     dropdownToggle.parentNode.replaceChild(newToggle, dropdownToggle);
+                 }
+             });
 
-            // Add click event listener to toggle button
-            toggleButton.addEventListener('click', toggleSidebar);
+             // For mobile view, setup click handling
+             if (window.innerWidth < 992) {
+                 dropdowns.forEach(dropdown => {
+                     const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+                     if (dropdownToggle) {
+                         dropdownToggle.addEventListener('click', function(e) {
+                             e.preventDefault();
+                             e.stopPropagation();
 
-            // Handle mobile dropdown behavior
-            if (window.innerWidth < 992) {
-                const dropdowns = document.querySelectorAll('.navbar-nav .dropdown');
-                dropdowns.forEach(dropdown => {
-                    const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
-                    dropdownToggle.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        dropdown.classList.toggle('show');
-                    });
-                });
-            }
+                             // Close all other open dropdowns
+                             dropdowns.forEach(d => {
+                                 if (d !== dropdown && d.classList.contains('show')) {
+                                     d.classList.remove('show');
+                                 }
+                             });
 
-            // Handle responsive behavior
-            function handleResponsiveLayout() {
-                if (window.innerWidth < 992) {
-                    if (!sidebar.classList.contains('collapsed') && !sidebar.classList.contains('expanded')) {
-                        sidebar.classList.add('collapsed');
-                        content.classList.add('expanded');
-                        toggleIcon.classList.remove('bi-chevron-left');
-                        toggleIcon.classList.add('bi-chevron-right');
-                    }
-                }
-            }
+                             dropdown.classList.toggle('show');
+                         });
+                     }
+                 });
 
-            // Check on page load
-            handleResponsiveLayout();
+                 // Close dropdowns when clicking outside
+                 document.addEventListener('click', function(e) {
+                     dropdowns.forEach(dropdown => {
+                         if (!dropdown.contains(e.target) && dropdown.classList.contains('show')) {
+                             dropdown.classList.remove('show');
+                         }
+                     });
+                 });
+             }
+         }
 
-            // Check on window resize
-            window.addEventListener('resize', handleResponsiveLayout);
-            const navLinks = document.querySelectorAll('.sidebar-menu .nav-link');
-            const currentPath = window.location.pathname;
+         // Handle responsive behavior
+         function handleResponsiveLayout() {
+             if (window.innerWidth < 992) {
+                 if (!sidebar.classList.contains('collapsed') && !sidebar.classList.contains('expanded')) {
+                     sidebar.classList.add('collapsed');
+                     content.classList.add('expanded');
+                     toggleIcon.classList.remove('bi-chevron-left');
+                     toggleIcon.classList.add('bi-chevron-right');
+                 }
+             }
 
-            console.log("Current Path:", currentPath);
+             // Always update dropdown behavior when resizing
+             handleDropdowns();
+         }
 
-            navLinks.forEach(link => {
-                const linkPath = link.getAttribute('href');
-                console.log("Checking:", linkPath);
+         // Check on page load
+         handleResponsiveLayout();
 
-                // Pastikan path cocok sepenuhnya atau dengan pola
-                if (currentPath === linkPath || currentPath.startsWith(linkPath)) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
-            });
-        });
-    </script>
+         // Check on window resize
+         window.addEventListener('resize', handleResponsiveLayout);
+
+         // Handle active sidebar links
+         const navLinks = document.querySelectorAll('.sidebar-menu .nav-link');
+         const currentPath = window.location.pathname;
+
+         navLinks.forEach(link => {
+             const linkPath = link.getAttribute('href');
+
+             // Make sure path matches completely or pattern
+             if (currentPath === linkPath || currentPath.startsWith(linkPath)) {
+                 link.classList.add('active');
+             } else {
+                 link.classList.remove('active');
+             }
+         });
+     });
+ </script>
 
 </body>
 

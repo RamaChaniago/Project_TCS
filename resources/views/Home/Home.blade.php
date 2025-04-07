@@ -693,7 +693,7 @@
     </section>
 
     <!-- Blog Section -->
-    <section class="blog-section py-5">
+    {{-- <section class="blog-section py-5">
         <div class="container py-4">
             <div class="section-header text-center mb-5" data-aos="fade-up">
                 <h2 class="fw-bold">Blog & Artikel Terbaru</h2>
@@ -765,7 +765,7 @@
                 <a href="#" class="btn btn-outline-primary">Lihat Semua Artikel</a>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Footer -->
-    
+
     @include('Home.section.footer')

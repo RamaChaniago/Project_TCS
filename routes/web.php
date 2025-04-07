@@ -47,7 +47,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 //Route For Instruktur
 
 Route::get('/member', function () {
-    return view('Member.MainDashboardMember');
+    return view('Member.Transaction');
 });
 Route::get('/transaction', function () {
     return view('Member.Transaction');
@@ -67,11 +67,14 @@ Route::get('/sertifikat', function () {
 Route::get('/profile-member', function () {
     return view('Profile.Profile_Member.MainProfil');
 });
+Route::get('/exam-toefl', function () {
+    return view('Member.Exam    ');
+});
 
 
 
 Route::get('/admin', function () {
-    return view('Admin.MainDashboardAdmin');
+    return view('Admin.Dashboard');
 });
 Route::get('/dashboard', function () {
     return view('Admin.Dashboard');
@@ -101,7 +104,7 @@ Route::get('/system-settings', function () {
 
 
 Route::get('/instructor', function () {
-    return view('Instructor.MainDashboardInstructor');
+    return view('Instructor.Dashboard');
 });
 Route::get('/dashboard-instructor', function () {
     return view('Instructor.Dashboard');
@@ -157,5 +160,5 @@ Route::get('/courses-subscription', [SubscriptionController::class, 'index']);
 Route::get('/Karir', [KarirController::class, 'index']);
 
 Route::middleware(['auth', 'cekRole:admin'])->group(function(){
-    
+
 });
