@@ -42,10 +42,6 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 //Route For Member
 
 
-
-
-//Route For Instruktur
-
 Route::get('/member', function () {
     return view('Member.MainDashboardMember');
 });
@@ -99,6 +95,10 @@ Route::get('/system-settings', function () {
 });
 
 
+
+
+
+//Route For Instruktur
 
 Route::get('/instructor', function () {
     return view('Instructor.MainDashboardInstructor');
@@ -156,6 +156,14 @@ Route::get('/courses-subscription', [SubscriptionController::class, 'index']);
 
 Route::get('/Karir', [KarirController::class, 'index']);
 
+
+
 Route::middleware(['auth', 'cekRole:admin'])->group(function(){
     
 });
+
+
+
+
+
+
