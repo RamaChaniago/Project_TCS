@@ -93,18 +93,18 @@
         /* 4. Sidebar Styling            */
         /* ============================= */
         #sidebar {
-            width: 250px;
-            position: fixed;
-            top: 85px;
-            left: 0;
-            height: calc(100vh - 85px);
-            background: white;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            padding-top: 15px;
-            transition: all 0.3s ease-in-out;
-            z-index: 999;
-            overflow-x: hidden;
-        }
+    width: 250px;
+    position: fixed;
+    top: 85px;
+    left: 0;
+    height: calc(100vh - 85px);
+    background: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding-top: 15px;
+    transition: all 0.3s ease-in-out;
+    z-index: 999;
+    overflow-x: hidden;
+}
 
         #sidebar.collapsed {
             width: 70px;
@@ -161,6 +161,10 @@
             padding: 12px;
             margin: 5px;
         }
+
+        #sidebar.collapsed .sidebar-item-text {
+    display: none;
+}
 
         .sidebar-menu .nav-link.active {
             background-color: #0066cc;
@@ -426,12 +430,12 @@
                         <span class="sidebar-item-text">Certifications</span>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="/content-management" class="nav-link">
                         <i class="bi bi-journal-text"></i>
                         <span class="sidebar-item-text">Content Management</span>
                     </a>
-                </li> --}}
+                </li>
                 <li class="nav-item">
                     <a href="/promo-management" class="nav-link">
                         <i class="bi bi-percent"></i>
