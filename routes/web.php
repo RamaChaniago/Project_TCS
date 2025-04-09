@@ -68,7 +68,7 @@ Route::get('/profile-member', function () {
     return view('Profile.Profile_Member.MainProfil');
 });
 Route::get('/exam-toefl', function () {
-    return view('Member.Exam    ');
+    return view('Member.Exam');
 });
 
 
