@@ -85,6 +85,9 @@ Route::get('/user-management', function () {
 Route::get('/course-management', function () {
     return view('Admin.Course-Management');
 });
+Route::get('/toefl-management', function () {
+    return view('Admin_crud.Exam-Toefl.ExamToefl');
+});
 Route::get('/admin-transaction', function () {
     return view('Admin.Transaction');
 });
