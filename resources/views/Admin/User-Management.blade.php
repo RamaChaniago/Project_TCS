@@ -16,6 +16,104 @@ User Management
         </div>
     </div>
 
+    <!-- Admin Management Section -->
+    <div class="card shadow-lg border-0 rounded-lg mb-4" data-aos="fade-up">
+        <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Admin Management</h5>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addadminModal">
+                <i class="bi bi-plus-circle me-2"></i>Add Admin
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Admins</h6>
+                                    {{-- <h4 class="fw-bold">{{ $totalAdmins }}</h4> --}}
+                                </div>
+                                <i class="bi bi-person-workspace text-primary fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted mb-1">Active Admins</h6>
+                                    {{-- <h4 class="fw-bold">{{ $activeAdmins }}</h4> --}}
+                                </div>
+                                <i class="bi bi-person-check-fill text-success fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted mb-1">New Admins (30d)</h6>
+                                    {{-- <h4 class="fw-bold">{{ $newAdmins }}</h4> --}}
+                                </div>
+                                <i class="bi bi-person-plus-fill text-warning fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- admin List Table -->
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Specialization</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{-- @foreach($admins as $admin)
+                        <tr>
+                            <td>{{ $admin->id }}</td>
+                            <td>{{ $admin->name }}</td>
+                            <td>{{ $admin->email }}</td>
+                            <td>{{ $admin->specialization }}</td>
+                            <td>
+                                <span class="badge {{ $admin->status == 'active' ? 'bg-success' : 'bg-warning' }}">
+                                    {{ $admin->status }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewadminModal{{ $admin->id }}">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editadminModal{{ $admin->id }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteadminModal{{ $admin->id }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach --}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Instructor Management Section -->
     <div class="card shadow-lg border-0 rounded-lg mb-4" data-aos="fade-up">
         <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">

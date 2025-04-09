@@ -582,10 +582,10 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label class="form-label">Notes (Optional)</label>
                         <textarea class="form-control" id="questionNotes" rows="2" placeholder="Any additional notes about this question"></textarea>
-                    </div>
+                    </div> --}}
                 </form>
             </div>
             <div class="modal-footer p-3 border-0">
@@ -792,10 +792,10 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label class="form-label">Notes</label>
                         <textarea class="form-control" id="editQuestionNotes" rows="2">This question tests the ability to identify the main topic in a short conversation.</textarea>
-                    </div>
+                    </div> --}}
                 </form>
             </div>
             <div class="modal-footer p-3 border-0">
