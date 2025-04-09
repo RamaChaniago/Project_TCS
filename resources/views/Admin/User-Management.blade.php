@@ -335,13 +335,16 @@ User Management
 {{-- @include('Admin.Modals.AddInstructorModal')
 @include('Admin.Modals.EditInstructorModal')
 @include('Admin.Modals.ViewInstructorModal')
-@include('Admin.Modals.DeleteInstructorModal') --}}
+@include('Admin.Modals.DeleteInstructorModal')
 
 <!-- Modals for User Management -->
-{{-- @include('Admin.Modals.AddUserModal')
+@include('Admin.Modals.AddUserModal')
 @include('Admin.Modals.EditUserModal')
 @include('Admin.Modals.ViewUserModal')
 @include('Admin.Modals.DeleteUserModal') --}}
+
+@include('Admin.Modals.modalusermanagement')
+{{-- @include('Admin.Modals.EditInstructorModal') --}}
 @endsection
 
 @section('scripts')
