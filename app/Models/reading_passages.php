@@ -18,6 +18,6 @@ class reading_passages extends Model
 
     public function questions()
     {
-        return $this->hasMany(ToeflQuestion::class, 'reading_passage_id');
+        return $this->hasMany(toefl_questions::class, 'reading_passage_id');
     }
 }

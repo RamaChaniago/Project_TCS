@@ -117,8 +117,8 @@
                                                     <a href="{{ route('admin.toefl-questions.show', $question->id) }}" class="btn btn-sm btn-outline-primary">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" 
-                                                            data-bs-toggle="modal" data-bs-target="#editQuestionModal" 
+                                                    <button type="button" class="btn btn-sm btn-outline-warning"
+                                                            data-bs-toggle="modal" data-bs-target="#editQuestionModal"
                                                             data-question-id="{{ $question->id }}"
                                                             data-question-text="{{ $question->question_text }}"
                                                             data-option-a="{{ $question->option_a }}"
@@ -135,7 +135,7 @@
                                                     <form action="{{ route('admin.toefl-questions.destroy', $question->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="button" class="btn btn-sm btn-outline-danger delete-confirm" 
+                                                        <button type="button" class="btn btn-sm btn-outline-danger delete-confirm"
                                                                 data-question-text="{{ $question->question_text }}">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
@@ -174,7 +174,7 @@
                                 <i class="bi bi-diagram-3 me-2 text-primary"></i>Structure & Written Expression Questions
                             </h5>
                             <div>
-                                <form action="{{ route('admin.toefl-exam') }}" method="GET">
+                                {{-- <form action="{{ route('admin.toefl-exam') }}" method="GET"> --}}
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="search_structure" placeholder="Search questions..." value="{{ request('search_structure') }}">
                                         <button class="btn btn-outline-secondary" type="submit">
@@ -211,8 +211,8 @@
                                                     <a href="{{ route('admin.toefl-questions.show', $question->id) }}" class="btn btn-sm btn-outline-primary">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" 
-                                                            data-bs-toggle="modal" data-bs-target="#editQuestionModal" 
+                                                    <button type="button" class="btn btn-sm btn-outline-warning"
+                                                            data-bs-toggle="modal" data-bs-target="#editQuestionModal"
                                                             data-question-id="{{ $question->id }}"
                                                             data-question-text="{{ $question->question_text }}"
                                                             data-option-a="{{ $question->option_a }}"
@@ -228,7 +228,7 @@
                                                     <form action="{{ route('admin.toefl-questions.destroy', $question->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="button" class="btn btn-sm btn-outline-danger delete-confirm" 
+                                                        <button type="button" class="btn btn-sm btn-outline-danger delete-confirm"
                                                                 data-question-text="{{ $question->question_text }}">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
@@ -309,8 +309,8 @@
                                                         <a href="{{ route('admin.toefl-questions.show', $question->id) }}" class="btn btn-sm btn-outline-primary">
                                                             <i class="bi bi-eye"></i>
                                                         </a>
-                                                        <button type="button" class="btn btn-sm btn-outline-warning" 
-                                                                data-bs-toggle="modal" data-bs-target="#editQuestionModal" 
+                                                        <button type="button" class="btn btn-sm btn-outline-warning"
+                                                                data-bs-toggle="modal" data-bs-target="#editQuestionModal"
                                                                 data-question-id="{{ $question->id }}"
                                                                 data-question-text="{{ $question->question_text }}"
                                                                 data-option-a="{{ $question->option_a }}"
@@ -326,7 +326,7 @@
                                                         <form action="{{ route('admin.toefl-questions.destroy', $question->id) }}" method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-confirm" 
+                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-confirm"
                                                                     data-question-text="{{ $question->question_text }}">
                                                                 <i class="bi bi-trash"></i>
                                                             </button>
@@ -356,7 +356,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Add Question Modal -->
     <div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -374,26 +374,26 @@
                             <label class="btn btn-outline-primary" for="listeningType">
                                 <i class="bi bi-soundwave me-2"></i>Listening
                             </label>
-                            
+
                             <input type="radio" class="btn-check" name="questionType" id="structureType" value="structure" autocomplete="off">
                             <label class="btn btn-outline-primary" for="structureType">
                                 <i class="bi bi-diagram-3 me-2"></i>Structure
                             </label>
-                            
+
                             <input type="radio" class="btn-check" name="questionType" id="readingType" value="reading" autocomplete="off">
                             <label class="btn btn-outline-primary" for="readingType">
                                 <i class="bi bi-book me-2"></i>Reading
                             </label>
                         </div>
                     </div>
-    
+
                     <!-- Form Container for Dynamic Forms -->
                     <div id="questionFormContainer">
                         <!-- Listening Question Form (Default) -->
                         <form id="listeningForm" action="{{ route('admin.toefl-questions.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="section" value="listening">
-                            
+
                             <div class="mb-3">
                                 <label for="listening_part" class="form-label">Listening Part</label>
                                 <select class="form-select" id="listening_part" name="listening_part" required>
@@ -403,18 +403,18 @@
                                     <option value="C">Part C - Lectures/Talks</option>
                                 </select>
                             </div>
-    
+
                             <div class="mb-3">
                                 <label for="audio_file" class="form-label">Audio File</label>
                                 <input type="file" class="form-control" id="audio_file" name="audio_file" accept="audio/*" required>
                                 <small class="text-muted">Upload MP3, WAV or OGG file (max 10MB)</small>
                             </div>
-    
+
                             <div class="mb-3">
                                 <label for="question_text" class="form-label">Question Text</label>
                                 <textarea class="form-control" id="question_text" name="question_text" rows="3" required></textarea>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="option_a" class="form-label">Option A</label>
@@ -425,7 +425,7 @@
                                     <input type="text" class="form-control" id="option_b" name="option_b" required>
                                 </div>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="option_c" class="form-label">Option C</label>
@@ -436,7 +436,7 @@
                                     <input type="text" class="form-control" id="option_d" name="option_d" required>
                                 </div>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="correct_answer" class="form-label">Correct Answer</label>
@@ -458,25 +458,25 @@
                                     </select>
                                 </div>
                             </div>
-    
+
                             <div class="mb-3">
                                 <label for="notes" class="form-label">Notes (Optional)</label>
                                 <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
                                 <small class="text-muted">Add any additional notes about this question</small>
                             </div>
-    
+
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-plus-circle me-2"></i>Add Listening Question
                                 </button>
                             </div>
                         </form>
-    
+
                         <!-- Structure Question Form (Hidden by Default) -->
                         <form id="structureForm" action="{{ route('admin.toefl-questions.store') }}" method="POST" style="display: none;">
                             @csrf
                             <input type="hidden" name="section" value="structure">
-                            
+
                             <div class="mb-3">
                                 <label for="structure_type" class="form-label">Structure Type</label>
                                 <select class="form-select" id="structure_type" name="structure_type" required>
@@ -485,12 +485,12 @@
                                     <option value="error">Error Identification</option>
                                 </select>
                             </div>
-    
+
                             <div class="mb-3">
                                 <label for="question_text" class="form-label">Question Text</label>
                                 <textarea class="form-control" id="structure_question_text" name="question_text" rows="3" required></textarea>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="structure_option_a" class="form-label">Option A</label>
@@ -501,7 +501,7 @@
                                     <input type="text" class="form-control" id="structure_option_b" name="option_b" required>
                                 </div>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="structure_option_c" class="form-label">Option C</label>
@@ -512,7 +512,7 @@
                                     <input type="text" class="form-control" id="structure_option_d" name="option_d" required>
                                 </div>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="structure_correct_answer" class="form-label">Correct Answer</label>
@@ -534,25 +534,25 @@
                                     </select>
                                 </div>
                             </div>
-    
+
                             <div class="mb-3">
                                 <label for="structure_notes" class="form-label">Notes (Optional)</label>
                                 <textarea class="form-control" id="structure_notes" name="notes" rows="2"></textarea>
                                 <small class="text-muted">Add any additional notes about this question</small>
                             </div>
-    
+
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-plus-circle me-2"></i>Add Structure Question
                                 </button>
                             </div>
                         </form>
-    
+
                         <!-- Reading Question Form (Hidden by Default) -->
                         <form id="readingForm" action="{{ route('admin.toefl-questions.store') }}" method="POST" style="display: none;">
                             @csrf
                             <input type="hidden" name="section" value="reading">
-                            
+
                             <div class="mb-3">
                                 <label for="reading_passage_id" class="form-label">Reading Passage</label>
                                 <select class="form-select" id="reading_passage_id" name="reading_passage_id" required>
@@ -567,12 +567,12 @@
                                     </a>
                                 </div>
                             </div>
-    
+
                             <div class="mb-3">
                                 <label for="reading_question_text" class="form-label">Question Text</label>
                                 <textarea class="form-control" id="reading_question_text" name="question_text" rows="3" required></textarea>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="reading_option_a" class="form-label">Option A</label>
@@ -583,7 +583,7 @@
                                     <input type="text" class="form-control" id="reading_option_b" name="option_b" required>
                                 </div>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="reading_option_c" class="form-label">Option C</label>
@@ -594,7 +594,7 @@
                                     <input type="text" class="form-control" id="reading_option_d" name="option_d" required>
                                 </div>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="reading_correct_answer" class="form-label">Correct Answer</label>
@@ -616,13 +616,13 @@
                                     </select>
                                 </div>
                             </div>
-    
+
                             <div class="mb-3">
                                 <label for="reading_notes" class="form-label">Notes (Optional)</label>
                                 <textarea class="form-control" id="reading_notes" name="notes" rows="2"></textarea>
                                 <small class="text-muted">Add any additional notes about this question</small>
                             </div>
-    
+
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-plus-circle me-2"></i>Add Reading Question
@@ -634,7 +634,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Edit Question Modal -->
     <div class="modal fade" id="editQuestionModal" tabindex="-1" aria-labelledby="editQuestionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -648,12 +648,12 @@
                         @csrf
                         @method('PUT')
                         <input type="hidden" id="edit_section" name="section">
-                        
+
                         <!-- Dynamic fields will be populated based on question type -->
                         <div id="editFormFields">
                             <!-- Fields will be inserted here via JavaScript -->
                         </div>
-    
+
                         <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-warning">
                                 <i class="bi bi-check-circle me-2"></i>Update Question
@@ -664,7 +664,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Delete Confirmation Modal -->
     <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -687,10 +687,10 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Audio Player -->
     <audio id="audioPlayer" style="display: none;"></audio>
-    
+
     <script>
         // Show/hide question forms based on selection
         document.addEventListener('DOMContentLoaded', function() {
@@ -702,47 +702,47 @@
                 structure: document.getElementById('structureForm'),
                 reading: document.getElementById('readingForm')
             };
-            
+
             typeRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     // Hide all forms
                     Object.values(forms).forEach(form => {
                         form.style.display = 'none';
                     });
-                    
+
                     // Show selected form
                     forms[this.value].style.display = 'block';
                 });
             });
-            
+
             // Handle delete confirmation
             const deleteButtons = document.querySelectorAll('.delete-confirm');
             const questionToDelete = document.getElementById('questionToDelete');
             const confirmDeleteBtn = document.getElementById('confirmDelete');
             const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
-            
+
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const questionText = this.dataset.questionText;
                     const form = this.closest('form');
-                    
+
                     questionToDelete.textContent = questionText;
                     confirmDeleteBtn.onclick = function() {
                         form.submit();
                         deleteModal.hide();
                     };
-                    
+
                     deleteModal.show();
                 });
             });
-            
+
             // Audio player functionality
             window.playAudio = function(url) {
                 const audioPlayer = document.getElementById('audioPlayer');
                 audioPlayer.src = url;
                 audioPlayer.play();
             };
-            
+
             // Edit question modal
             const editModal = document.getElementById('editQuestionModal');
             if (editModal) {
@@ -750,10 +750,10 @@
                     const button = event.relatedTarget;
                     const questionId = button.getAttribute('data-question-id');
                     const form = document.getElementById('editQuestionForm');
-                    
+
                     // Set the form action URL
                     form.action = `/admin/toefl-questions/${questionId}`;
-                    
+
                     // Determine section based on available attributes
                     let section;
                     if (button.hasAttribute('data-listening-part')) {
@@ -771,11 +771,11 @@
                     }
                 });
             }
-            
+
             // Populate edit forms based on question type
             function populateListeningForm(button) {
                 const fieldsContainer = document.getElementById('editFormFields');
-                
+
                 fieldsContainer.innerHTML = `
                     <div class="mb-3">
                         <label for="edit_listening_part" class="form-label">Listening Part</label>
@@ -785,7 +785,7 @@
                             <option value="C" ${button.getAttribute('data-listening-part') === 'C' ? 'selected' : ''}>Part C - Lectures/Talks</option>
                         </select>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="edit_audio_file" class="form-label">Audio File</label>
                         <div class="input-group">
@@ -794,12 +794,12 @@
                         </div>
                         <small class="text-muted">Leave blank to keep current audio</small>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="edit_question_text" class="form-label">Question Text</label>
                         <textarea class="form-control" id="edit_question_text" name="question_text" rows="3" required>${button.getAttribute('data-question-text')}</textarea>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="edit_option_a" class="form-label">Option A</label>
@@ -810,7 +810,7 @@
                             <input type="text" class="form-control" id="edit_option_b" name="option_b" value="${button.getAttribute('data-option-b')}" required>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="edit_option_c" class="form-label">Option C</label>
@@ -821,7 +821,7 @@
                             <input type="text" class="form-control" id="edit_option_d" name="option_d" value="${button.getAttribute('data-option-d')}" required>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="edit_correct_answer" class="form-label">Correct Answer</label>
@@ -841,17 +841,17 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="edit_notes" class="form-label">Notes (Optional)</label>
                         <textarea class="form-control" id="edit_notes" name="notes" rows="2">${button.getAttribute('data-notes') || ''}</textarea>
                     </div>
                 `;
             }
-            
+
             function populateStructureForm(button) {
                 const fieldsContainer = document.getElementById('editFormFields');
-                
+
                 fieldsContainer.innerHTML = `
                     <div class="mb-3">
                         <label for="edit_structure_type" class="form-label">Structure Type</label>
@@ -860,12 +860,12 @@
                             <option value="error" ${button.getAttribute('data-structure-type') === 'error' ? 'selected' : ''}>Error Identification</option>
                         </select>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="edit_question_text" class="form-label">Question Text</label>
                         <textarea class="form-control" id="edit_question_text" name="question_text" rows="3" required>${button.getAttribute('data-question-text')}</textarea>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="edit_option_a" class="form-label">Option A</label>
@@ -876,7 +876,7 @@
                             <input type="text" class="form-control" id="edit_option_b" name="option_b" value="${button.getAttribute('data-option-b')}" required>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="edit_option_c" class="form-label">Option C</label>
@@ -889,7 +889,7 @@
                         <input type="text" class="form-control" id="edit_option_d" name="option_d" value="${button.getAttribute('data-option-d')}" required>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="edit_correct_answer" class="form-label">Correct Answer</label>
@@ -909,17 +909,17 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="edit_notes" class="form-label">Notes (Optional)</label>
                     <textarea class="form-control" id="edit_notes" name="notes" rows="2">${button.getAttribute('data-notes') || ''}</textarea>
                 </div>
             `;
         }
-        
+
         function populateReadingForm(button) {
             const fieldsContainer = document.getElementById('editFormFields');
-            
+
             fieldsContainer.innerHTML = `
                 <div class="mb-3">
                     <label for="edit_reading_passage_id" class="form-label">Reading Passage</label>
@@ -927,12 +927,12 @@
                         ${generatePassageOptions(button.getAttribute('data-passage-id'))}
                     </select>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="edit_question_text" class="form-label">Question Text</label>
                     <textarea class="form-control" id="edit_question_text" name="question_text" rows="3" required>${button.getAttribute('data-question-text')}</textarea>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="edit_option_a" class="form-label">Option A</label>
@@ -943,7 +943,7 @@
                         <input type="text" class="form-control" id="edit_option_b" name="option_b" value="${button.getAttribute('data-option-b')}" required>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="edit_option_c" class="form-label">Option C</label>
@@ -954,7 +954,7 @@
                         <input type="text" class="form-control" id="edit_option_d" name="option_d" value="${button.getAttribute('data-option-d')}" required>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="edit_correct_answer" class="form-label">Correct Answer</label>
@@ -974,24 +974,24 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="edit_notes" class="form-label">Notes (Optional)</label>
                     <textarea class="form-control" id="edit_notes" name="notes" rows="2">${button.getAttribute('data-notes') || ''}</textarea>
                 </div>
             `;
         }
-        
+
         // Function to generate passage options
         function generatePassageOptions(selectedId) {
             let options = '';
             const passages = @json($readingPassages);
-            
+
             passages.forEach(passage => {
                 const selected = passage.id == selectedId ? 'selected' : '';
                 options += `<option value="${passage.id}" ${selected}>Passage #${passage.id}: ${passage.topic}</option>`;
             });
-            
+
             return options;
         }
     });
