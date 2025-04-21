@@ -160,6 +160,8 @@ Route::get('/courses-learning-package', [LearningPackageController::class, 'inde
 Route::get('/courses-smart-book', [SmartBookController::class, 'index']);
 Route::get('/courses-subscription', [SubscriptionController::class, 'index']);
 
+Route::get('/program/live-class', [SubscriptionController::class, 'index']);
+
 Route::get('/Karir', [KarirController::class, 'index']);
 
 Route::middleware(['auth', 'cekRole:admin'])->group(function(){
