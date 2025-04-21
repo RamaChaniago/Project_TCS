@@ -1,5 +1,72 @@
 <!-- Modals for Instructor Management -->
 
+<!-- Add Admin Modal -->
+<div class="modal fade" id="addAdminModal" tabindex="-1" aria-labelledby="addAdminModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="addAdminModalLabel">Add New Admin</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="admin_name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="admin_name" name="name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="admin_email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="admin_email" name="email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="admin_phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="admin_phone" name="phone">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="admin_role" class="form-label">Role</label>
+                            <select class="form-select" id="admin_role" name="role" required>
+                                <option value="superadmin">Super Admin</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="admin_password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="admin_password" name="password" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="admin_password_confirmation" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="admin_password_confirmation" name="password_confirmation" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="admin_status" class="form-label">Status</label>
+                            <select class="form-select" id="admin_status" name="status" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="admin_profile_image" class="form-label">Profile Image</label>
+                            <input type="file" class="form-control" id="admin_profile_image" name="profile_image">
+                        </div>
+                        <div class="col-12">
+                            <label for="admin_bio" class="form-label">Bio/Description</label>
+                            <textarea class="form-control" id="admin_bio" name="bio" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Admin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 <!-- Add Instructor Modal -->
 <div class="modal fade" id="addInstructorModal" tabindex="-1" aria-labelledby="addInstructorModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

@@ -6,6 +6,7 @@ User Management
 
 @section('content')
 <div class="container-fluid py-5">
+
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="font-weight-bold mb-0">User Management</h3>
@@ -20,7 +21,7 @@ User Management
     <div class="card shadow-lg border-0 rounded-lg mb-4" data-aos="fade-up">
         <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Admin Management</h5>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addadminModal">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAdminModal">
                 <i class="bi bi-plus-circle me-2"></i>Add Admin
             </button>
         </div>
@@ -329,6 +330,7 @@ User Management
             </div>
         </div>
     </div>
+
 </div>
 
 <!-- Modals for Instructor Management -->
@@ -348,35 +350,35 @@ User Management
 @endsection
 
 @section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Google User Sync Functionality
-        document.getElementById('syncGoogleUsers').addEventListener('click', function() {
-            // Implement Google OAuth user sync logic
-            fetch('/admin/sync-google-users', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Users Synced',
-                        text: `${data.newUsers} new users imported from Google`
-                    });
-                    // Optionally refresh the page or update the table
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Sync Failed',
-                        text: data.message
-                    });
-                }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Google User Sync Functionality
+            document.getElementById('syncGoogleUsers').addEventListener('click', function() {
+                // Implement Google OAuth user sync logic
+                fetch('/admin/sync-google-users', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Users Synced',
+                            text: `${data.newUsers} new users imported from Google`
+                        });
+                        // Optionally refresh the page or update the table
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Sync Failed',
+                            text: data.message
+                        });
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 @endsection
