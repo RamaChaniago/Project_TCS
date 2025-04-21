@@ -13,7 +13,7 @@ class authController extends Controller
     {
         $credentials = $request->validate([
             'email' => 'required|email|exists:users,email',
-            'password' => 'required|min:8'
+            'password' => 'required|min:6'
         ], [
             'required' => 'Harap mengisi bidang ini!',
             'email' => 'Harap sesuaikan format @gmail.com',
@@ -22,18 +22,25 @@ class authController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            
             $user = Auth::user();
 
             // Redirect berdasarkan role
             if ($user->role === 'instructor') {
+                
                 return redirect('/instructor');
                 Alert::success('Login Berhasil', 'Selamat Datang');
+
             } elseif ($user->role === 'member') {
+
                 return redirect('/');
                 Alert::success('Login Berhasil', 'Selamat Datang');
+
             } elseif ($user->role === 'admin') {
+
                 return redirect('/admin');
                 Alert::success('Login Berhasil', 'Selamat Datang');
+
             }
 
             // Jika role tidak dikenali, logout dan tampilkan error

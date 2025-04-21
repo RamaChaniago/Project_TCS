@@ -364,7 +364,7 @@
                     </li>
                     <li class="nav-item dropdown user-profile-nav active">
                         <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
-                            <img src="{{ asset('assets/images/profile2.jpeg') }}" alt="Admin Profile">
+                            <img src="{{ asset('storage/' . Auth::user()->getAdminInfo->profile_image) }}" alt="Admin Profile">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">Admin Profile</a></li>
@@ -389,9 +389,9 @@
 
         <!-- Profile Section -->
         <div class="sidebar-profile">
-            <img src="{{ asset('assets/images/profile2.jpeg') }}" alt="Admin Profile" class="rounded-circle">
+            <img src="{{ asset('storage/' . Auth::user()->getAdminInfo->profile_image) }}" alt="Admin Profile" class="rounded-circle">
             <div class="sidebar-profile-text">
-                <h6 class="mb-0"> Rosemerian Chay</h6>
+                <h6 class="mb-0">{{ Auth::user()->name }}</h6>
                 <a href="#" class="text-decoration-none small">View Profile</a>
                 <span class="admin-badge">Admin</span>
             </div>

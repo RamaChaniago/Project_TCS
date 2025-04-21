@@ -8,7 +8,7 @@
                 <h5 class="modal-title" id="addAdminModalLabel">Add New Admin</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('user-management.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="row g-3">
@@ -27,7 +27,7 @@
                         <div class="col-md-6">
                             <label for="admin_role" class="form-label">Role</label>
                             <select class="form-select" id="admin_role" name="role" required>
-                                <option value="superadmin">Super Admin</option>
+                                {{-- <option value="superadmin">Super Admin</option> --}}
                                 <option value="admin">Admin</option>
                             </select>
                         </div>
@@ -75,7 +75,7 @@
                 <h5 class="modal-title" id="addInstructorModalLabel">Add New Instructor</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('user-management.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="row g-3">
@@ -118,6 +118,7 @@
                             <label for="bio" class="form-label">Bio/Description</label>
                             <textarea class="form-control" id="bio" name="bio" rows="3"></textarea>
                         </div>
+                        <input type="text" name="role" value="instructor" required hidden>
                     </div>
                 </div>
                 <div class="modal-footer">

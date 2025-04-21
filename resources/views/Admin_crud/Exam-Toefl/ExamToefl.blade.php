@@ -44,6 +44,21 @@
         </div>
     </div>
 
+    <!-- Display flash messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <!-- Tab Content -->
     <div class="tab-content" id="sectionTabsContent">
         <!-- Listening Comprehension Section -->
@@ -56,12 +71,14 @@
                                 <i class="bi bi-soundwave me-2 text-primary"></i>Listening Comprehension Questions
                             </h5>
                             <div>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search questions..." id="searchListening">
-                                    <button class="btn btn-outline-secondary" type="button">
-                                        <i class="bi bi-search"></i>
-                                    </button>
-                                </div>
+                                <form action="" method="GET">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="search_listening" placeholder="Search questions..." value="{{ request('search_listening') }}">
+                                        <button class="btn btn-outline-secondary" type="submit">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -78,119 +95,68 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @forelse($listeningQuestions as $question)
                                         <tr>
-                                            <td>1</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <button class="btn btn-sm btn-outline-primary rounded-circle me-2">
+                                                    <button class="btn btn-sm btn-outline-primary rounded-circle me-2" onclick="playAudio('{{ Storage::url('audio/' . $question->audio_file) }}')">
                                                         <i class="bi bi-play-fill"></i>
                                                     </button>
-                                                    <span class="small text-muted">audio_1.mp3</span>
+                                                    <span class="small text-muted">{{ $question->audio_file }}</span>
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="mb-1">What is the woman primarily discussing?</p>
-                                                <span class="badge bg-info">Part A</span>
+                                                <p class="mb-1">{{ $question->question_text }}</p>
+                                                <span class="badge bg-info">Part {{ $question->listening_part }}</span>
                                             </td>
-                                            <td><span class="badge bg-success">C</span></td>
-                                            <td><small>2023-08-15 14:30</small></td>
+                                            <td><span class="badge bg-success">{{ $question->correct_answer }}</span></td>
+                                            <td><small>{{ $question->updated_at->format('Y-m-d H:i') }}</small></td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewQuestionModal">
+                                                    <a href="{{ route('admin.toefl-questions.show', $question->id) }}" class="btn btn-sm btn-outline-primary">
                                                         <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editQuestionModal">
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-outline-warning"
+                                                            data-bs-toggle="modal" data-bs-target="#editQuestionModal"
+                                                            data-question-id="{{ $question->id }}"
+                                                            data-question-text="{{ $question->question_text }}"
+                                                            data-option-a="{{ $question->option_a }}"
+                                                            data-option-b="{{ $question->option_b }}"
+                                                            data-option-c="{{ $question->option_c }}"
+                                                            data-option-d="{{ $question->option_d }}"
+                                                            data-correct-answer="{{ $question->correct_answer }}"
+                                                            data-difficulty="{{ $question->difficulty }}"
+                                                            data-notes="{{ $question->notes }}"
+                                                            data-listening-part="{{ $question->listening_part }}"
+                                                            data-audio-file="{{ $question->audio_file }}">
                                                         <i class="bi bi-pencil"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
+                                                    <form action="{{ route('admin.toefl-questions.destroy', $question->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-sm btn-outline-danger delete-confirm"
+                                                                data-question-text="{{ $question->question_text }}">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @empty
                                         <tr>
-                                            <td>2</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <button class="btn btn-sm btn-outline-primary rounded-circle me-2">
-                                                        <i class="bi bi-play-fill"></i>
-                                                    </button>
-                                                    <span class="small text-muted">audio_2.mp3</span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p class="mb-1">What does the professor imply about the assignment?</p>
-                                                <span class="badge bg-info">Part B</span>
-                                            </td>
-                                            <td><span class="badge bg-success">A</span></td>
-                                            <td><small>2023-08-16 09:15</small></td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewQuestionModal">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editQuestionModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
+                                            <td colspan="6" class="text-center py-4">No listening questions found</td>
                                         </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <button class="btn btn-sm btn-outline-primary rounded-circle me-2">
-                                                        <i class="bi bi-play-fill"></i>
-                                                    </button>
-                                                    <span class="small text-muted">audio_3.mp3</span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p class="mb-1">What will the students do next?</p>
-                                                <span class="badge bg-info">Part C</span>
-                                            </td>
-                                            <td><span class="badge bg-success">D</span></td>
-                                            <td><small>2023-08-17 11:45</small></td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewQuestionModal">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editQuestionModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
                             <!-- Pagination -->
                             <div class="d-flex justify-content-between align-items-center p-3 border-top">
-                                <div class="small text-muted">Showing 1-3 of 50 questions</div>
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination pagination-sm mb-0">
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                <div class="small text-muted">
+                                    Showing {{ $listeningQuestions->firstItem() ?? 0 }}-{{ $listeningQuestions->lastItem() ?? 0 }} of {{ $listeningQuestions->total() }} questions
+                                </div>
+                                {{ $listeningQuestions->appends(['structure_page' => request('structure_page'), 'reading_page' => request('reading_page')])->links() }}
                             </div>
                         </div>
                     </div>
@@ -208,12 +174,14 @@
                                 <i class="bi bi-diagram-3 me-2 text-primary"></i>Structure & Written Expression Questions
                             </h5>
                             <div>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search questions..." id="searchStructure">
-                                    <button class="btn btn-outline-secondary" type="button">
-                                        <i class="bi bi-search"></i>
-                                    </button>
-                                </div>
+                                {{-- <form action="{{ route('admin.toefl-exam') }}" method="GET"> --}}
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="search_structure" placeholder="Search questions..." value="{{ request('search_structure') }}">
+                                        <button class="btn btn-outline-secondary" type="submit">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -229,73 +197,59 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @forelse($structureQuestions as $question)
                                         <tr>
-                                            <td>1</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>
-                                                <p class="mb-1">________ the discovery of penicillin, many bacterial infections were fatal.</p>
-                                                <span class="badge bg-info">Structure</span>
+                                                <p class="mb-1">{{ $question->question_text }}</p>
+                                                <span class="badge bg-info">{{ ucfirst($question->structure_type) }}</span>
                                             </td>
-                                            <td><span class="badge bg-success">B</span></td>
-                                            <td><small>2023-08-15 10:30</small></td>
+                                            <td><span class="badge bg-success">{{ $question->correct_answer }}</span></td>
+                                            <td><small>{{ $question->updated_at->format('Y-m-d H:i') }}</small></td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewQuestionModal">
+                                                    <a href="{{ route('admin.toefl-questions.show', $question->id) }}" class="btn btn-sm btn-outline-primary">
                                                         <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editQuestionModal">
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-outline-warning"
+                                                            data-bs-toggle="modal" data-bs-target="#editQuestionModal"
+                                                            data-question-id="{{ $question->id }}"
+                                                            data-question-text="{{ $question->question_text }}"
+                                                            data-option-a="{{ $question->option_a }}"
+                                                            data-option-b="{{ $question->option_b }}"
+                                                            data-option-c="{{ $question->option_c }}"
+                                                            data-option-d="{{ $question->option_d }}"
+                                                            data-correct-answer="{{ $question->correct_answer }}"
+                                                            data-difficulty="{{ $question->difficulty }}"
+                                                            data-notes="{{ $question->notes }}"
+                                                            data-structure-type="{{ $question->structure_type }}">
                                                         <i class="bi bi-pencil"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
+                                                    <form action="{{ route('admin.toefl-questions.destroy', $question->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-sm btn-outline-danger delete-confirm"
+                                                                data-question-text="{{ $question->question_text }}">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @empty
                                         <tr>
-                                            <td>2</td>
-                                            <td>
-                                                <p class="mb-1">The research paper was so poorly written that the professor requested the student to revise it.</p>
-                                                <span class="badge bg-info">Written Expression</span>
-                                            </td>
-                                            <td><span class="badge bg-success">C</span></td>
-                                            <td><small>2023-08-16 14:22</small></td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewQuestionModal">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editQuestionModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
+                                            <td colspan="5" class="text-center py-4">No structure questions found</td>
                                         </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
                             <!-- Pagination -->
                             <div class="d-flex justify-content-between align-items-center p-3 border-top">
-                                <div class="small text-muted">Showing 1-2 of 40 questions</div>
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination pagination-sm mb-0">
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                <div class="small text-muted">
+                                    Showing {{ $structureQuestions->firstItem() ?? 0 }}-{{ $structureQuestions->lastItem() ?? 0 }} of {{ $structureQuestions->total() }} questions
+                                </div>
+                                {{ $structureQuestions->appends(['listening_page' => request('listening_page'), 'reading_page' => request('reading_page')])->links() }}
                             </div>
                         </div>
                     </div>
@@ -313,12 +267,14 @@
                                 <i class="bi bi-book me-2 text-primary"></i>Reading Comprehension Questions
                             </h5>
                             <div>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search questions..." id="searchReading">
-                                    <button class="btn btn-outline-secondary" type="button">
-                                        <i class="bi bi-search"></i>
-                                    </button>
-                                </div>
+                                <form action="{{ route('admin.toefl-exam') }}" method="GET">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="search_reading" placeholder="Search questions..." value="{{ request('search_reading') }}">
+                                        <button class="btn btn-outline-secondary" type="submit">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -335,104 +291,64 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @forelse($readingQuestions as $question)
                                         <tr>
-                                            <td>1</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>
-                                                <span class="badge rounded-pill bg-secondary">Passage #1</span>
-                                                <small class="d-block text-muted mt-1">Environmental Science</small>
+                                                <span class="badge rounded-pill bg-secondary">Passage #{{ $question->readingPassage->id }}</span>
+                                                <small class="d-block text-muted mt-1">{{ $question->readingPassage->topic }}</small>
                                             </td>
                                             <td>
-                                                <p class="mb-1">According to the passage, what is the main cause of coral reef destruction?</p>
+                                                <p class="mb-1">{{ $question->question_text }}</p>
                                             </td>
-                                            <td><span class="badge bg-success">A</span></td>
-                                            <td><small>2023-08-10 09:15</small></td>
+                                            <td><span class="badge bg-success">{{ $question->correct_answer }}</span></td>
+                                            <td><small>{{ $question->updated_at->format('Y-m-d H:i') }}</small></td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewQuestionModal">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editQuestionModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>
-                                                <span class="badge rounded-pill bg-secondary">Passage #1</span>
-                                                <small class="d-block text-muted mt-1">Environmental Science</small>
-                                            </td>
-                                            <td>
-                                                <p class="mb-1">The word "devastating" in line 12 is closest in meaning to:</p>
-                                            </td>
-                                            <td><span class="badge bg-success">D</span></td>
-                                            <td><small>2023-08-10 09:20</small></td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewQuestionModal">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editQuestionModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>
-                                                <span class="badge rounded-pill bg-secondary">Passage #2</span>
-                                                <small class="d-block text-muted mt-1">History</small>
-                                            </td>
-                                            <td>
-                                                <p class="mb-1">The passage primarily focuses on which aspect of ancient civilization?</p>
-                                            </td>
-                                            <td><span class="badge bg-success">B</span></td>
-                                            <td><small>2023-08-11 14:35</small></td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewQuestionModal">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editQuestionModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- Pagination -->
-                            <div class="d-flex justify-content-between align-items-center p-3 border-top">
-                                <div class="small text-muted">Showing 1-3 of 50 questions</div>
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination pagination-sm mb-0">
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                                    <a href="{{ route('admin.toefl-questions.show', $question->id) }}" class="btn btn-sm btn-outline-primary">
+                                                        <a href="{{ route('admin.toefl-questions.show', $question->id) }}" class="btn btn-sm btn-outline-primary">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-sm btn-outline-warning"
+                                                                data-bs-toggle="modal" data-bs-target="#editQuestionModal"
+                                                                data-question-id="{{ $question->id }}"
+                                                                data-question-text="{{ $question->question_text }}"
+                                                                data-option-a="{{ $question->option_a }}"
+                                                                data-option-b="{{ $question->option_b }}"
+                                                                data-option-c="{{ $question->option_c }}"
+                                                                data-option-d="{{ $question->option_d }}"
+                                                                data-correct-answer="{{ $question->correct_answer }}"
+                                                                data-difficulty="{{ $question->difficulty }}"
+                                                                data-notes="{{ $question->notes }}"
+                                                                data-passage-id="{{ $question->reading_passage_id }}">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <form action="{{ route('admin.toefl-questions.destroy', $question->id) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-confirm"
+                                                                    data-question-text="{{ $question->question_text }}">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="6" class="text-center py-4">No reading questions found</td>
+                                            </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Pagination -->
+                                <div class="d-flex justify-content-between align-items-center p-3 border-top">
+                                    <div class="small text-muted">
+                                        Showing {{ $readingQuestions->firstItem() ?? 0 }}-{{ $readingQuestions->lastItem() ?? 0 }} of {{ $readingQuestions->total() }} questions
+                                    </div>
+                                    {{ $readingQuestions->appends(['listening_page' => request('listening_page'), 'structure_page' => request('structure_page')])->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -440,152 +356,189 @@
             </div>
         </div>
     </div>
-</div>
 
-<!-- MODALS -->
-
-<!-- Add Question Modal -->
-<div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header bg-light p-4 border-0">
-                <h5 class="modal-title" id="addQuestionModalLabel">
-                    <i class="bi bi-plus-circle me-2 text-primary"></i>Add New Question
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <form id="addQuestionForm">
-                    <!-- Section Selection -->
+    <!-- Add Question Modal -->
+    <div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="addQuestionModalLabel">Add New TOEFL Question</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Question Type Selection -->
                     <div class="mb-4">
-                        <label class="form-label">Section</label>
-                        <select class="form-select" id="questionSection" required>
-                            <option value="">Select a section</option>
-                            <option value="listening">Listening Comprehension</option>
-                            <option value="structure">Structure & Written Expression</option>
-                            <option value="reading">Reading Comprehension</option>
-                        </select>
+                        <label class="form-label fw-bold">Select Question Type</label>
+                        <div class="btn-group w-100" role="group" aria-label="Question Type">
+                            <input type="radio" class="btn-check" name="questionType" id="listeningType" value="listening" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="listeningType">
+                                <i class="bi bi-soundwave me-2"></i>Listening
+                            </label>
+
+                            <input type="radio" class="btn-check" name="questionType" id="structureType" value="structure" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="structureType">
+                                <i class="bi bi-diagram-3 me-2"></i>Structure
+                            </label>
+
+                            <input type="radio" class="btn-check" name="questionType" id="readingType" value="reading" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="readingType">
+                                <i class="bi bi-book me-2"></i>Reading
+                            </label>
+                        </div>
                     </div>
 
-                    <!-- Dynamic Form Fields based on Section -->
-                    <div id="listeningFields" class="d-none section-fields">
-                        <div class="mb-3">
-                            <label class="form-label">Audio File</label>
-                            <div class="input-group">
-                                <input type="file" class="form-control" id="audioFile" accept="audio/*">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="bi bi-upload"></i>
+                    <!-- Form Container for Dynamic Forms -->
+                    <div id="questionFormContainer">
+                        <!-- Listening Question Form (Default) -->
+                        <form id="listeningForm" action="{{ route('admin.toefl-questions.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="section" value="listening">
+
+                            <div class="mb-3">
+                                <label for="listening_part" class="form-label">Listening Part</label>
+                                <select class="form-select" id="listening_part" name="listening_part" required>
+                                    <option value="" selected disabled>Select part...</option>
+                                    <option value="A">Part A - Short Conversations</option>
+                                    <option value="B">Part B - Extended Conversations</option>
+                                    <option value="C">Part C - Lectures/Talks</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="audio_file" class="form-label">Audio File</label>
+                                <input type="file" class="form-control" id="audio_file" name="audio_file" accept="audio/*" required>
+                                <small class="text-muted">Upload MP3, WAV or OGG file (max 10MB)</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="question_text" class="form-label">Question Text</label>
+                                <textarea class="form-control" id="question_text" name="question_text" rows="3" required></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="option_a" class="form-label">Option A</label>
+                                    <input type="text" class="form-control" id="option_a" name="option_a" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="option_b" class="form-label">Option B</label>
+                                    <input type="text" class="form-control" id="option_b" name="option_b" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="option_c" class="form-label">Option C</label>
+                                    <input type="text" class="form-control" id="option_c" name="option_c" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="option_d" class="form-label">Option D</label>
+                                    <input type="text" class="form-control" id="option_d" name="option_d" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="correct_answer" class="form-label">Correct Answer</label>
+                                    <select class="form-select" id="correct_answer" name="correct_answer" required>
+                                        <option value="" selected disabled>Select answer...</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="difficulty" class="form-label">Difficulty Level</label>
+                                    <select class="form-select" id="difficulty" name="difficulty" required>
+                                        <option value="" selected disabled>Select level...</option>
+                                        <option value="easy">Easy</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="hard">Hard</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="notes" class="form-label">Notes (Optional)</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
+                                <small class="text-muted">Add any additional notes about this question</small>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>Add Listening Question
                                 </button>
                             </div>
-                            <div class="form-text">Upload MP3 or WAV file. Maximum size: 10MB</div>
-                        </div>
+                        </form>
 
-                        <div class="mb-3">
-                            <label class="form-label">Part</label>
-                            <select class="form-select" id="listeningPart">
-                                <option value="A">Part A</option>
-                                <option value="B">Part B</option>
-                                <option value="C">Part C</option>
-                            </select>
-                        </div>
+                        <!-- Structure Question Form (Hidden by Default) -->
+                        <form id="structureForm" action="{{ route('admin.toefl-questions.store') }}" method="POST" style="display: none;">
+                            @csrf
+                            <input type="hidden" name="section" value="structure">
 
-                        <div class="mb-3">
-                            <label class="form-label">Question Text</label>
-                            <textarea class="form-control" id="listeningQuestion" rows="3" placeholder="Enter the question text"></textarea>
-                        </div>
-                    </div>
-
-                    <div id="structureFields" class="d-none section-fields">
-                        <div class="mb-3">
-                            <label class="form-label">Question Type</label>
-                            <select class="form-select" id="structureType">
-                                <option value="structure">Structure</option>
-                                <option value="written">Written Expression</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Question Text</label>
-                            <textarea class="form-control" id="structureQuestion" rows="3" placeholder="Enter the question text"></textarea>
-                            <div class="form-text">For structure questions, use underscores (_____) to indicate the blank space</div>
-                        </div>
-                    </div>
-
-                    <div id="readingFields" class="d-none section-fields">
-                        <div class="mb-3">
-                            <label class="form-label">Select Passage</label>
-                            <select class="form-select" id="readingPassage">
-                                <option value="">Select a passage</option>
-                                <option value="1">Passage #1: Environmental Science</option>
-                                <option value="2">Passage #2: History</option>
-                                <option value="3">Passage #3: Technology</option>
-                                <option value="new">+ Add New Passage</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Question Text</label>
-                            <textarea class="form-control" id="readingQuestion" rows="3" placeholder="Enter the question text"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Answer Options (Common for all sections) -->
-                    <div class="mb-4">
-                        <label class="form-label">Answer Options</label>
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">A</span>
-                                <input type="text" class="form-control" id="optionA" placeholder="Option A">
+                            <div class="mb-3">
+                                <label for="structure_type" class="form-label">Structure Type</label>
+                                <select class="form-select" id="structure_type" name="structure_type" required>
+                                    <option value="" selected disabled>Select type...</option>
+                                    <option value="completion">Sentence Completion</option>
+                                    <option value="error">Error Identification</option>
+                                </select>
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">B</span>
-                                <input type="text" class="form-control" id="optionB" placeholder="Option B">
+                            <div class="mb-3">
+                                <label for="question_text" class="form-label">Question Text</label>
+                                <textarea class="form-control" id="structure_question_text" name="question_text" rows="3" required></textarea>
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">C</span>
-                                <input type="text" class="form-control" id="optionC" placeholder="Option C">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="structure_option_a" class="form-label">Option A</label>
+                                    <input type="text" class="form-control" id="structure_option_a" name="option_a" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="structure_option_b" class="form-label">Option B</label>
+                                    <input type="text" class="form-control" id="structure_option_b" name="option_b" required>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">D</span>
-                                <input type="text" class="form-control" id="optionD" placeholder="Option D">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="structure_option_c" class="form-label">Option C</label>
+                                    <input type="text" class="form-control" id="structure_option_c" name="option_c" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="structure_option_d" class="form-label">Option D</label>
+                                    <input type="text" class="form-control" id="structure_option_d" name="option_d" required>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="structure_correct_answer" class="form-label">Correct Answer</label>
+                                    <select class="form-select" id="structure_correct_answer" name="correct_answer" required>
+                                        <option value="" selected disabled>Select answer...</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="structure_difficulty" class="form-label">Difficulty Level</label>
+                                    <select class="form-select" id="structure_difficulty" name="difficulty" required>
+                                        <option value="" selected disabled>Select level...</option>
+                                        <option value="easy">Easy</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="hard">Hard</option>
+                                    </select>
+                                </div>
+                            </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Correct Answer</label>
-                        <select class="form-select" id="correctAnswer" required>
-                            <option value="">Select correct answer</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Difficulty Level</label>
-                        <select class="form-select" id="difficultyLevel">
-                            <option value="easy">Easy</option>
-                            <option value="medium">Medium</option>
-                            <option value="hard">Hard</option>
-                        </select>
-                    </div>
-
-                    {{-- <div class="mb-3">
                         <label class="form-label">Notes (Optional)</label>
                         <textarea class="form-control" id="questionNotes" rows="2" placeholder="Any additional notes about this question"></textarea>
-                    </div> --}}
+                    </div>
                 </form>
             </div>
             <div class="modal-footer p-3 border-0">
@@ -624,178 +577,298 @@
                     </div>
                 </div>
 
-                <div class="card bg-light mb-3">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <button class="btn btn-sm btn-primary rounded-circle me-2">
-                                <i class="bi bi-play-fill"></i>
-                            </button>
-                            <span>audio_1.mp3</span>
-                            <span class="badge bg-success ms-auto">Correct Answer: C</span>
-                        </div>
-                        <h6 class="fw-bold">Question:</h6>
-                        <p>What is the woman primarily discussing?</p>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <h6 class="fw-bold mb-2">Answer Options:</h6>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex align-items-center">
-                            <span class="badge rounded-pill bg-secondary me-2">A</span>
-                            <span>A new research project</span>
-                        </li>
-                        <li class="list-group-item d-flex align-items-center">
-                            <span class="badge rounded-pill bg-secondary me-2">B</span>
-                            <span>A scheduling issue</span>
-                        </li>
-                        <li class="list-group-item d-flex align-items-center">
-                            <span class="badge rounded-pill bg-success me-2">C</span>
-                            <span>A campus policy change</span>
-                        </li>
-                        <li class="list-group-item d-flex align-items-center">
-                            <span class="badge rounded-pill bg-secondary me-2">D</span>
-                            <span>A personal matter</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="mb-3">
-                    <h6 class="fw-bold mb-2">Additional Information:</h6>
-                    <div class="card bg-light">
-                        <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <p class="mb-1"><span class="fw-bold">Difficulty Level:</span> Medium</p>
-                                    <p class="mb-1"><span class="fw-bold">Created On:</span> 2023-08-15 10:30</p>
+                                <div class="col-md-6 mb-3">
+                                    <label for="reading_option_a" class="form-label">Option A</label>
+                                    <input type="text" class="form-control" id="reading_option_a" name="option_a" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <p class="mb-1"><span class="fw-bold">Last Updated:</span> 2023-08-15 14:30</p>
-                                    <p class="mb-1"><span class="fw-bold">Question ID:</span> LST-A-001</p>
+                                <div class="col-md-6 mb-3">
+                                    <label for="reading_option_b" class="form-label">Option B</label>
+                                    <input type="text" class="form-control" id="reading_option_b" name="option_b" required>
                                 </div>
                             </div>
-                        </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="reading_option_c" class="form-label">Option C</label>
+                                    <input type="text" class="form-control" id="reading_option_c" name="option_c" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="reading_option_d" class="form-label">Option D</label>
+                                    <input type="text" class="form-control" id="reading_option_d" name="option_d" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="reading_correct_answer" class="form-label">Correct Answer</label>
+                                    <select class="form-select" id="reading_correct_answer" name="correct_answer" required>
+                                        <option value="" selected disabled>Select answer...</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="reading_difficulty" class="form-label">Difficulty Level</label>
+                                    <select class="form-select" id="reading_difficulty" name="difficulty" required>
+                                        <option value="" selected disabled>Select level...</option>
+                                        <option value="easy">Easy</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="hard">Hard</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="reading_notes" class="form-label">Notes (Optional)</label>
+                                <textarea class="form-control" id="reading_notes" name="notes" rows="2"></textarea>
+                                <small class="text-muted">Add any additional notes about this question</small>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>Add Reading Question
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer p-3 border-0">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-warning" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#editQuestionModal">
-                    <i class="bi bi-pencil me-1"></i>Edit
-                </button>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Edit Question Modal -->
-<div class="modal fade" id="editQuestionModal" tabindex="-1" aria-labelledby="editQuestionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header bg-light p-4 border-0">
-                <h5 class="modal-title" id="editQuestionModalLabel">
-                    <i class="bi bi-pencil me-2 text-warning"></i>Edit Question
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <form id="editQuestionForm">
-                    <!-- Using the same form structure as Add Question but with pre-filled values -->
-                    <div class="mb-4">
-                        <label class="form-label">Section</label>
-                        <select class="form-select" id="editQuestionSection" disabled>
-                            <option value="listening" selected>Listening Comprehension</option>
-                            <option value="structure">Structure & Written Expression</option>
-                            <option value="reading">Reading Comprehension</option>
-                        </select>
-                        <div class="form-text">Section cannot be changed after creation</div>
-                    </div>
+    <!-- Edit Question Modal -->
+    <div class="modal fade" id="editQuestionModal" tabindex="-1" aria-labelledby="editQuestionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title" id="editQuestionModalLabel">Edit TOEFL Question</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editQuestionForm" action="" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit_section" name="section">
 
-                    <div id="editListeningFields">
-                        <div class="mb-3">
-                            <label class="form-label">Audio File</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" value="audio_1.mp3" readonly>
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="bi bi-play-fill"></i>
-                                </button>
-                                <button class="btn btn-outline-primary" type="button">
-                                    <i class="bi bi-upload"></i> Replace
-                                </button>
-                            </div>
+                        <!-- Dynamic fields will be populated based on question type -->
+                        <div id="editFormFields">
+                            <!-- Fields will be inserted here via JavaScript -->
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Part</label>
-                            <select class="form-select" id="editListeningPart">
-                                <option value="A" selected>Part A</option>
-                                <option value="B">Part B</option>
-                                <option value="C">Part C</option>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-check-circle me-2"></i>Update Question
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirm Deletion</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the following question?</p>
+                    <div class="alert alert-light border p-3">
+                        <p id="questionToDelete" class="mb-0"></p>
+                    </div>
+                    <p class="text-danger mb-0"><strong>Warning:</strong> This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Delete Question</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Player -->
+    <audio id="audioPlayer" style="display: none;"></audio>
+
+    <script>
+        // Show/hide question forms based on selection
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle question type selection
+            const typeRadios = document.querySelectorAll('input[name="questionType"]');
+            const formContainer = document.getElementById('questionFormContainer');
+            const forms = {
+                listening: document.getElementById('listeningForm'),
+                structure: document.getElementById('structureForm'),
+                reading: document.getElementById('readingForm')
+            };
+
+            typeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Hide all forms
+                    Object.values(forms).forEach(form => {
+                        form.style.display = 'none';
+                    });
+
+                    // Show selected form
+                    forms[this.value].style.display = 'block';
+                });
+            });
+
+            // Handle delete confirmation
+            const deleteButtons = document.querySelectorAll('.delete-confirm');
+            const questionToDelete = document.getElementById('questionToDelete');
+            const confirmDeleteBtn = document.getElementById('confirmDelete');
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const questionText = this.dataset.questionText;
+                    const form = this.closest('form');
+
+                    questionToDelete.textContent = questionText;
+                    confirmDeleteBtn.onclick = function() {
+                        form.submit();
+                        deleteModal.hide();
+                    };
+
+                    deleteModal.show();
+                });
+            });
+
+            // Audio player functionality
+            window.playAudio = function(url) {
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.src = url;
+                audioPlayer.play();
+            };
+
+            // Edit question modal
+            const editModal = document.getElementById('editQuestionModal');
+            if (editModal) {
+                editModal.addEventListener('show.bs.modal', function(event) {
+                    const button = event.relatedTarget;
+                    const questionId = button.getAttribute('data-question-id');
+                    const form = document.getElementById('editQuestionForm');
+
+                    // Set the form action URL
+                    form.action = `/admin/toefl-questions/${questionId}`;
+
+                    // Determine section based on available attributes
+                    let section;
+                    if (button.hasAttribute('data-listening-part')) {
+                        section = 'listening';
+                        document.getElementById('edit_section').value = 'listening';
+                        populateListeningForm(button);
+                    } else if (button.hasAttribute('data-structure-type')) {
+                        section = 'structure';
+                        document.getElementById('edit_section').value = 'structure';
+                        populateStructureForm(button);
+                    } else if (button.hasAttribute('data-passage-id')) {
+                        section = 'reading';
+                        document.getElementById('edit_section').value = 'reading';
+                        populateReadingForm(button);
+                    }
+                });
+            }
+
+            // Populate edit forms based on question type
+            function populateListeningForm(button) {
+                const fieldsContainer = document.getElementById('editFormFields');
+
+                fieldsContainer.innerHTML = `
+                    <div class="mb-3">
+                        <label for="edit_listening_part" class="form-label">Listening Part</label>
+                        <select class="form-select" id="edit_listening_part" name="listening_part" required>
+                            <option value="A" ${button.getAttribute('data-listening-part') === 'A' ? 'selected' : ''}>Part A - Short Conversations</option>
+                            <option value="B" ${button.getAttribute('data-listening-part') === 'B' ? 'selected' : ''}>Part B - Extended Conversations</option>
+                            <option value="C" ${button.getAttribute('data-listening-part') === 'C' ? 'selected' : ''}>Part C - Lectures/Talks</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_audio_file" class="form-label">Audio File</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">${button.getAttribute('data-audio-file')}</span>
+                            <input type="file" class="form-control" id="edit_audio_file" name="audio_file" accept="audio/*">
+                        </div>
+                        <small class="text-muted">Leave blank to keep current audio</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_question_text" class="form-label">Question Text</label>
+                        <textarea class="form-control" id="edit_question_text" name="question_text" rows="3" required>${button.getAttribute('data-question-text')}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_option_a" class="form-label">Option A</label>
+                            <input type="text" class="form-control" id="edit_option_a" name="option_a" value="${button.getAttribute('data-option-a')}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_option_b" class="form-label">Option B</label>
+                            <input type="text" class="form-control" id="edit_option_b" name="option_b" value="${button.getAttribute('data-option-b')}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_option_c" class="form-label">Option C</label>
+                            <input type="text" class="form-control" id="edit_option_c" name="option_c" value="${button.getAttribute('data-option-c')}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_option_d" class="form-label">Option D</label>
+                            <input type="text" class="form-control" id="edit_option_d" name="option_d" value="${button.getAttribute('data-option-d')}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_correct_answer" class="form-label">Correct Answer</label>
+                            <select class="form-select" id="edit_correct_answer" name="correct_answer" required>
+                                <option value="A" ${button.getAttribute('data-correct-answer') === 'A' ? 'selected' : ''}>A</option>
+                                <option value="B" ${button.getAttribute('data-correct-answer') === 'B' ? 'selected' : ''}>B</option>
+                                <option value="C" ${button.getAttribute('data-correct-answer') === 'C' ? 'selected' : ''}>C</option>
+                                <option value="D" ${button.getAttribute('data-correct-answer') === 'D' ? 'selected' : ''}>D</option>
                             </select>
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Question Text</label>
-                            <textarea class="form-control" id="editListeningQuestion" rows="3">What is the woman primarily discussing?</textarea>
-                        </div>
-                    </div>
-
-                    <!-- Answer Options (pre-filled) -->
-                    <div class="mb-4">
-                        <label class="form-label">Answer Options</label>
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">A</span>
-                                <input type="text" class="form-control" value="A new research project">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">B</span>
-                                <input type="text" class="form-control" value="A scheduling issue">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">C</span>
-                                <input type="text" class="form-control" value="A campus policy change">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">D</span>
-                                <input type="text" class="form-control" value="A personal matter">
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_difficulty" class="form-label">Difficulty Level</label>
+                            <select class="form-select" id="edit_difficulty" name="difficulty" required>
+                                <option value="easy" ${button.getAttribute('data-difficulty') === 'easy' ? 'selected' : ''}>Easy</option>
+                                <option value="medium" ${button.getAttribute('data-difficulty') === 'medium' ? 'selected' : ''}>Medium</option>
+                                <option value="hard" ${button.getAttribute('data-difficulty') === 'hard' ? 'selected' : ''}>Hard</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Correct Answer</label>
-                        <select class="form-select" id="editCorrectAnswer">
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C" selected>C</option>
-                            <option value="D">D</option>
+                        <label for="edit_notes" class="form-label">Notes (Optional)</label>
+                        <textarea class="form-control" id="edit_notes" name="notes" rows="2">${button.getAttribute('data-notes') || ''}</textarea>
+                    </div>
+                `;
+            }
+
+            function populateStructureForm(button) {
+                const fieldsContainer = document.getElementById('editFormFields');
+
+                fieldsContainer.innerHTML = `
+                    <div class="mb-3">
+                        <label for="edit_structure_type" class="form-label">Structure Type</label>
+                        <select class="form-select" id="edit_structure_type" name="structure_type" required>
+                            <option value="completion" ${button.getAttribute('data-structure-type') === 'completion' ? 'selected' : ''}>Sentence Completion</option>
+                            <option value="error" ${button.getAttribute('data-structure-type') === 'error' ? 'selected' : ''}>Error Identification</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Difficulty Level</label>
-                        <select class="form-select" id="editDifficultyLevel">
-                            <option value="easy">Easy</option>
-                            <option value="medium" selected>Medium</option>
-                            <option value="hard">Hard</option>
-                        </select>
-                    </div>
-
-                    {{-- <div class="mb-3">
                         <label class="form-label">Notes</label>
                         <textarea class="form-control" id="editQuestionNotes" rows="2">This question tests the ability to identify the main topic in a short conversation.</textarea>
-                    </div> --}}
+                    </div>
                 </form>
             </div>
             <div class="modal-footer p-3 border-0">
@@ -808,210 +881,123 @@
     </div>
 </div>
 
-<!-- Delete Question Modal -->
-<div class="modal fade" id="deleteQuestionModal" tabindex="-1" aria-labelledby="deleteQuestionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header bg-light p-4 border-0">
-                <h5 class="modal-title" id="deleteQuestionModalLabel">
-                    <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Confirm Deletion
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="text-center mb-4">
-                    <div class="bg-danger bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-                        <i class="bi bi-trash text-danger fs-1"></i>
-                    </div>
-                    <h5>Are you sure you want to delete this question?</h5>
-                    <p class="text-muted">This action cannot be undone. All data associated with this question will be permanently removed.</p>
-                </div>
-
-                <div class="card bg-light mb-3">
-                    <div class="card-body">
-                        <h6 class="fw-bold">Question Preview:</h6>
-                        <p>"What is the woman primarily discussing?"</p>
-                        <div class="d-flex justify-content-between">
-                            <span class="badge bg-info">Listening Comprehension</span>
-                            <span class="badge bg-success">Correct Answer: C</span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_option_c" class="form-label">Option C</label>
+                            <input type="text" class="form-control" id="edit_option_c" name="option_c" value="${button.getAttribute('data-option-c')}" required>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_option_d" class="
+                            <div class="col-md-6 mb-3">
+                        <label for="edit_option_d" class="form-label">Option D</label>
+                        <input type="text" class="form-control" id="edit_option_d" name="option_d" value="${button.getAttribute('data-option-d')}" required>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer p-3 border-0">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete">
-                    <i class="bi bi-trash me-1"></i>Delete Question
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Add New Passage Modal (For Reading Section) -->
-<div class="modal fade" id="addPassageModal" tabindex="-1" aria-labelledby="addPassageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header bg-light p-4 border-0">
-                <h5 class="modal-title" id="addPassageModalLabel">
-                    <i class="bi bi-file-earmark-text me-2 text-primary"></i>Add New Reading Passage
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <form id="addPassageForm">
-                    <div class="mb-3">
-                        <label class="form-label">Passage Title</label>
-                        <input type="text" class="form-control" id="passageTitle" placeholder="Enter a descriptive title">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Subject/Topic</label>
-                        <input type="text" class="form-control" id="passageTopic" placeholder="E.g., Environmental Science, History, Technology">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Difficulty Level</label>
-                        <select class="form-select" id="passageDifficulty">
-                            <option value="easy">Easy</option>
-                            <option value="medium" selected>Medium</option>
-                            <option value="hard">Hard</option>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_correct_answer" class="form-label">Correct Answer</label>
+                        <select class="form-select" id="edit_correct_answer" name="correct_answer" required>
+                            <option value="A" ${button.getAttribute('data-correct-answer') === 'A' ? 'selected' : ''}>A</option>
+                            <option value="B" ${button.getAttribute('data-correct-answer') === 'B' ? 'selected' : ''}>B</option>
+                            <option value="C" ${button.getAttribute('data-correct-answer') === 'C' ? 'selected' : ''}>C</option>
+                            <option value="D" ${button.getAttribute('data-correct-answer') === 'D' ? 'selected' : ''}>D</option>
                         </select>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Passage Text</label>
-                        <textarea class="form-control" id="passageText" rows="10" placeholder="Enter the full passage text here..."></textarea>
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_difficulty" class="form-label">Difficulty Level</label>
+                        <select class="form-select" id="edit_difficulty" name="difficulty" required>
+                            <option value="easy" ${button.getAttribute('data-difficulty') === 'easy' ? 'selected' : ''}>Easy</option>
+                            <option value="medium" ${button.getAttribute('data-difficulty') === 'medium' ? 'selected' : ''}>Medium</option>
+                            <option value="hard" ${button.getAttribute('data-difficulty') === 'hard' ? 'selected' : ''}>Hard</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Notes (Optional)</label>
-                        <textarea class="form-control" id="passageNotes" rows="2" placeholder="Any additional notes or keywords related to this passage"></textarea>
+                <div class="mb-3">
+                    <label for="edit_notes" class="form-label">Notes (Optional)</label>
+                    <textarea class="form-control" id="edit_notes" name="notes" rows="2">${button.getAttribute('data-notes') || ''}</textarea>
+                </div>
+            `;
+        }
+
+        function populateReadingForm(button) {
+            const fieldsContainer = document.getElementById('editFormFields');
+
+            fieldsContainer.innerHTML = `
+                <div class="mb-3">
+                    <label for="edit_reading_passage_id" class="form-label">Reading Passage</label>
+                    <select class="form-select" id="edit_reading_passage_id" name="reading_passage_id" required>
+                        ${generatePassageOptions(button.getAttribute('data-passage-id'))}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit_question_text" class="form-label">Question Text</label>
+                    <textarea class="form-control" id="edit_question_text" name="question_text" rows="3" required>${button.getAttribute('data-question-text')}</textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_option_a" class="form-label">Option A</label>
+                        <input type="text" class="form-control" id="edit_option_a" name="option_a" value="${button.getAttribute('data-option-a')}" required>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer p-3 border-0">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveNewPassage">
-                    <i class="bi bi-save me-1"></i>Save Passage
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_option_b" class="form-label">Option B</label>
+                        <input type="text" class="form-control" id="edit_option_b" name="option_b" value="${button.getAttribute('data-option-b')}" required>
+                    </div>
+                </div>
 
-<!-- JavaScript for the page -->
-<script>
-    // Show relevant fields based on section selection
-    document.getElementById('questionSection').addEventListener('change', function() {
-        // Hide all section fields
-        document.querySelectorAll('.section-fields').forEach(function(el) {
-            el.classList.add('d-none');
-        });
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_option_c" class="form-label">Option C</label>
+                        <input type="text" class="form-control" id="edit_option_c" name="option_c" value="${button.getAttribute('data-option-c')}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_option_d" class="form-label">Option D</label>
+                        <input type="text" class="form-control" id="edit_option_d" name="option_d" value="${button.getAttribute('data-option-d')}" required>
+                    </div>
+                </div>
 
-        // Show the selected section fields
-        const selectedSection = this.value;
-        if (selectedSection) {
-            document.getElementById(selectedSection + 'Fields').classList.remove('d-none');
-        }
-    });
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_correct_answer" class="form-label">Correct Answer</label>
+                        <select class="form-select" id="edit_correct_answer" name="correct_answer" required>
+                            <option value="A" ${button.getAttribute('data-correct-answer') === 'A' ? 'selected' : ''}>A</option>
+                            <option value="B" ${button.getAttribute('data-correct-answer') === 'B' ? 'selected' : ''}>B</option>
+                            <option value="C" ${button.getAttribute('data-correct-answer') === 'C' ? 'selected' : ''}>C</option>
+                            <option value="D" ${button.getAttribute('data-correct-answer') === 'D' ? 'selected' : ''}>D</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_difficulty" class="form-label">Difficulty Level</label>
+                        <select class="form-select" id="edit_difficulty" name="difficulty" required>
+                            <option value="easy" ${button.getAttribute('data-difficulty') === 'easy' ? 'selected' : ''}>Easy</option>
+                            <option value="medium" ${button.getAttribute('data-difficulty') === 'medium' ? 'selected' : ''}>Medium</option>
+                            <option value="hard" ${button.getAttribute('data-difficulty') === 'hard' ? 'selected' : ''}>Hard</option>
+                        </select>
+                    </div>
+                </div>
 
-    // Handle "Add New Passage" option
-    document.getElementById('readingPassage')?.addEventListener('change', function() {
-        if (this.value === 'new') {
-            // Hide current modal and show add passage modal
-            const currentModal = bootstrap.Modal.getInstance(document.getElementById('addQuestionModal'));
-            currentModal.hide();
-
-            setTimeout(() => {
-                const passageModal = new bootstrap.Modal(document.getElementById('addPassageModal'));
-                passageModal.show();
-            }, 500);
-        }
-    });
-
-    // Save new question
-    document.getElementById('saveNewQuestion').addEventListener('click', function() {
-        // Validate form
-        const form = document.getElementById('addQuestionForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
+                <div class="mb-3">
+                    <label for="edit_notes" class="form-label">Notes (Optional)</label>
+                    <textarea class="form-control" id="edit_notes" name="notes" rows="2">${button.getAttribute('data-notes') || ''}</textarea>
+                </div>
+            `;
         }
 
-        // Simulate saving question
-        alert('Question saved successfully!');
+        // Function to generate passage options
+        function generatePassageOptions(selectedId) {
+            let options = '';
+            const passages = @json($readingPassages);
 
-        // Close modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('addQuestionModal'));
-        modal.hide();
+            passages.forEach(passage => {
+                const selected = passage.id == selectedId ? 'selected' : '';
+                options += `<option value="${passage.id}" ${selected}>Passage #${passage.id}: ${passage.topic}</option>`;
+            });
 
-        // In a real application, you would send form data to the server here
-    });
-
-    // Update question
-    document.getElementById('updateQuestion').addEventListener('click', function() {
-        // Validate form
-        const form = document.getElementById('editQuestionForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
+            return options;
         }
-
-        // Simulate updating question
-        alert('Question updated successfully!');
-
-        // Close modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('editQuestionModal'));
-        modal.hide();
-
-        // In a real application, you would send form data to the server here
-    });
-
-    // Delete question
-    document.getElementById('confirmDelete').addEventListener('click', function() {
-        // Simulate deleting question
-        alert('Question deleted successfully!');
-
-        // Close modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('deleteQuestionModal'));
-        modal.hide();
-
-        // In a real application, you would send delete request to the server here
-    });
-
-    // Save new passage
-    document.getElementById('saveNewPassage').addEventListener('click', function() {
-        // Validate form
-        const form = document.getElementById('addPassageForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-
-        // Simulate saving passage
-        alert('Passage saved successfully!');
-
-        // Close modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('addPassageModal'));
-        modal.hide();
-
-        // Re-open add question modal
-        setTimeout(() => {
-            const questionModal = new bootstrap.Modal(document.getElementById('addQuestionModal'));
-            questionModal.show();
-
-            // Update passage dropdown with new passage
-            const passageSelect = document.getElementById('readingPassage');
-            const newOption = document.createElement('option');
-            const passageTitle = document.getElementById('passageTitle').value;
-            const passageTopic = document.getElementById('passageTopic').value;
-
-            newOption.value = 'new_passage';
-            newOption.text = `Passage: ${passageTitle} - ${passageTopic}`;
-            passageSelect.add(newOption, 3); // Add before "Add New Passage" option
-            passageSelect.value = 'new_passage';
-        }, 500);
     });
 </script>
 @endsection

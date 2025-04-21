@@ -76,21 +76,21 @@ User Management
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Specialization</th>
+                            {{-- <th>Specialization</th> --}}
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach($admins as $admin)
+                        @foreach($admins as $admin)
                         <tr>
-                            <td>{{ $admin->id }}</td>
+                            <td>{{ (($admins->currentPage() - 1) * $admins->perPage()) + $loop->iteration }}</td>
                             <td>{{ $admin->name }}</td>
                             <td>{{ $admin->email }}</td>
-                            <td>{{ $admin->specialization }}</td>
+                            {{-- <td>{{ $admin->specialization }}</td> --}}
                             <td>
-                                <span class="badge {{ $admin->status == 'active' ? 'bg-success' : 'bg-warning' }}">
-                                    {{ $admin->status }}
+                                <span class="badge {{ $admin->getAdminInfo->status == 'active' ? 'bg-success' : 'bg-warning' }}">
+                                    {{ $admin->getAdminInfo->status }}
                                 </span>
                             </td>
                             <td>
@@ -107,7 +107,7 @@ User Management
                                 </div>
                             </td>
                         </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -180,15 +180,15 @@ User Management
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach($instructors as $instructor)
+                        @foreach($instructors as $instructor)
                         <tr>
-                            <td>{{ $instructor->id }}</td>
+                            <td>{{ (($instructors->currentPage() - 1) * $instructors->perPage()) + $loop->iteration }}</td>
                             <td>{{ $instructor->name }}</td>
                             <td>{{ $instructor->email }}</td>
-                            <td>{{ $instructor->specialization }}</td>
+                            <td>{{ $instructor->getInstructorInfo->specialization }}</td>
                             <td>
-                                <span class="badge {{ $instructor->status == 'active' ? 'bg-success' : 'bg-warning' }}">
-                                    {{ $instructor->status }}
+                                <span class="badge {{ $instructor->getInstructorInfo->status == 'active' ? 'bg-success' : 'bg-warning' }}">
+                                    {{ $instructor->getInstructorInfo->status }}
                                 </span>
                             </td>
                             <td>
@@ -205,7 +205,7 @@ User Management
                                 </div>
                             </td>
                         </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -337,10 +337,10 @@ User Management
 {{-- @include('Admin.Modals.AddInstructorModal')
 @include('Admin.Modals.EditInstructorModal')
 @include('Admin.Modals.ViewInstructorModal')
-@include('Admin.Modals.DeleteInstructorModal')
+@include('Admin.Modals.DeleteInstructorModal') --}}
 
 <!-- Modals for User Management -->
-@include('Admin.Modals.AddUserModal')
+{{-- @include('Admin.Modals.AddUserModal')
 @include('Admin.Modals.EditUserModal')
 @include('Admin.Modals.ViewUserModal')
 @include('Admin.Modals.DeleteUserModal') --}}

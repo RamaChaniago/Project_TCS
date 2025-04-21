@@ -131,7 +131,7 @@
                     <a class="nav-link" href="/Karir">Karir</a>
                 </li>
 
-                {{-- @if(Auth::check()) --}}
+                @if(Auth::check())
                 <li class="nav-item">
                     <a class="nav-link" href="/member">Kelas Saya</a>
                 </li>
@@ -154,11 +154,11 @@
                         <li><a class="dropdown-item" href="/logout">Logout</a></li>
                     </ul>
                 </li>
-                {{-- @else --}}
+                @else
                 <li class="nav-item">
                     <a class="btn btn-primary" href="/login">Masuk</a>
                 </li>
-                {{-- @endif --}}
+                @endif
             </ul>
         </div>
     </div>
