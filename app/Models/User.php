@@ -23,8 +23,11 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'address',
+        'profile_image',
         'role',
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,7 +47,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
     /**
      * Get the getAdminInfo associated with the User
      *
@@ -60,8 +63,18 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function getInstructorInfo(): HasOne
+    public function getInstructorInfo()
     {
         return $this->hasOne(instructorManagement::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the getMemberInfo associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function getMemberInfo(): HasOne
+    {
+        return $this->hasOne(memberManagement::class, 'user_id', 'id');
     }
 }

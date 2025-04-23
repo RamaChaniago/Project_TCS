@@ -22,12 +22,12 @@ class authController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            
+
             $user = Auth::user();
 
             // Redirect berdasarkan role
             if ($user->role === 'instructor') {
-                
+
                 return redirect('/instructor');
                 Alert::success('Login Berhasil', 'Selamat Datang');
 
@@ -53,15 +53,23 @@ class authController extends Controller
         return redirect()->back();
     }
 
-    public function logout(Request $request)
+/*************  ✨ Windsurf Command ⭐  *************/
+    /**
+     * Handle an incoming authentication logout request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+/*******  97660065-9664-469d-a13a-70ccb1fa52e1  *******/    public function logout(Request $request)
     {
         Auth::logout(); // Logout user yang sedang aktif
-    
+
         $request->session()->invalidate(); // Hapus session
         $request->session()->regenerateToken(); // Regenerasi CSRF token
-    
+
         return redirect('/'); // Redirect ke halaman login
     }
 
-    
+
 }

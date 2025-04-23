@@ -9,6 +9,8 @@ use App\Http\Controllers\KarirController;
 use App\Http\Controllers\LearningPackageController;
 use App\Http\Controllers\LiveClassesController;
 use App\Http\Controllers\OneOnOneController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileMemberController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\SmartBookController;
 use App\Http\Controllers\SubscriptionController;
@@ -37,7 +39,7 @@ Route::middleware(['auth', 'cekRole:admin,member,instructor'])->group(function()
 
 
 Route::middleware(['auth', 'cekRole:admin,member'])->group(function(){
-   
+
     //Route For Member
     Route::get('/member', function () {return view('Member.Transaction');});
     Route::get('/transaction', function () {return view('Member.Transaction');});
@@ -48,6 +50,10 @@ Route::middleware(['auth', 'cekRole:admin,member'])->group(function(){
     Route::get('/profile-member', function () {return view('Profile.Profile_Member.MainProfil');});
     Route::get('/exam-toefl', function () {return view('Member.Exam');});
 
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/update-image', [ProfileController::class, 'updateImage'])->name('profile.update.image');
+    Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 });
 
 
@@ -58,7 +64,7 @@ Route::middleware(['auth', 'cekRole:admin'])->group(function(){
     //Route For Admin
     Route::get('/admin', function () {return view('Admin.Dashboard');});
     Route::get('/dashboard', function () {return view('Admin.Dashboard');});
-    
+
     Route::resource('/user-management', userManagementController::class);
 
     Route::get('/course-management', function () {return view('Admin.Course-Management');});
