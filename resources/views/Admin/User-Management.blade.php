@@ -217,12 +217,12 @@ User Management
         <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
             <h5 class="mb-0">User/Customer Management</h5>
             <div class="d-flex gap-2">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
                     <i class="bi bi-plus-circle me-2"></i>Add User
                 </button>
                 <button class="btn btn-success" id="syncGoogleUsers">
                     <i class="bi bi-google me-2"></i>Sync Google Users
-                </button>
+                </button> --}}
             </div>
         </div>
         <div class="card-body">
