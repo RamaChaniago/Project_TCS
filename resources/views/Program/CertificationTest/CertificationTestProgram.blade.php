@@ -1,6 +1,8 @@
 @extends('Main')
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Program Detail Page with Mobile-Desktop Transition -->
     <div class="container mt-5 pt-3">
         <div class="row">
@@ -41,8 +43,9 @@
                     </div>
                     <!-- Mobile Action Buttons -->
                     <div class="mt-3 d-flex gap-2">
-                        <a href="/checkout" class="btn btn-primary flex-grow-1 text-center">Beli Sekarang</a>
-                        <a href="https://wa.me/+6282177980624" target="_blank" class="btn btn-outline-secondary">
+                        <a href="{{ url('/checkout') }}" class="btn btn-primary text-center">Beli Sekarang</a>
+                        
+                        <a href="https://wa.me/6282177980624" target="_blank" class="btn btn-outline-secondary">
                             <i class="bi bi-chat-text"></i> Chat Admin
                         </a>
                     </div>
@@ -292,7 +295,7 @@
 
             <!-- Right Content (Floating Card) - Only visible on desktop -->
             <div class="col-lg-4 d-none d-lg-block">
-                <div class="card border-0 shadow floating-card">
+                <div class="card border-0 shadow">
                     <!-- Image at the top of the card -->
                     <div class="p-3 bg-primary rounded-top">
                         <img src="{{ asset('img/toefl-test-banner.jpg') }}" class="card-img-top rounded"
@@ -317,8 +320,11 @@
 
                         <!-- Buttons -->
                         <div class="d-flex gap-2 mb-3">
-                            <button class="btn btn-primary flex-grow-1">Beli Sekarang</button>
-                            <button class="btn btn-outline-primary"><i class="bi bi-cart"></i></button>
+                            <a href="{{ url('/checkout') }}" class="btn btn-primary text-center">Beli Sekarang</a>
+                            
+                            <a href="https://wa.me/6282177980624" target="_blank" class="btn btn-outline-secondary">
+                                <i class="bi bi-chat-text"></i> Chat Admin
+                            </a>
                         </div>
                         <button class="btn btn-outline-secondary w-100">Chat Admin</button>
                     </div>
@@ -608,6 +614,7 @@
             will-change: position, top;
             transition: top 0.2s ease-out, position 0.2s ease-out;
             z-index: 100;
+            pointer-events: none;
         }
 
         /* Mobile hero banner styling */
