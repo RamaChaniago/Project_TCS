@@ -226,8 +226,8 @@
         transform: rotate(180deg);
     }
     /* Remove borders completely */
-    .table-borderless, 
-    .table-borderless th, 
+    .table-borderless,
+    .table-borderless th,
     .table-borderless td {
         border: none !important;
     }
@@ -238,52 +238,126 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Form Validation
-        const loginForm = document.getElementById('loginForm');
-        loginForm.addEventListener('submit', function(event) {
-            if (!loginForm.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            loginForm.classList.add('was-validated');
-        }, false);
+    // Check if user is logged in (this would typically come from your authentication system)
+    const isLoggedIn = false; // Change this to true to test logged-in behavior
 
-        // Payment Method Selection
-        const paymentMethods = document.querySelectorAll('.payment-method');
-        const proceedPaymentBtn = document.getElementById('proceedPayment');
+    // Form Validation
+    const loginForm = document.getElementById('loginForm');
+    const loginSection = document.getElementById('loginSection');
+    const proceedPaymentBtn = document.getElementById('proceedPayment');
 
-        paymentMethods.forEach(method => {
-            method.addEventListener('click', function() {
-                // Remove active class from all payment methods
-                paymentMethods.forEach(m => {
-                    m.classList.remove('active');
-                    m.classList.remove('btn-primary');
-                    m.classList.add('btn-outline-' + m.classList[1].split('-')[1]);
-                });
-                
-                // Add active class to clicked method
-                this.classList.add('active');
-                this.classList.remove('btn-outline-' + this.classList[1].split('-')[1]);
-                this.classList.add('btn-primary');
-                
-                // Enable proceed to payment button
-                proceedPaymentBtn.disabled = false;
-            });
+    // Auto-collapse login section if already logged in
+    if (isLoggedIn) {
+        const loginSectionCollapse = new bootstrap.Collapse(loginSection, {
+            toggle: false
         });
+        loginSectionCollapse.hide();
 
-        // Collapse Toggle
-        const collapseToggles = document.querySelectorAll('.toggle-collapse');
-        collapseToggles.forEach(toggle => {
-            toggle.addEventListener('click', function() {
-                const icon = this.querySelector('.bi');
-                const targetId = this.getAttribute('data-bs-target');
-                const targetSection = document.querySelector(targetId);
-                
-                // Toggle chevron icon
-                icon.classList.toggle('bi-chevron-up');
-                icon.classList.toggle('bi-chevron-down');
+        // Update the toggle button icon
+        const loginToggleBtn = document.querySelector('[data-bs-target="#loginSection"]');
+        loginToggleBtn.querySelector('.bi').classList.remove('bi-chevron-up');
+        loginToggleBtn.querySelector('.bi').classList.add('bi-chevron-down');
+
+        // Add success indicator
+        const loginHeader = document.querySelector('[data-bs-target="#loginSection"]').parentElement;
+        const successBadge = document.createElement('span');
+        successBadge.className = 'badge bg-success ms-2';
+        successBadge.innerHTML = '<i class="bi bi-check-circle"></i> Completed';
+        loginHeader.appendChild(successBadge);
+    } else {
+        // If not logged in, ensure the login section is open and can't be closed
+        const loginToggleBtn = document.querySelector('[data-bs-target="#loginSection"]');
+        loginToggleBtn.setAttribute('disabled', 'disabled');
+
+        // Add required indicator
+        const loginHeader = document.querySelector('[data-bs-target="#loginSection"]').parentElement;
+        const requiredBadge = document.createElement('span');
+        requiredBadge.className = 'badge bg-danger ms-2';
+        requiredBadge.innerHTML = '<i class="bi bi-exclamation-circle"></i> Required';
+        loginHeader.appendChild(requiredBadge);
+    }
+
+    // Form validation and login handling
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        if (!loginForm.checkValidity()) {
+            event.stopPropagation();
+            loginForm.classList.add('was-validated');
+        } else {
+            // Simulate successful login
+            const loginSectionCollapse = new bootstrap.Collapse(loginSection, {
+                toggle: false
             });
+            loginSectionCollapse.hide();
+
+            // Update login section visual cues
+            const loginToggleBtn = document.querySelector('[data-bs-target="#loginSection"]');
+            loginToggleBtn.querySelector('.bi').classList.remove('bi-chevron-up');
+            loginToggleBtn.querySelector('.bi').classList.add('bi-chevron-down');
+
+            // Remove any existing badges
+            const loginHeader = loginToggleBtn.parentElement;
+            const existingBadges = loginHeader.querySelectorAll('.badge');
+            existingBadges.forEach(badge => badge.remove());
+
+            // Add success badge
+            const successBadge = document.createElement('span');
+            successBadge.className = 'badge bg-success ms-2';
+            successBadge.innerHTML = '<i class="bi bi-check-circle"></i> Completed';
+            loginHeader.appendChild(successBadge);
+
+            // Now we need to check if payment method is selected to enable the payment button
+            checkPaymentEligibility();
+        }
+    }, false);
+
+    // Payment Method Selection
+    const paymentMethods = document.querySelectorAll('.payment-method');
+    let paymentMethodSelected = false;
+
+    paymentMethods.forEach(method => {
+        method.addEventListener('click', function() {
+            // Remove active class from all payment methods
+            paymentMethods.forEach(m => {
+                m.classList.remove('active');
+                const btnStyle = m.classList[1].split('-')[1];
+                m.classList.remove('btn-primary');
+                m.classList.add('btn-outline-' + btnStyle);
+            });
+
+            // Add active class to clicked method
+            this.classList.add('active');
+            const btnStyle = this.classList[1].split('-')[1];
+            this.classList.remove('btn-outline-' + btnStyle);
+            this.classList.add('btn-primary');
+
+            // Mark payment method as selected
+            paymentMethodSelected = true;
+
+            // Check if we can enable the payment button
+            checkPaymentEligibility();
         });
     });
+
+    // Function to check if we can enable the payment button
+    function checkPaymentEligibility() {
+        // User can proceed if they're logged in AND have selected a payment method
+        if ((isLoggedIn || loginForm.classList.contains('was-validated') && loginForm.checkValidity()) && paymentMethodSelected) {
+            proceedPaymentBtn.disabled = false;
+        } else {
+            proceedPaymentBtn.disabled = true;
+        }
+    }
+
+    // Collapse Toggle for other sections
+    const collapseToggles = document.querySelectorAll('.toggle-collapse:not([data-bs-target="#loginSection"])');
+    collapseToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const icon = this.querySelector('.bi');
+            icon.classList.toggle('bi-chevron-up');
+            icon.classList.toggle('bi-chevron-down');
+        });
+    });
+});
 </script>
 @endsection
