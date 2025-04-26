@@ -25,22 +25,24 @@ class authController extends Controller
 
             $user = Auth::user();
 
-            // Redirect berdasarkan role
+            // Check if there's a redirect_to parameter
+            $redirectTo = $request->input('redirect_to');
+
+            if ($redirectTo) {
+                // If there's a redirect URL, use it with a success parameter
+                return redirect($redirectTo . '?login_success=Successfully logged in');
+            }
+
+            // Default redirects based on role if no redirect_to is specified
             if ($user->role === 'instructor') {
-
+                Alert::success('Login Berhasil', 'Selamat Datang');
                 return redirect('/instructor');
-                Alert::success('Login Berhasil', 'Selamat Datang');
-
             } elseif ($user->role === 'member') {
-
+                Alert::success('Login Berhasil', 'Selamat Datang');
                 return redirect('/');
-                Alert::success('Login Berhasil', 'Selamat Datang');
-
             } elseif ($user->role === 'admin') {
-
-                return redirect('/admin');
                 Alert::success('Login Berhasil', 'Selamat Datang');
-
+                return redirect('/admin');
             }
 
             // Jika role tidak dikenali, logout dan tampilkan error
@@ -49,19 +51,16 @@ class authController extends Controller
             return redirect()->back();
         }
 
+        // If the login fails and there's a redirect_to parameter
+        if ($request->has('redirect_to')) {
+            return redirect($request->input('redirect_to') . '?login_error=Password Anda Salah! Silahkan Coba Kembali');
+        }
+
         Alert::error('Error', 'Password Anda Salah!!, Silahkan Coba Kembali');
         return redirect()->back();
     }
 
-/*************  ✨ Windsurf Command ⭐  *************/
-    /**
-     * Handle an incoming authentication logout request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-
-/*******  97660065-9664-469d-a13a-70ccb1fa52e1  *******/    public function logout(Request $request)
+    public function logout(Request $request)
     {
         Auth::logout(); // Logout user yang sedang aktif
 
@@ -70,6 +69,4 @@ class authController extends Controller
 
         return redirect('/'); // Redirect ke halaman login
     }
-
-
 }

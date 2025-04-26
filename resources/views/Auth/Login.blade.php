@@ -51,13 +51,13 @@ Login
                         </div>
 
                         <div class="d-grid gap-2 mb-3">
-                            <button type="submit" class="btn btn-primary py-2 rounded-pill">Masuk</button>
+                            <button type="submit" class="btn btn-primary py-2 rounded-pill">Login</button>
                         </div>
 
                     </form>
                 </div>
                 <div class="card-footer bg-white text-center border-0 p-4">
-                    <p class="mb-0">Belum punya akun? <a href="/register" class="text-decoration-none fw-bold">Daftar sekarang</a></p>
+                    <p class="mb-0">Belum punya akun? <a href="/register" class="text-decoration-none fw-bold">Register Now</a></p>
                 </div>
             </div>
         </div>
