@@ -24,16 +24,34 @@ use Illuminate\Support\Facades\Log;
 // Debug route resolution
 Route::matched(function ($event) {
     $controller = $event->route->getAction('controller');
-    $controllerInstance = app()->make(explode('@', $controller)[0]);
-    Log::info('Route matched', [
-        'method' => $event->request->method(),
-        'path' => $event->request->path(),
-        'controller' => $controller,
-        'controller_class' => get_class($controllerInstance),
-        'controller_methods' => get_class_methods($controllerInstance),
-    ]);
+    if ($controller) {
+        $controllerClass = explode('@', $controller)[0];
+        try {
+            $controllerInstance = app()->make($controllerClass);
+            Log::info('Route matched', [
+                'method' => $event->request->method(),
+                'path' => $event->request->path(),
+                'controller' => $controller,
+                'controller_class' => get_class($controllerInstance),
+                'controller_methods' => get_class_methods($controllerInstance),
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error resolving controller for route', [
+                'method' => $event->request->method(),
+                'path' => $event->request->path(),
+                'controller' => $controller,
+                'error' => $e->getMessage()
+            ]);
+        }
+    } else {
+        // Log route with no controller (closure routes)
+        Log::info('Route matched (no controller)', [
+            'method' => $event->request->method(),
+            'path' => $event->request->path(),
+            'uses' => $event->route->getAction('uses'),
+        ]);
+    }
 });
-
 // ------------------ Public Routes ------------------ //
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -128,13 +146,13 @@ Route::middleware(['auth', 'cekRole:admin'])->group(function () {
 
     // TOEFL ITP Questions Management
     Route::get('/course-management', [QuestionController::class, 'index'])->name('questions.index');
-    Route::get('/course-management/filter', [QuestionController::class, 'filter'])->name('questions.filter');
-    Route::post('/course-management', [QuestionController::class, 'store'])->name('questions.store');
-    Route::get('/course-management/{question}', [QuestionController::class, 'show'])->name('questions.show');
-    Route::get('/course-management/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
-    Route::put('/course-management/{question}', [QuestionController::class, 'update'])->name('questions.update');
-    Route::delete('/course-management/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
-    Route::put('/course-management/timing/update', [QuestionController::class, 'updateTiming'])->name('test.timing.update');
+Route::get('/course-management/filter', [QuestionController::class, 'filter'])->name('questions.filter');
+Route::post('/course-management', [QuestionController::class, 'store'])->name('questions.store');
+Route::get('/course-management/{question}', [QuestionController::class, 'show'])->name('questions.show');
+Route::get('/course-management/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
+Route::put('/course-management/{question}', [QuestionController::class, 'update'])->name('questions.update');
+Route::delete('/course-management/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+Route::put('/course-management/timing/update', [QuestionController::class, 'updateTiming'])->name('test.timing.update');
 
     // Reading Passages Management
     Route::get('/toefl-passages', [ToeflExamController::class, 'managePassages'])->name('toefl-passages');

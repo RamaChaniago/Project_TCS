@@ -18,21 +18,30 @@ class CekRole
             'method' => $request->method(),
         ]);
 
-        if (auth()->check() && in_array($request->user()->role, $roles)) {
-            Log::info('CekRole: Access granted', ['path' => $request->path()]);
+        // Check if user is authenticated
+        if (!auth()->check()) {
+            Log::info('CekRole: User not authenticated, redirecting to login');
+            return redirect('/login');
+        }
+
+        // Check if user role is allowed
+        if (in_array($request->user()->role, $roles)) {
+            Log::info('CekRole: Access granted', [
+                'user_role' => $request->user()->role,
+                'path' => $request->path()
+            ]);
             return $next($request);
         }
 
-        if (auth()->check()) {
-            $redirect = '/' . strtolower($request->user()->role);
-            Log::info('CekRole: Redirecting to role-specific dashboard', [
-                'role' => $request->user()->role,
-                'redirect' => $redirect,
-            ]);
-            return redirect($redirect);
-        }
-
-        Log::info('CekRole: Redirecting to login');
-        return redirect('/login');
+        // User is authenticated but has incorrect role - redirect to appropriate dashboard
+        $userRole = strtolower($request->user()->role);
+        $redirect = "/{$userRole}";
+        
+        Log::info('CekRole: Access denied, redirecting to role-specific dashboard', [
+            'user_role' => $request->user()->role,
+            'redirect' => $redirect
+        ]);
+        
+        return redirect($redirect);
     }
 }
