@@ -5,26 +5,20 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ToeflQuestion;
 use App\Models\ToeflTestSetting;
-use App\Models\ToeflPassage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
-    /**
-     * Display a listing of the questions.
-     */
     public function index()
     {
         $questions = ToeflQuestion::latest()->paginate(10);
-
         $totalQuestions = ToeflQuestion::count();
         $listeningQuestions = ToeflQuestion::where('section', 'Listening')->count();
         $structureQuestions = ToeflQuestion::where('section', 'Structure')->count();
         $readingQuestions = ToeflQuestion::where('section', 'Reading')->count();
 
-        // Get test timing settings
         $testSettings = ToeflTestSetting::first();
         $listeningTime = $testSettings ? $testSettings->listening_time : 35;
         $structureTime = $testSettings ? $testSettings->structure_time : 25;
@@ -44,14 +38,10 @@ class QuestionController extends Controller
         ));
     }
 
-    /**
-     * Filter questions based on criteria.
-     */
     public function filter(Request $request)
     {
         $query = ToeflQuestion::query();
 
-        // Apply filters
         if ($request->filled('section')) {
             $query->where('section', $request->section);
         }
@@ -72,13 +62,11 @@ class QuestionController extends Controller
         }
 
         $questions = $query->latest()->paginate(10)->withQueryString();
-
         $totalQuestions = ToeflQuestion::count();
         $listeningQuestions = ToeflQuestion::where('section', 'Listening')->count();
         $structureQuestions = ToeflQuestion::where('section', 'Structure')->count();
         $readingQuestions = ToeflQuestion::where('section', 'Reading')->count();
 
-        // Get test timing settings
         $testSettings = ToeflTestSetting::first();
         $listeningTime = $testSettings ? $testSettings->listening_time : 35;
         $structureTime = $testSettings ? $testSettings->structure_time : 25;
@@ -98,21 +86,9 @@ class QuestionController extends Controller
         ));
     }
 
-    /**
-     * Show the form for creating a new question.
-     */
-    public function create()
-    {
-        $passages = ToeflPassage::all();
-        return view('Admin.Questions.create', compact('passages'));
-    }
-
-    /**
-     * Store a newly created question in database.
-     */
     public function store(Request $request)
     {
-        $request->validate([
+        $rules = [
             'section' => 'required|in:Listening,Structure,Reading',
             'question_text' => 'required|string',
             'option_a' => 'required|string',
@@ -121,37 +97,55 @@ class QuestionController extends Controller
             'option_d' => 'required|string',
             'correct_answer' => 'required|in:A,B,C,D',
             'difficulty' => 'required|in:Easy,Medium,Hard',
-            'audio_file' => 'nullable|file|mimes:mp3,wav|max:10240', // 10MB max
-            'reading_passage' => 'nullable|string'
-        ]);
+            'audio_file' => 'nullable|file|mimes:mp3,wav|max:10240',
+            'image_file' => 'nullable|file|mimes:jpeg,png|max:5120',
+        ];
 
-        $data = $request->except(['audio_file']);
+        if ($request->section == 'Listening') {
+            $rules['audio_file'] = 'required|file|mimes:mp3,wav|max:10240';
+            if ($request->hasFile('image_file')) {
+                $request->merge(['image_file' => null]);
+                return redirect()->back()->withErrors(['image_file' => 'Image uploads are not allowed for Listening section.'])->withInput();
+            }
+        } elseif (in_array($request->section, ['Structure', 'Reading'])) {
+            if ($request->hasFile('audio_file')) {
+                $request->merge(['audio_file' => null]);
+                return redirect()->back()->withErrors(['audio_file' => 'Audio uploads are not allowed for Structure or Reading sections.'])->withInput();
+            }
+        }
 
-        // Handle audio file upload for Listening questions
-        if ($request->hasFile('audio_file') && $request->section == 'Listening') {
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $data = $request->except(['audio_file', 'image_file']);
+        if ($request->section == 'Listening' && $request->hasFile('audio_file')) {
             $audioFile = $request->file('audio_file');
             $path = $audioFile->store('audio', 'public');
             $data['audio_file'] = $path;
+            $data['image_file'] = null;
+        }
+
+        if (in_array($request->section, ['Structure', 'Reading']) && $request->hasFile('image_file')) {
+            $imageFile = $request->file('image_file');
+            $path = $imageFile->store('images', 'public');
+            $data['image_file'] = $path;
+            $data['audio_file'] = null;
         }
 
         ToeflQuestion::create($data);
-
         return redirect()->route('questions.index')->with('success', 'Question created successfully!');
     }
 
-    /**
-     * Display the specified question.
-     */
     public function show(ToeflQuestion $question)
     {
         $viewQuestion = $question;
-
         $totalQuestions = ToeflQuestion::count();
         $listeningQuestions = ToeflQuestion::where('section', 'Listening')->count();
         $structureQuestions = ToeflQuestion::where('section', 'Structure')->count();
         $readingQuestions = ToeflQuestion::where('section', 'Reading')->count();
 
-        // Get test timing settings
         $testSettings = ToeflTestSetting::first();
         $listeningTime = $testSettings ? $testSettings->listening_time : 35;
         $structureTime = $testSettings ? $testSettings->structure_time : 25;
@@ -174,19 +168,14 @@ class QuestionController extends Controller
         ));
     }
 
-    /**
-     * Show the form for editing the specified question.
-     */
     public function edit(ToeflQuestion $question)
     {
         $editQuestion = $question;
-
         $totalQuestions = ToeflQuestion::count();
         $listeningQuestions = ToeflQuestion::where('section', 'Listening')->count();
         $structureQuestions = ToeflQuestion::where('section', 'Structure')->count();
         $readingQuestions = ToeflQuestion::where('section', 'Reading')->count();
 
-        // Get test timing settings
         $testSettings = ToeflTestSetting::first();
         $listeningTime = $testSettings ? $testSettings->listening_time : 35;
         $structureTime = $testSettings ? $testSettings->structure_time : 25;
@@ -194,12 +183,10 @@ class QuestionController extends Controller
         $lastTimingUpdate = $testSettings ? $testSettings->last_updated : now();
 
         $questions = ToeflQuestion::latest()->paginate(10);
-        $passages = ToeflPassage::all();
 
         return view('Admin.Course-Management', compact(
             'questions',
             'editQuestion',
-            'passages',
             'totalQuestions',
             'listeningQuestions',
             'structureQuestions',
@@ -211,80 +198,112 @@ class QuestionController extends Controller
         ));
     }
 
-    /**
-     * Update the specified question in database.
-     */
     public function update(Request $request, ToeflQuestion $question)
     {
-        $request->validate([
+        $rules = [
             'section' => 'required|in:Listening,Structure,Reading',
+            'difficulty' => 'required|in:Easy,Medium,Hard',
             'question_text' => 'required|string',
             'option_a' => 'required|string',
             'option_b' => 'required|string',
             'option_c' => 'required|string',
             'option_d' => 'required|string',
             'correct_answer' => 'required|in:A,B,C,D',
-            'difficulty' => 'required|in:Easy,Medium,Hard',
-            'audio_file' => 'nullable|file|mimes:mp3,wav|max:10240', // 10MB max
-            'reading_passage' => 'nullable|string'
-        ]);
+            'audio_file' => 'nullable|file|mimes:mp3,wav|max:10240',
+            'image_file' => 'nullable|file|mimes:jpeg,png|max:5120',
+            'explanation' => 'nullable|string',
+        ];
 
-        $data = $request->except(['audio_file']);
-
-        // Handle audio file upload for Listening questions
-        if ($request->hasFile('audio_file') && $request->section == 'Listening') {
-            // Delete old file if it exists
-            if ($question->audio_file) {
-                Storage::disk('public')->delete($question->audio_file);
+        if ($request->section == 'Listening') {
+            if ($request->hasFile('image_file')) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['image_file' => ['Image uploads are not allowed for Listening section.']]
+                ], 422);
             }
-
-            $audioFile = $request->file('audio_file');
-            $path = $audioFile->store('audio', 'public');
-            $data['audio_file'] = $path;
+        } elseif (in_array($request->section, ['Structure', 'Reading'])) {
+            if ($request->hasFile('audio_file')) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['audio_file' => ['Audio uploads are not allowed for Structure or Reading sections.']]
+                ], 422);
+            }
         }
 
-        $question->update($data);
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
-        return redirect()->route('questions.index')->with('success', 'Question updated successfully!');
+        try {
+            $data = $request->except(['audio_file', 'image_file']);
+            if ($request->section == 'Listening' && $request->hasFile('audio_file')) {
+                if ($question->audio_file) {
+                    Storage::disk('public')->delete($question->audio_file);
+                }
+                $audioFile = $request->file('audio_file');
+                $path = $audioFile->store('audio', 'public');
+                $data['audio_file'] = $path;
+                $data['image_file'] = null;
+            } elseif ($request->section == 'Listening') {
+                $data['audio_file'] = $question->audio_file;
+                $data['image_file'] = null;
+            }
+
+            if (in_array($request->section, ['Structure', 'Reading']) && $request->hasFile('image_file')) {
+                if ($question->image_file) {
+                    Storage::disk('public')->delete($question->image_file);
+                }
+                $imageFile = $request->file('image_file');
+                $path = $imageFile->store('images', 'public');
+                $data['image_file'] = $path;
+                $data['audio_file'] = null;
+            } elseif (in_array($request->section, ['Structure', 'Reading'])) {
+                $data['image_file'] = $question->image_file;
+                $data['audio_file'] = null;
+            }
+
+            $question->update($data);
+            $updatedQuestion = ToeflQuestion::findOrFail($question->id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Question updated successfully',
+                'question' => [
+                    'id' => $updatedQuestion->id,
+                    'section' => $updatedQuestion->section,
+                    'difficulty' => $updatedQuestion->difficulty,
+                    'question_text' => $updatedQuestion->question_text,
+                    'option_a' => $updatedQuestion->option_a,
+                    'option_b' => $updatedQuestion->option_b,
+                    'option_c' => $updatedQuestion->option_c,
+                    'option_d' => $updatedQuestion->option_d,
+                    'correct_answer' => $updatedQuestion->correct_answer,
+                    'audio_file' => $updatedQuestion->audio_file ? Storage::url($updatedQuestion->audio_file) : null,
+                    'image_file' => $updatedQuestion->image_file ? Storage::url($updatedQuestion->image_file) : null,
+                    'explanation' => $updatedQuestion->explanation,
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => ['general' => ['Failed to update question: ' . $e->getMessage()]]
+            ], 500);
+        }
     }
 
-    /**
-     * Remove the specified question from database.
-     */
     public function destroy(ToeflQuestion $question)
     {
-        // Delete associated audio file if exists
         if ($question->audio_file) {
             Storage::disk('public')->delete($question->audio_file);
         }
-
-        $question->delete();
-
-        return redirect()->route('questions.index')->with('success', 'Question deleted successfully!');
-    }
-
-    /**
-     * Update test timing settings.
-     */
-    public function updateTiming(Request $request)
-    {
-        $request->validate([
-            'listening_time' => 'required|integer|min:5|max:120',
-            'structure_time' => 'required|integer|min:5|max:120',
-            'reading_time' => 'required|integer|min:5|max:120',
-        ]);
-
-        $testSettings = ToeflTestSetting::first();
-        if (!$testSettings) {
-            $testSettings = new ToeflTestSetting();
+        if ($question->image_file) {
+            Storage::disk('public')->delete($question->image_file);
         }
-
-        $testSettings->listening_time = $request->listening_time;
-        $testSettings->structure_time = $request->structure_time;
-        $testSettings->reading_time = $request->reading_time;
-        $testSettings->last_updated = now();
-        $testSettings->save();
-
-        return redirect()->route('questions.index')->with('success', 'Test timing updated successfully!');
+        $question->delete();
+        return redirect()->route('questions.index')->with('success', 'Question deleted successfully!');
     }
 }

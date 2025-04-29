@@ -22,7 +22,6 @@ class authController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-
             $user = Auth::user();
 
             // Check if there's a redirect_to parameter
@@ -67,6 +66,7 @@ class authController extends Controller
         $request->session()->invalidate(); // Hapus session
         $request->session()->regenerateToken(); // Regenerasi CSRF token
 
+        Alert::success('Logout Berhasil', 'Anda telah keluar dari sistem.');
         return redirect('/'); // Redirect ke halaman login
     }
 }

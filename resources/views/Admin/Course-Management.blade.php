@@ -5,13 +5,10 @@ Course Management
 @endsection
 
 @section('content')
-<!-- Bootstrap 5.3 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-<div class="container-fluid py-5">
-    <!-- Page Header -->
+<div class="container-fluid pt-3 pb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold mb-0">Course Management</h3>
         <div class="d-flex gap-2">
@@ -21,7 +18,6 @@ Course Management
         </div>
     </div>
 
-    <!-- Success/Error Messages -->
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -39,7 +35,6 @@ Course Management
         </div>
     @endif
 
-    <!-- Certificate Test Management Section -->
     <div class="card shadow-lg border-0 rounded-4 mb-4">
         <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
             <h5 class="mb-0">TOEFL ITP Question Management</h5>
@@ -101,8 +96,8 @@ Course Management
                         </div>
                     </div>
                 </div>
+            </div>
 
-            <!-- Question Filter Options (Server-side Form) -->
             <form action="{{ route('questions.filter') }}" method="GET" class="row mb-3">
                 <div class="col-md-4 mb-2">
                     <select class="form-select" id="sectionFilter" name="section" onchange="this.form.submit()">
@@ -130,33 +125,48 @@ Course Management
                 </div>
             </form>
 
-            <!-- Questions Table -->
             <div class="table-responsive">
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover" id="questionsTable">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Section</th>
+                            <th>Nomor</th>
+                            <th>Gambar/Audio</th>
                             <th>Question Preview</th>
-                            <th>Difficulty</th>
+                            <th>Answer</th>
+                            <th>Level Difficulty</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="questionsTableBody">
-                        @forelse($questions as $question)
-                        <tr>
-                            <td>{{ $question->id }}</td>
-                            <td>
-                                @if($question->section == 'Listening')
-                                    <span class="badge bg-info">Listening</span>
-                                @elseif($question->section == 'Structure')
-                                    <span class="badge bg-warning text-dark">Structure</span>
-                                @elseif($question->section == 'Reading')
-                                    <span class="badge bg-danger">Reading</span>
+                        @forelse($questions as $index => $question)
+                        <tr data-id="{{ $question->id }}">
+                            <td>{{ $loop->iteration + $questions->firstItem() - 1 }}</td>
+                            <td class="media-cell">
+                                @if($question->section == 'Listening' && $question->audio_file)
+                                    <audio controls class="w-100" style="max-width: 200px;">
+                                        <source src="{{ Storage::url($question->audio_file) }}" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                @elseif(in_array($question->section, ['Structure', 'Reading']) && $question->image_file)
+                                    <img src="{{ Storage::url($question->image_file) }}" alt="Question Image" class="img-fluid" style="max-width: 100px; max-height: 100px;">
+                                @else
+                                    <span class="text-muted">No media</span>
                                 @endif
                             </td>
-                            <td>{{ Str::limit($question->question_text, 60) }}</td>
-                            <td>
+                            <td class="question-text">{{ Str::limit($question->question_text, 60) }}</td>
+                            <td class="correct-answer">
+                                @php
+                                    $option = match($question->correct_answer) {
+                                        'A' => $question->option_a,
+                                        'B' => $question->option_b,
+                                        'C' => $question->option_c,
+                                        'D' => $question->option_d,
+                                        default => 'N/A'
+                                    };
+                                @endphp
+                                Option {{ $question->correct_answer }}: {{ Str::limit($option, 30) }}
+                            </td>
+                            <td class="difficulty">
                                 @if($question->difficulty == 'Easy')
                                     <span class="badge bg-success">Easy</span>
                                 @elseif($question->difficulty == 'Medium')
@@ -167,19 +177,46 @@ Course Management
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('questions.show', $question->id) }}" class="btn btn-sm btn-info">
+                                    <button class="btn btn-sm btn-info view-question-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#viewQuestionModal"
+                                            data-id="{{ $question->id }}"
+                                            data-section="{{ $question->section }}"
+                                            data-difficulty="{{ $question->difficulty }}"
+                                            data-question-text="{{ htmlspecialchars($question->question_text) }}"
+                                            data-option-a="{{ htmlspecialchars($question->option_a) }}"
+                                            data-option-b="{{ htmlspecialchars($question->option_b) }}"
+                                            data-option-c="{{ htmlspecialchars($question->option_c) }}"
+                                            data-option-d="{{ htmlspecialchars($question->option_d) }}"
+                                            data-correct-answer="{{ $question->correct_answer }}"
+                                            data-audio-file="{{ $question->audio_file ? Storage::url($question->audio_file) : '' }}"
+                                            data-image-file="{{ $question->image_file ? Storage::url($question->image_file) : '' }}"
+                                            data-explanation="{{ htmlspecialchars($question->explanation ?? '') }}">
                                         <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ route('questions.edit', $question->id) }}" class="btn btn-sm btn-warning">
+                                    </button>
+                                    <button class="btn btn-sm btn-warning edit-question-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editQuestionModal"
+                                            data-id="{{ $question->id }}"
+                                            data-section="{{ $question->section }}"
+                                            data-difficulty="{{ $question->difficulty }}"
+                                            data-question-text="{{ htmlspecialchars($question->question_text) }}"
+                                            data-option-a="{{ htmlspecialchars($question->option_a) }}"
+                                            data-option-b="{{ htmlspecialchars($question->option_b) }}"
+                                            data-option-c="{{ htmlspecialchars($question->option_c) }}"
+                                            data-option-d="{{ htmlspecialchars($question->option_d) }}"
+                                            data-correct-answer="{{ $question->correct_answer }}"
+                                            data-audio-file="{{ $question->audio_file ? basename($question->audio_file) : '' }}"
+                                            data-image-file="{{ $question->image_file ? basename($question->image_file) : '' }}"
+                                            data-explanation="{{ htmlspecialchars($question->explanation ?? '') }}">
                                         <i class="bi bi-pencil"></i>
-                                    </a>
+                                    </button>
                                     <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal_{{ $question->id }}">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
-                        <!-- Delete Modal for Each Question -->
                         <div class="modal fade" id="deleteQuestionModal_{{ $question->id }}" tabindex="-1" aria-labelledby="deleteQuestionModalLabel_{{ $question->id }}" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -207,14 +244,13 @@ Course Management
                         </div>
                         @empty
                         <tr>
-                            <td colspan="5" class="text-center">No questions found.</td>
+                            <td colspan="6" class="text-center">No questions found.</td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
 
-            <!-- Pagination -->
             <div class="d-flex justify-content-between align-items-center mt-3">
                 <div>
                     <span>Showing {{ $questions->firstItem() }} to {{ $questions->lastItem() }} of {{ $questions->total() }} entries</span>
@@ -224,7 +260,6 @@ Course Management
         </div>
     </div>
 
-    <!-- Test Timing Management Section -->
     <div class="card shadow-lg border-0 rounded-4 mb-4">
         <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Test Timing Management</h5>
@@ -291,7 +326,6 @@ Course Management
     </div>
 </div>
 
-<!-- Add Question Modal -->
 <div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -302,45 +336,47 @@ Course Management
             <form action="{{ route('questions.store') }}" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="section" class="form-label">Section <span class="text-danger">*</span></label>
-                            <select class="form-select" id="section" name="section" required>
-                                <option value="" {{ old('section') == '' ? 'selected' : '' }}>Select Section</option>
-                                <option value="Listening" {{ old('section') == 'Listening' ? 'selected' : '' }}>Listening</option>
-                                <option value="Structure" {{ old('section') == 'Structure' ? 'selected' : '' }}>Structure & Written Expression</option>
-                                <option value="Reading" {{ old('section') == 'Reading' ? 'selected' : '' }}>Reading</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a section.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="difficulty" class="form-label">Difficulty Level <span class="text-danger">*</span></label>
-                            <select class="form-select" id="difficulty" name="difficulty" required>
-                                <option value="" {{ old('difficulty') == '' ? 'selected' : '' }}>Select Difficulty</option>
-                                <option value="Easy" {{ old('difficulty') == 'Easy' ? 'selected' : '' }}>Easy</option>
-                                <option value="Medium" {{ old('difficulty') == 'Medium' ? 'selected' : '' }}>Medium</option>
-                                <option value="Hard" {{ old('difficulty') == 'Hard' ? 'selected' : '' }}>Hard</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a difficulty level.</div>
-                        </div>
+                    <div class="mb-3">
+                        <label for="section" class="form-label">Section <span class="text-danger">*</span></label>
+                        <select class="form-select" id="section" name="section" required>
+                            <option value="" {{ old('section') == '' ? 'selected' : '' }}>Select Section</option>
+                            <option value="Listening" {{ old('section') == 'Listening' ? 'selected' : '' }}>Listening</option>
+                            <option value="Structure" {{ old('section') == 'Structure' ? 'selected' : '' }}>Structure & Written Expression</option>
+                            <option value="Reading" {{ old('section') == 'Reading' ? 'selected' : '' }}>Reading</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a section.</div>
                     </div>
-
-                    <div class="mb-3" id="listeningFileContainer" style="display: none;">
-                        <label for="audioFile" class="form-label">Audio File (MP3/WAV)</label>
-                        <input type="file" class="form-control" id="audioFile" name="audio_file" accept="audio/*">
+                    <div class="mb-3">
+                        <label for="difficulty" class="form-label">Difficulty Level <span class="text-danger">*</span></label>
+                        <select class="form-select" id="difficulty" name="difficulty" required>
+                            <option value="" {{ old('difficulty') == '' ? 'selected' : '' }}>Select Difficulty</option>
+                            <option value="Easy" {{ old('difficulty') == 'Easy' ? 'selected' : '' }}>Easy</option>
+                            <option value="Medium" {{ old('difficulty') == 'Medium' ? 'selected' : '' }}>Medium</option>
+                            <option value="Hard" {{ old('difficulty') == 'Hard' ? 'selected' : '' }}>Hard</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a difficulty level.</div>
                     </div>
-
-                    <div class="mb-3" id="readingPassageContainer" style="display: none;">
-                        <label for="readingPassage" class="form-label">Reading Passage</label>
-                        <textarea class="form-control" id="readingPassage" name="reading_passage" rows="5">{{ old('reading_passage') }}</textarea>
+                    <div class="mb-3">
+                        <label for="audioFile" class="form-label">Upload Audio (MP3/WAV)</label>
+                        <input type="file" class="form-control" id="audioFile" name="audio_file" accept="audio/mpeg,audio/wav">
+                        <small id="audioFileHelp" class="form-text text-muted">Upload an audio file for Listening section questions only.</small>
+                        @error('audio_file')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
-
+                    <div class="mb-3">
+                        <label for="imageFile" class="form-label">Upload Picture (JPG/PNG)</label>
+                        <input type="file" class="form-control" id="imageFile" name="image_file" accept="image/jpeg,image/png">
+                        <small id="imageFileHelp" class="form-text text-muted">Upload an image for Structure or Reading section questions only.</small>
+                        @error('image_file')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="mb-3">
                         <label for="questionText" class="form-label">Question Text <span class="text-danger">*</span></label>
                         <textarea class="form-control" id="questionText" name="question_text" rows="3" required>{{ old('question_text') }}</textarea>
                         <div class="invalid-feedback">Please enter the question text.</div>
                     </div>
-
                     <div class="mb-3">
                         <label class="form-label">Answer Options <span class="text-danger">*</span></label>
                         <div class="row g-2">
@@ -374,7 +410,6 @@ Course Management
                             </div>
                         </div>
                     </div>
-
                     <div class="mb-3">
                         <label for="correctAnswer" class="form-label">Correct Answer <span class="text-danger">*</span></label>
                         <select class="form-select" id="correctAnswer" name="correct_answer" required>
@@ -386,7 +421,6 @@ Course Management
                         </select>
                         <div class="invalid-feedback">Please select the correct answer.</div>
                     </div>
-
                     <div class="mb-3">
                         <label for="explanation" class="form-label">Explanation (Optional)</label>
                         <textarea class="form-control" id="explanation" name="explanation" rows="2">{{ old('explanation') }}</textarea>
@@ -401,8 +435,6 @@ Course Management
     </div>
 </div>
 
-<!-- View Question Modal -->
-@if(isset($viewQuestion))
 <div class="modal fade" id="viewQuestionModal" tabindex="-1" aria-labelledby="viewQuestionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -414,37 +446,27 @@ Course Management
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <h6 class="text-muted">Section:</h6>
-                        <p class="fw-bold">{{ $viewQuestion->section }}</p>
+                        <p class="fw-bold" id="view-section"></p>
                     </div>
                     <div class="col-md-6">
                         <h6 class="text-muted">Difficulty Level:</h6>
-                        <span class="badge {{ $viewQuestion->difficulty == 'Easy' ? 'bg-success' : ($viewQuestion->difficulty == 'Medium' ? 'bg-warning text-dark' : 'bg-danger') }}">{{ $viewQuestion->difficulty }}</span>
+                        <span class="badge" id="view-difficulty"></span>
                     </div>
                 </div>
-
-                @if($viewQuestion->section == 'Listening' && $viewQuestion->audio_file)
-                <div id="viewListeningContainer">
+                <div class="mb-3" id="view-audio" style="display: none;">
                     <h6 class="text-muted">Audio:</h6>
-                    <audio id="viewAudio" controls class="w-100 mb-3" src="{{ Storage::url($viewQuestion->audio_file) }}"></audio>
+                    <audio controls class="w-100 mb-3" id="view-audio-player"></audio>
                 </div>
-                @endif
-
-                @if($viewQuestion->section == 'Reading' && $viewQuestion->reading_passage)
-                <div id="viewReadingContainer">
-                    <h6 class="text-muted">Reading Passage:</h6>
-                    <div class="card bg-light p-3 mb-3">
-                        <p class="mb-0">{{ $viewQuestion->reading_passage }}</p>
-                    </div>
+                <div class="mb-3" id="view-image" style="display: none;">
+                    <h6 class="text-muted">Image:</h6>
+                    <img id="view-image-src" alt="Question Image" class="img-fluid mb-3" style="max-height: 300px;">
                 </div>
-                @endif
-
                 <div class="mb-3">
                     <h6 class="text-muted">Question:</h6>
                     <div class="card bg-light p-3">
-                        <p class="mb-0">{{ $viewQuestion->question_text }}</p>
+                        <p class="mb-0" id="view-question-text"></p>
                     </div>
                 </div>
-
                 <div class="mb-3">
                     <h6 class="text-muted">Answer Options:</h6>
                     <div class="row g-2">
@@ -452,7 +474,7 @@ Course Management
                             <div class="card mb-2">
                                 <div class="card-body py-2 px-3">
                                     <span class="fw-bold me-2">A:</span>
-                                    <span>{{ $viewQuestion->option_a }}</span>
+                                    <span id="view-option-a"></span>
                                 </div>
                             </div>
                         </div>
@@ -460,7 +482,7 @@ Course Management
                             <div class="card mb-2">
                                 <div class="card-body py-2 px-3">
                                     <span class="fw-bold me-2">B:</span>
-                                    <span>{{ $viewQuestion->option_b }}</span>
+                                    <span id="view-option-b"></span>
                                 </div>
                             </div>
                         </div>
@@ -468,7 +490,7 @@ Course Management
                             <div class="card mb-2">
                                 <div class="card-body py-2 px-3">
                                     <span class="fw-bold me-2">C:</span>
-                                    <span>{{ $viewQuestion->option_c }}</span>
+                                    <span id="view-option-c"></span>
                                 </div>
                             </div>
                         </div>
@@ -476,38 +498,31 @@ Course Management
                             <div class="card mb-2">
                                 <div class="card-body py-2 px-3">
                                     <span class="fw-bold me-2">D:</span>
-                                    <span>{{ $viewQuestion->option_d }}</span>
+                                    <span id="view-option-d"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="mb-3">
                     <h6 class="text-muted">Correct Answer:</h6>
-                    <p class="fw-bold text-success">Option {{ $viewQuestion->correct_answer }}</p>
+                    <p class="fw-bold text-success" id="view-correct-answer"></p>
                 </div>
-
-                @if($viewQuestion->explanation)
-                <div id="viewExplanationContainer">
+                <div class="mb-3" id="view-explanation" style="display: none;">
                     <h6 class="text-muted">Explanation:</h6>
                     <div class="card bg-light p-3">
-                        <p class="mb-0">{{ $viewQuestion->explanation }}</p>
+                        <p class="mb-0" id="view-explanation-text"></p>
                     </div>
                 </div>
-                @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="{{ route('questions.edit', $viewQuestion->id) }}" class="btn btn-warning">Edit Question</a>
+                <button type="button" class="btn btn-warning edit-from-view" data-id="">Edit Question</button>
             </div>
         </div>
     </div>
 </div>
-@endif
 
-<!-- Edit Question Modal -->
-@if(isset($editQuestion))
 <div class="modal fade" id="editQuestionModal" tabindex="-1" aria-labelledby="editQuestionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -515,101 +530,94 @@ Course Management
                 <h5 class="modal-title" id="editQuestionModalLabel">Edit Question</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('questions.update', $editQuestion->id) }}" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
+            <form id="editQuestionForm" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="question_id" id="editQuestionId">
                 <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="editSection" class="form-label">Section <span class="text-danger">*</span></label>
-                            <select class="form-select" id="editSection" name="section" required>
-                                <option value="" {{ old('section', $editQuestion->section) == '' ? 'selected' : '' }}>Select Section</option>
-                                <option value="Listening" {{ old('section', $editQuestion->section) == 'Listening' ? 'selected' : '' }}>Listening</option>
-                                <option value="Structure" {{ old('section', $editQuestion->section) == 'Structure' ? 'selected' : '' }}>Structure & Written Expression</option>
-                                <option value="Reading" {{ old('section', $editQuestion->section) == 'Reading' ? 'selected' : '' }}>Reading</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a section.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="editDifficulty" class="form-label">Difficulty Level <span class="text-danger">*</span></label>
-                            <select class="form-select" id="editDifficulty" name="difficulty" required>
-                                <option value="" {{ old('section', $editQuestion->difficulty) == '' ? 'selected' : '' }}>Select Difficulty</option>
-                                <option value="Easy" {{ old('section', $editQuestion->difficulty) == 'Easy' ? 'selected' : '' }}>Easy</option>
-                                <option value="Medium" {{ old('section', $editQuestion->difficulty) == 'Medium' ? 'selected' : '' }}>Medium</option>
-                                <option value="Hard" {{ old('section', $editQuestion->difficulty) == 'Hard' ? 'selected' : '' }}>Hard</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a difficulty level.</div>
-                        </div>
+                    <div id="editFormMessages"></div>
+                    <div class="mb-3">
+                        <label for="editSection" class="form-label">Section <span class="text-danger">*</span></label>
+                        <select class="form-select" id="editSection" name="section" required>
+                            <option value="">Select Section</option>
+                            <option value="Listening">Listening</option>
+                            <option value="Structure">Structure & Written Expression</option>
+                            <option value="Reading">Reading</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a section.</div>
                     </div>
-
-                    <div class="mb-3" id="editListeningFileContainer" style="display: {{ $editQuestion->section == 'Listening' ? 'block' : 'none' }};">
-                        <label for="editAudioFile" class="form-label">Audio File (MP3/WAV)</label>
-                        <div class="input-group">
-                            <input type="file" class="form-control" id="editAudioFile" name="audio_file" accept="audio/*">
-                            <span class="input-group-text">Current: {{ $editQuestion->audio_file ? basename($editQuestion->audio_file) : 'None' }}</span>
-                        </div>
+                    <div class="mb-3">
+                        <label for="editDifficulty" class="form-label">Difficulty Level <span class="text-danger">*</span></label>
+                        <select class="form-select" id="editDifficulty" name="difficulty" required>
+                            <option value="">Select Difficulty</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a difficulty level.</div>
                     </div>
-
-                    <div class="mb-3" id="editReadingPassageContainer" style="display: {{ $editQuestion->section == 'Reading' ? 'block' : 'none' }};">
-                        <label for="editReadingPassage" class="form-label">Reading Passage</label>
-                        <textarea class="form-control" id="editReadingPassage" name="reading_passage" rows="5">{{ old('reading_passage', $editQuestion->reading_passage) }}</textarea>
+                    <div class="mb-3">
+                        <label for="editAudioFile" class="form-label">Upload Audio (MP3/WAV)</label>
+                        <input type="file" class="form-control" id="editAudioFile" name="audio_file" accept="audio/mpeg,audio/wav">
+                        <small id="editAudioFileHelp" class="form-text text-muted"></small>
                     </div>
-
+                    <div class="mb-3">
+                        <label for="editImageFile" class="form-label">Upload Picture (JPG/PNG)</label>
+                        <input type="file" class="form-control" id="editImageFile" name="image_file" accept="image/jpeg,image/png">
+                        <small id="editImageFileHelp" class="form-text text-muted"></small>
+                    </div>
                     <div class="mb-3">
                         <label for="editQuestionText" class="form-label">Question Text <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="editQuestionText" name="question_text" rows="3" required>{{ old('question_text', $editQuestion->question_text) }}</textarea>
+                        <textarea class="form-control" id="editQuestionText" name="question_text" rows="3" required></textarea>
                         <div class="invalid-feedback">Please enter the question text.</div>
                     </div>
-
                     <div class="mb-3">
                         <label class="form-label">Answer Options <span class="text-danger">*</span></label>
                         <div class="row g-2">
                             <div class="col-md-6">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">A</span>
-                                    <input type="text" class="form-control" id="editOptionA" name="option_a" value="{{ old('option_a', $editQuestion->option_a) }}" required>
+                                    <input type="text" class="form-control" id="editOptionA" name="option_a" required>
                                     <div class="invalid-feedback">Please enter option A.</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">B</span>
-                                    <input type="text" class="form-control" id="editOptionB" name="option_b" value="{{ old('option_b', $editQuestion->option_b) }}" required>
+                                    <input type="text" class="form-control" id="editOptionB" name="option_b" required>
                                     <div class="invalid-feedback">Please enter option B.</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">C</span>
-                                    <input type="text" class="form-control" id="editOptionC" name="option_c" value="{{ old('option_c', $editQuestion->option_c) }}" required>
+                                    <input type="text" class="form-control" id="editOptionC" name="option_c" required>
                                     <div class="invalid-feedback">Please enter option C.</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">D</span>
-                                    <input type="text" class="form-control" id="editOptionD" name="option_d" value="{{ old('option_d', $editQuestion->option_d) }}" required>
+                                    <input type="text" class="form-control" id="editOptionD" name="option_d" required>
                                     <div class="invalid-feedback">Please enter option D.</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="mb-3">
                         <label for="editCorrectAnswer" class="form-label">Correct Answer <span class="text-danger">*</span></label>
                         <select class="form-select" id="editCorrectAnswer" name="correct_answer" required>
-                            <option value="" {{ old('correct_answer', $editQuestion->correct_answer) == '' ? 'selected' : '' }}>Select Correct Answer</option>
-                            <option value="A" {{ old('correct_answer', $editQuestion->correct_answer) == 'A' ? 'selected' : '' }}>Option A</option>
-                            <option value="B" {{ old('correct_answer', $editQuestion->correct_answer) == 'B' ? 'selected' : '' }}>Option B</option>
-                            <option value="C" {{ old('correct_answer', $editQuestion->correct_answer) == 'C' ? 'selected' : '' }}>Option C</option>
-                            <option value="D" {{ old('correct_answer', $editQuestion->correct_answer) == 'D' ? 'selected' : '' }}>Option D</option>
+                            <option value="">Select Correct Answer</option>
+                            <option value="A">Option A</option>
+                            <option value="B">Option B</option>
+                            <option value="C">Option C</option>
+                            <option value="D">Option D</option>
                         </select>
                         <div class="invalid-feedback">Please select the correct answer.</div>
                     </div>
-
                     <div class="mb-3">
                         <label for="editExplanation" class="form-label">Explanation (Optional)</label>
-                        <textarea class="form-control" id="editExplanation" name="explanation" rows="2">{{ old('explanation', $editQuestion->explanation) }}</textarea>
+                        <textarea class="form-control" id="editExplanation" name="explanation" rows="2"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -620,9 +628,7 @@ Course Management
         </div>
     </div>
 </div>
-@endif
 
-<!-- Edit Test Timing Modal -->
 <div class="modal fade" id="editTimingModal" tabindex="-1" aria-labelledby="editTimingModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -664,51 +670,14 @@ Course Management
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('scripts')
-<!-- Bootstrap 5.3 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Configure section-specific form fields for Add Question Modal
-        const sectionSelect = document.getElementById('section');
-        const listeningFileContainer = document.getElementById('listeningFileContainer');
-        const readingPassageContainer = document.getElementById('readingPassageContainer');
-
-        if (sectionSelect) {
-            // Initialize based on current value
-            const selectedSection = sectionSelect.value;
-            listeningFileContainer.style.display = selectedSection === 'Listening' ? 'block' : 'none';
-            readingPassageContainer.style.display = selectedSection === 'Reading' ? 'block' : 'none';
-
-            sectionSelect.addEventListener('change', function() {
-                const selectedSection = this.value;
-                listeningFileContainer.style.display = selectedSection === 'Listening' ? 'block' : 'none';
-                readingPassageContainer.style.display = selectedSection === 'Reading' ? 'block' : 'none';
-            });
-        }
-
-        // Configure section-specific form fields for Edit Question Modal
-        const editSectionSelect = document.getElementById('editSection');
-        const editListeningFileContainer = document.getElementById('editListeningFileContainer');
-        const editReadingPassageContainer = document.getElementById('editReadingPassageContainer');
-
-        if (editSectionSelect) {
-            // Initialize based on current value
-            const selectedSection = editSectionSelect.value;
-            editListeningFileContainer.style.display = selectedSection === 'Listening' ? 'block' : 'none';
-            editReadingPassageContainer.style.display = selectedSection === 'Reading' ? 'block' : 'none';
-
-            editSectionSelect.addEventListener('change', function() {
-                const selectedSection = this.value;
-                editListeningFileContainer.style.display = selectedSection === 'Listening' ? 'block' : 'none';
-                editReadingPassageContainer.style.display = selectedSection === 'Reading' ? 'block' : 'none';
-            });
-        }
-
-        // Update total test time dynamically
         const listeningTimeInput = document.getElementById('listeningTime');
         const structureTimeInput = document.getElementById('structureTime');
         const readingTimeInput = document.getElementById('readingTime');
@@ -727,7 +696,6 @@ Course Management
             readingTimeInput.addEventListener('input', updateTotalTime);
         }
 
-        // Bootstrap form validation
         const forms = document.querySelectorAll('.needs-validation');
         forms.forEach(form => {
             form.addEventListener('submit', function(event) {
@@ -739,13 +707,272 @@ Course Management
             }, false);
         });
 
-        // Auto-show modals if data is present
-        @if(isset($viewQuestion))
-            new bootstrap.Modal(document.getElementById('viewQuestionModal')).show();
-        @endif
-        @if(isset($editQuestion))
-            new bootstrap.Modal(document.getElementById('editQuestionModal')).show();
-        @endif
+        function decodeHtml(html) {
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        const viewModal = document.getElementById('viewQuestionModal');
+        viewModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const data = {
+                section: button.getAttribute('data-section'),
+                difficulty: button.getAttribute('data-difficulty'),
+                questionText: decodeHtml(button.getAttribute('data-question-text') || ''),
+                optionA: decodeHtml(button.getAttribute('data-option-a') || ''),
+                optionB: decodeHtml(button.getAttribute('data-option-b') || ''),
+                optionC: decodeHtml(button.getAttribute('data-option-c') || ''),
+                optionD: decodeHtml(button.getAttribute('data-option-d') || ''),
+                correctAnswer: button.getAttribute('data-correct-answer'),
+                audioFile: button.getAttribute('data-audio-file'),
+                imageFile: button.getAttribute('data-image-file'),
+                explanation: decodeHtml(button.getAttribute('data-explanation') || ''),
+                id: button.getAttribute('data-id')
+            };
+
+            document.getElementById('view-section').textContent = data.section || 'N/A';
+            const difficultyBadge = document.getElementById('view-difficulty');
+            difficultyBadge.textContent = data.difficulty || 'N/A';
+            difficultyBadge.className = 'badge ' + (data.difficulty === 'Easy' ? 'bg-success' : (data.difficulty === 'Medium' ? 'bg-warning text-dark' : 'bg-danger'));
+
+            const audioSection = document.getElementById('view-audio');
+            const audioPlayer = document.getElementById('view-audio-player');
+            if (data.section === 'Listening' && data.audioFile) {
+                audioPlayer.src = data.audioFile;
+                audioSection.style.display = 'block';
+            } else {
+                audioSection.style.display = 'none';
+            }
+
+            const imageSection = document.getElementById('view-image');
+            const imageSrc = document.getElementById('view-image-src');
+            if (['Structure', 'Reading'].includes(data.section) && data.imageFile) {
+                imageSrc.src = data.imageFile;
+                imageSection.style.display = 'block';
+            } else {
+                imageSection.style.display = 'none';
+            }
+
+            document.getElementById('view-question-text').textContent = data.questionText || 'N/A';
+            document.getElementById('view-option-a').textContent = data.optionA || 'N/A';
+            document.getElementById('view-option-b').textContent = data.optionB || 'N/A';
+            document.getElementById('view-option-c').textContent = data.optionC || 'N/A';
+            document.getElementById('view-option-d').textContent = data.optionD || 'N/A';
+            document.getElementById('view-correct-answer').textContent = data.correctAnswer ? 'Option ' + data.correctAnswer : 'N/A';
+
+            const explanationSection = document.getElementById('view-explanation');
+            const explanationText = document.getElementById('view-explanation-text');
+            if (data.explanation) {
+                explanationText.textContent = data.explanation;
+                explanationSection.style.display = 'block';
+            } else {
+                explanationSection.style.display = 'none';
+            }
+
+            document.querySelector('.edit-from-view').setAttribute('data-id', data.id);
+        });
+
+        const editModal = document.getElementById('editQuestionModal');
+        editModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const data = {
+                id: button.getAttribute('data-id'),
+                section: button.getAttribute('data-section'),
+                difficulty: button.getAttribute('data-difficulty'),
+                questionText: decodeHtml(button.getAttribute('data-question-text') || ''),
+                optionA: decodeHtml(button.getAttribute('data-option-a') || ''),
+                optionB: decodeHtml(button.getAttribute('data-option-b') || ''),
+                optionC: decodeHtml(button.getAttribute('data-option-c') || ''),
+                optionD: decodeHtml(button.getAttribute('data-option-d') || ''),
+                correctAnswer: button.getAttribute('data-correct-answer'),
+                audioFile: button.getAttribute('data-audio-file'),
+                imageFile: button.getAttribute('data-image-file'),
+                explanation: decodeHtml(button.getAttribute('data-explanation') || '')
+            };
+
+            const editForm = document.getElementById('editQuestionForm');
+            editForm.action = `/course-management/${data.id}`;
+            document.getElementById('editQuestionId').value = data.id || '';
+            document.getElementById('editSection').value = data.section || '';
+            document.getElementById('editDifficulty').value = data.difficulty || '';
+            document.getElementById('editQuestionText').value = data.questionText || '';
+            document.getElementById('editOptionA').value = data.optionA || '';
+            document.getElementById('editOptionB').value = data.optionB || '';
+            document.getElementById('editOptionC').value = data.optionC || '';
+            document.getElementById('editOptionD').value = data.optionD || '';
+            document.getElementById('editCorrectAnswer').value = data.correctAnswer || '';
+            document.getElementById('editExplanation').value = data.explanation || '';
+
+            const audioHelp = document.getElementById('editAudioFileHelp');
+            const imageHelp = document.getElementById('editImageFileHelp');
+            const audioInput = document.getElementById('editAudioFile');
+            const imageInput = document.getElementById('editImageFile');
+
+            audioHelp.textContent = data.audioFile ? `Current: ${data.audioFile.split('/').pop()}` : 'No audio uploaded';
+            imageHelp.textContent = data.imageFile ? `Current: ${data.imageFile.split('/').pop()}` : 'No image uploaded';
+
+            toggleEditUploadFields(data.section, audioInput, imageInput, audioHelp, imageHelp);
+            document.getElementById('editFormMessages').innerHTML = '';
+        });
+
+        const editSectionSelect = document.getElementById('editSection');
+        const editAudioFileInput = document.getElementById('editAudioFile');
+        const editImageFileInput = document.getElementById('editImageFile');
+        const editAudioFileHelp = document.getElementById('editAudioFileHelp');
+        const editImageFileHelp = document.getElementById('editImageFileHelp');
+
+        function toggleEditUploadFields(section, audioInput, imageInput, audioHelp, imageHelp) {
+            const currentAudio = audioHelp.textContent.includes('Current') ? audioHelp.textContent.split('Current: ')[1] : 'No audio uploaded';
+            const currentImage = imageHelp.textContent.includes('Current') ? imageHelp.textContent.split('Current: ')[1] : 'No image uploaded';
+
+            if (section === 'Listening') {
+                audioInput.disabled = false;
+                imageInput.disabled = true;
+                audioHelp.textContent = `Current: ${currentAudio} | Upload an audio file for Listening questions.`;
+                imageHelp.textContent = `Current: ${currentImage} | Image upload is not available for Listening section.`;
+            } else if (section === 'Structure' || section === 'Reading') {
+                audioInput.disabled = true;
+                imageInput.disabled = false;
+                audioHelp.textContent = `Current: ${currentAudio} | Audio upload is only available for Listening section.`;
+                imageHelp.textContent = `Current: ${currentImage} | Upload an image for Structure or Reading questions.`;
+            } else {
+                audioInput.disabled = true;
+                imageInput.disabled = true;
+                audioHelp.textContent = `Current: ${currentAudio} | Please select a section to enable uploads.`;
+                imageHelp.textContent = `Current: ${currentImage} | Please select a section to enable uploads.`;
+            }
+        }
+
+        if (editSectionSelect) {
+            editSectionSelect.addEventListener('change', () => {
+                toggleEditUploadFields(editSectionSelect.value, editAudioFileInput, editImageFileInput, editAudioFileHelp, editImageFileHelp);
+            });
+        }
+
+        document.querySelector('.edit-from-view').addEventListener('click', function() {
+            const questionId = this.getAttribute('data-id');
+            const editButton = document.querySelector(`.edit-question-btn[data-id="${questionId}"]`);
+            if (editButton) {
+                bootstrap.Modal.getInstance(viewModal).hide();
+                editButton.click();
+            }
+        });
+
+        const editForm = document.getElementById('editQuestionForm');
+        editForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (!editForm.checkValidity()) {
+                editForm.classList.add('was-validated');
+                return;
+            }
+
+            const formData = new FormData(editForm);
+            const questionId = formData.get('question_id');
+            const actionUrl = `/course-management/${questionId}`;
+
+            fetch(actionUrl, {
+                method: 'POST', // Laravel handles _method=PUT
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const messagesContainer = document.getElementById('editFormMessages');
+                messagesContainer.innerHTML = '';
+
+                if (data.success) {
+                    messagesContainer.innerHTML = `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `;
+
+                    const row = document.querySelector(`#questionsTable tr[data-id="${questionId}"]`);
+                    if (row) {
+                        const updatedQuestion = data.question;
+                        const cells = row.cells;
+
+                        cells[2].textContent = updatedQuestion.question_text.substring(0, 60) + (updatedQuestion.question_text.length > 60 ? '...' : '');
+                        const correctOption = updatedQuestion[`option_${updatedQuestion.correct_answer.toLowerCase()}`];
+                        cells[3].textContent = `Option ${updatedQuestion.correct_answer}: ${correctOption.substring(0, 30)}${correctOption.length > 30 ? '...' : ''}`;
+                        cells[4].innerHTML = updatedQuestion.difficulty === 'Easy' ? '<span class="badge bg-success">Easy</span>' :
+                                            updatedQuestion.difficulty === 'Medium' ? '<span class="badge bg-warning text-dark">Medium</span>' :
+                                            '<span class="badge bg-danger">Hard</span>';
+
+                        let mediaHtml = '<span class="text-muted">No media</span>';
+                        if (updatedQuestion.section === 'Listening' && updatedQuestion.audio_file) {
+                            mediaHtml = `<audio controls class="w-100" style="max-width: 200px;">
+                                            <source src="${updatedQuestion.audio_file}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                         </audio>`;
+                        } else if (['Structure', 'Reading'].includes(updatedQuestion.section) && updatedQuestion.image_file) {
+                            mediaHtml = `<img src="${updatedQuestion.image_file}" alt="Question Image" class="img-fluid" style="max-width: 100px; max-height: 100px;">`;
+                        }
+                        cells[1].innerHTML = mediaHtml;
+
+                        const editButton = row.querySelector('.edit-question-btn');
+                        editButton.setAttribute('data-section', updatedQuestion.section || '');
+                        editButton.setAttribute('data-difficulty', updatedQuestion.difficulty || '');
+                        editButton.setAttribute('data-question-text', encodeURIComponent(updatedQuestion.question_text || ''));
+                        editButton.setAttribute('data-option-a', encodeURIComponent(updatedQuestion.option_a || ''));
+                        editButton.setAttribute('data-option-b', encodeURIComponent(updatedQuestion.option_b || ''));
+                        editButton.setAttribute('data-option-c', encodeURIComponent(updatedQuestion.option_c || ''));
+                        editButton.setAttribute('data-option-d', encodeURIComponent(updatedQuestion.option_d || ''));
+                        editButton.setAttribute('data-correct-answer', updatedQuestion.correct_answer || '');
+                        editButton.setAttribute('data-audio-file', updatedQuestion.audio_file ? updatedQuestion.audio_file.split('/').pop() : '');
+                        editButton.setAttribute('data-image-file', updatedQuestion.image_file ? updatedQuestion.image_file.split('/').pop() : '');
+                        editButton.setAttribute('data-explanation', encodeURIComponent(updatedQuestion.explanation || ''));
+
+                        const viewButton = row.querySelector('.view-question-btn');
+                        viewButton.setAttribute('data-section', updatedQuestion.section || '');
+                        viewButton.setAttribute('data-difficulty', updatedQuestion.difficulty || '');
+                        viewButton.setAttribute('data-question-text', encodeURIComponent(updatedQuestion.question_text || ''));
+                        viewButton.setAttribute('data-option-a', encodeURIComponent(updatedQuestion.option_a || ''));
+                        viewButton.setAttribute('data-option-b', encode DECLAREDURIComponent(updatedQuestion.option_b || ''));
+                        viewButton.setAttribute('data-option-c', encodeURIComponent(updatedQuestion.option_c || ''));
+                        viewButton.setAttribute('data-option-d', encodeURIComponent(updatedQuestion.option_d || ''));
+                        viewButton.setAttribute('data-correct-answer', updatedQuestion.correct_answer || '');
+                        viewButton.setAttribute('data-audio-file', updatedQuestion.audio_file || '');
+                        viewButton.setAttribute('data-image-file', updatedQuestion.image_file || '');
+                        viewButton.setAttribute('data-explanation', encodeURIComponent(updatedQuestion.explanation || ''));
+                    }
+
+                    setTimeout(() => {
+                        bootstrap.Modal.getInstance(editModal).hide();
+                        editForm.classList.remove('was-validated');
+                    }, 1000);
+                } else {
+                    const errors = data.errors || { general: ['Failed to update question'] };
+                    messagesContainer.innerHTML = `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <ul class="mb-0">
+                                ${Object.values(errors).flat().map(error => `<li>${error}</li>`).join('')}
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                const messagesContainer = document.getElementById('editFormMessages');
+                messagesContainer.innerHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        An error occurred while updating the question: ${error.message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+            });
+        });
     });
 </script>
 @endsection

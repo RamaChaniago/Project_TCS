@@ -5,7 +5,6 @@
         left: 0;
         width: 100%;
         z-index: 1050;
-        /* Pastikan lebih tinggi dari elemen lain */
         padding: 15px 0;
         background-color: white;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -34,10 +33,8 @@
         pointer-events: auto;
     }
 
-    /* navbar-active.css */
     .navbar-nav .nav-link.active {
         color: #007bff !important;
-        /* Warna biru Bootstrap */
         font-weight: bold;
     }
 
@@ -48,7 +45,6 @@
         object-fit: cover;
     }
 
-    /* Custom hamburger button */
     .custom-toggler {
         border: none;
         background: transparent;
@@ -65,7 +61,21 @@
         height: 30px;
     }
 
-    /* Fix for mobile alignment */
+    /* Style for logout button to match dropdown items */
+    .dropdown-menu form button.dropdown-item {
+        background: none;
+        border: none;
+        padding: 6px 16px;
+        text-align: left;
+        width: 100%;
+        color: #333;
+    }
+
+    .dropdown-menu form button.dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #0066cc;
+    }
+
     @media (max-width: 991px) {
         .navbar-nav .dropdown-menu {
             padding-left: 20px;
@@ -96,6 +106,7 @@
         }
     }
 </style>
+
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
         <a class="navbar-brand" href="/">
@@ -143,7 +154,7 @@
                 </li>
                 <li class="nav-item dropdown user-profile-nav">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ asset('assets/images/profile.jpg') }}" alt="profile">
+                        <img src="{{ asset(Auth::user()->profile_image ?? 'assets/images/profile.jpg') }}" alt="profile">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="/profile-member">Profil Saya</a></li>
@@ -151,7 +162,12 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
+                        </li>
                     </ul>
                 </li>
                 @else

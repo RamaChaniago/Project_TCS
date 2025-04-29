@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\QuestionController;
-use App\Http\Controllers\Admin\ToeflExamController;
+use App\Http\Controllers\Admin\TestTimingController;
+use App\Http\Controllers\Admin\userManagementController;
 use App\Http\Controllers\Auth\authController;
 use App\Http\Controllers\Auth\registerController;
-use App\Http\Controllers\Admin\userManagementController;
 use App\Http\Controllers\CertificationTestController;
 use App\Http\Controllers\CertificationToeflProgramController;
 use App\Http\Controllers\HomeController;
@@ -12,12 +12,10 @@ use App\Http\Controllers\KarirController;
 use App\Http\Controllers\LearningPackageController;
 use App\Http\Controllers\LiveClassesController;
 use App\Http\Controllers\OneOnOneController;
-use App\Http\Controllers\BayarController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\SmartBookController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\Member\ToeflExamController as MemberToeflExamController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 
@@ -52,6 +50,7 @@ Route::matched(function ($event) {
         ]);
     }
 });
+
 // ------------------ Public Routes ------------------ //
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -113,9 +112,6 @@ Route::middleware(['auth', 'cekRole:admin,member'])->group(function () {
         return view('Member.Sertifikat');
     })->name('member.sertifikat');
 
-    Route::get('/exam-toefl', [MemberToeflExamController::class, 'startExam'])->name('exam.start');
-    Route::post('/exam-toefl/submit', [MemberToeflExamController::class, 'submitExam'])->name('exam.submit');
-
     Route::get('/profile-member', function () {
         return view('Profile.Profile_Member.MainProfil');
     })->name('profile.member');
@@ -125,11 +121,14 @@ Route::middleware(['auth', 'cekRole:admin,member'])->group(function () {
     Route::put('/profile/update-image', [ProfileController::class, 'updateImage'])->name('profile.update.image');
     Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
-    Route::get('/payment', [BayarController::class, 'index'])->name('payment.index');
-    Route::post('/payment', [BayarController::class, 'store'])->name('payment.store');
-    Route::post('/payment/check-status', [BayarController::class, 'checkStatus'])->name('payment.checkStatus');
-    Route::post('/payment/mark-paid', [BayarController::class, 'markPaid'])->name('payment.markPaid');
-    Route::get('/payment/success', [BayarController::class, 'success'])->name('payment.success');
+    // Commented-out routes for non-existent controllers
+    // Route::get('/exam-toefl', [MemberToeflExamController::class, 'startExam'])->name('exam.start');
+    // Route::post('/exam-toefl/submit', [MemberToeflExamController::class, 'submitExam'])->name('exam.submit');
+    // Route::get('/payment', [BayarController::class, 'index'])->name('payment.index');
+    // Route::post('/payment', [BayarController::class, 'store'])->name('payment.store');
+    // Route::post('/payment/check-status', [BayarController::class, 'checkStatus'])->name('payment.checkStatus');
+    // Route::post('/payment/mark-paid', [BayarController::class, 'markPaid'])->name('payment.markPaid');
+    // Route::get('/payment/success', [BayarController::class, 'success'])->name('payment.success');
 });
 
 // ------------------ Admin Routes ------------------ //
@@ -145,26 +144,20 @@ Route::middleware(['auth', 'cekRole:admin'])->group(function () {
     Route::resource('/user-management', userManagementController::class);
 
     // TOEFL ITP Questions Management
-    Route::get('/course-management', [QuestionController::class, 'index'])->name('questions.index');
-Route::get('/course-management/filter', [QuestionController::class, 'filter'])->name('questions.filter');
-Route::post('/course-management', [QuestionController::class, 'store'])->name('questions.store');
-Route::get('/course-management/{question}', [QuestionController::class, 'show'])->name('questions.show');
-Route::get('/course-management/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
-Route::put('/course-management/{question}', [QuestionController::class, 'update'])->name('questions.update');
-Route::delete('/course-management/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
-Route::put('/course-management/timing/update', [QuestionController::class, 'updateTiming'])->name('test.timing.update');
+    Route::prefix('course-management')->name('questions.')->group(function () {
+        Route::get('/', [QuestionController::class, 'index'])->name('index');
+        Route::get('/filter', [QuestionController::class, 'filter'])->name('filter');
+        Route::post('/', [QuestionController::class, 'store'])->name('store');
+        Route::get('/{question}', [QuestionController::class, 'show'])->name('show');
+        Route::get('/{question}/edit', [QuestionController::class, 'edit'])->name('edit');
+        Route::put('/{question}', [QuestionController::class, 'update'])->name('update');
+        Route::delete('/{question}', [QuestionController::class, 'destroy'])->name('destroy');
+    });
 
-    // Reading Passages Management
-    Route::get('/toefl-passages', [ToeflExamController::class, 'managePassages'])->name('toefl-passages');
-    Route::get('/toefl-passages/create', [ToeflExamController::class, 'createPassage'])->name('toefl-passages.create');
-    Route::post('/toefl-passages', [ToeflExamController::class, 'storePassage'])->name('toefl-passages.store');
-
-    // Import/Export Functionality
-    Route::post('/toefl-questions/import', [ToeflExamController::class, 'importQuestions'])->name('toefl-questions.import');
-    Route::get('/toefl-questions/export', [ToeflExamController::class, 'exportQuestions'])->name('toefl-questions.export');
-
-    // Analytics
-    Route::get('/toefl-analytics', [ToeflExamController::class, 'analytics'])->name('toefl-analytics');
+    // Test Timing Management
+    Route::prefix('test-timing')->name('test.timing.')->group(function () {
+        Route::put('/', [TestTimingController::class, 'update'])->name('update');
+    });
 
     Route::get('/admin-transaction', function () {
         return view('Admin.Transaction');

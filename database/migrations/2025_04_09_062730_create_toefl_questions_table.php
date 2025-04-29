@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('explanation')->nullable();
             $table->text('reading_passage')->nullable();
             $table->string('audio_file')->nullable();
+            $table->string('image_file')->nullable(); // Added for image uploads
             $table->unsignedBigInteger('passage_id')->nullable();
             $table->foreign('passage_id')->references('id')->on('reading_passages')->onDelete('set null');
             $table->timestamps();
