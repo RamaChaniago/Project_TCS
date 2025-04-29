@@ -99,19 +99,15 @@ class QuestionController extends Controller
             'difficulty' => 'required|in:Easy,Medium,Hard',
             'audio_file' => 'nullable|file|mimes:mp3,wav|max:10240',
             'image_file' => 'nullable|file|mimes:jpeg,png|max:5120',
+            'explanation' => 'nullable|string',
         ];
 
         if ($request->section == 'Listening') {
             $rules['audio_file'] = 'required|file|mimes:mp3,wav|max:10240';
-            if ($request->hasFile('image_file')) {
-                $request->merge(['image_file' => null]);
-                return redirect()->back()->withErrors(['image_file' => 'Image uploads are not allowed for Listening section.'])->withInput();
-            }
+            $rules['image_file'] = 'prohibited';
         } elseif (in_array($request->section, ['Structure', 'Reading'])) {
-            if ($request->hasFile('audio_file')) {
-                $request->merge(['audio_file' => null]);
-                return redirect()->back()->withErrors(['audio_file' => 'Audio uploads are not allowed for Structure or Reading sections.'])->withInput();
-            }
+            $rules['audio_file'] = 'prohibited';
+            $rules['image_file'] = 'nullable|file|mimes:jpeg,png|max:5120';
         }
 
         $validator = Validator::make($request->all(), $rules);
@@ -120,21 +116,21 @@ class QuestionController extends Controller
         }
 
         $data = $request->except(['audio_file', 'image_file']);
+
         if ($request->section == 'Listening' && $request->hasFile('audio_file')) {
-            $audioFile = $request->file('audio_file');
-            $path = $audioFile->store('audio', 'public');
-            $data['audio_file'] = $path;
+            $audioPath = $request->file('audio_file')->store('audio', 'public');
+            $data['audio_file'] = $audioPath;
             $data['image_file'] = null;
         }
 
         if (in_array($request->section, ['Structure', 'Reading']) && $request->hasFile('image_file')) {
-            $imageFile = $request->file('image_file');
-            $path = $imageFile->store('images', 'public');
-            $data['image_file'] = $path;
+            $imagePath = $request->file('image_file')->store('images', 'public');
+            $data['image_file'] = $imagePath;
             $data['audio_file'] = null;
         }
 
         ToeflQuestion::create($data);
+
         return redirect()->route('questions.index')->with('success', 'Question created successfully!');
     }
 
@@ -215,19 +211,9 @@ class QuestionController extends Controller
         ];
 
         if ($request->section == 'Listening') {
-            if ($request->hasFile('image_file')) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => ['image_file' => ['Image uploads are not allowed for Listening section.']]
-                ], 422);
-            }
+            $rules['image_file'] = 'prohibited';
         } elseif (in_array($request->section, ['Structure', 'Reading'])) {
-            if ($request->hasFile('audio_file')) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => ['audio_file' => ['Audio uploads are not allowed for Structure or Reading sections.']]
-                ], 422);
-            }
+            $rules['audio_file'] = 'prohibited';
         }
 
         $validator = Validator::make($request->all(), $rules);
@@ -240,13 +226,13 @@ class QuestionController extends Controller
 
         try {
             $data = $request->except(['audio_file', 'image_file']);
+
             if ($request->section == 'Listening' && $request->hasFile('audio_file')) {
                 if ($question->audio_file) {
                     Storage::disk('public')->delete($question->audio_file);
                 }
-                $audioFile = $request->file('audio_file');
-                $path = $audioFile->store('audio', 'public');
-                $data['audio_file'] = $path;
+                $audioPath = $request->file('audio_file')->store('audio', 'public');
+                $data['audio_file'] = $audioPath;
                 $data['image_file'] = null;
             } elseif ($request->section == 'Listening') {
                 $data['audio_file'] = $question->audio_file;
@@ -257,9 +243,8 @@ class QuestionController extends Controller
                 if ($question->image_file) {
                     Storage::disk('public')->delete($question->image_file);
                 }
-                $imageFile = $request->file('image_file');
-                $path = $imageFile->store('images', 'public');
-                $data['image_file'] = $path;
+                $imagePath = $request->file('image_file')->store('images', 'public');
+                $data['image_file'] = $imagePath;
                 $data['audio_file'] = null;
             } elseif (in_array($request->section, ['Structure', 'Reading'])) {
                 $data['image_file'] = $question->image_file;
@@ -294,6 +279,36 @@ class QuestionController extends Controller
             ], 500);
         }
     }
+
+    public function getQuestionDetails($id)
+{
+    try {
+        $question = ToeflQuestion::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $question->id,
+                'section' => $question->section ?? 'N/A',
+                'difficulty' => $question->difficulty ?? 'N/A',
+                'question_text' => $question->question_text ?? 'N/A',
+                'option_a' => $question->option_a ?? 'N/A',
+                'option_b' => $question->option_b ?? 'N/A',
+                'option_c' => $question->option_c ?? 'N/A',
+                'option_d' => $question->option_d ?? 'N/A',
+                'correct_answer' => $question->correct_answer ?? 'N/A',
+                'audio_file' => $question->audio_file ? Storage::url($question->audio_file) : '',
+                'image_file' => $question->image_file ? Storage::url($question->image_file) : '',
+                'explanation' => $question->explanation ?? ''
+            ]
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to fetch question details: ' . $e->getMessage()
+        ], 500);
+    }
+}
 
     public function destroy(ToeflQuestion $question)
     {

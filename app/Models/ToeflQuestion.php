@@ -26,6 +26,7 @@ class ToeflQuestion extends Model
         'explanation',
         'reading_passage',
         'audio_file',
+        'image_file',
         'passage_id'
     ];
 

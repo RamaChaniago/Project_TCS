@@ -150,7 +150,8 @@ Route::middleware(['auth', 'cekRole:admin'])->group(function () {
         Route::post('/', [QuestionController::class, 'store'])->name('store');
         Route::get('/{question}', [QuestionController::class, 'show'])->name('show');
         Route::get('/{question}/edit', [QuestionController::class, 'edit'])->name('edit');
-        Route::put('/{question}', [QuestionController::class, 'update'])->name('update');
+        Route::put('/course-management/{question}', [QuestionController::class, 'update'])->name('questions.update');
+        Route::get('/questions/{id}/details', [QuestionController::class, 'getQuestionDetails'])->name('questions.details');
         Route::delete('/{question}', [QuestionController::class, 'destroy'])->name('destroy');
     });
 
