@@ -341,7 +341,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
-                    <li class="nav-item dropdown">
+                    {{-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button">
                             Kursus Management
                         </a>
@@ -353,16 +353,16 @@
                             <li><a class="dropdown-item" href="#">Smart Book</a></li>
                             <li><a class="dropdown-item" href="#">Subscription</a></li>
                         </ul>
-                    </li>
-                    <li class="nav-item">
+                    </li> --}}
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="#">Users</a>
-                    </li>
-                    <li class="nav-item">
+                    </li> --}}
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="#">Reports</a>
-                    </li>
-                    <li class="nav-item">
+                    </li> --}}
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="#">Settings</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item dropdown user-profile-nav active">
                         <a class="nav-link dropdown-toggle" href="#" role="button" aria-current="page">
                             <img src="{{ asset('storage/' . Auth::user()->getAdminInfo->profile_image) }}" alt="Admin Profile">
@@ -431,7 +431,7 @@
                         <span class="sidebar-item-text">Certifications</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="/content-management" class="nav-link">
                         <i class="bi bi-journal-text"></i>
                         <span class="sidebar-item-text">Content Management</span>
@@ -454,7 +454,7 @@
                         <i class="bi bi-gear"></i>
                         <span class="sidebar-item-text">System Settings</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>

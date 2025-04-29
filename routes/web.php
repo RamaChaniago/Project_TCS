@@ -144,15 +144,15 @@ Route::middleware(['auth', 'cekRole:admin'])->group(function () {
     Route::resource('/user-management', userManagementController::class);
 
     // TOEFL ITP Questions Management
-    Route::prefix('course-management')->name('questions.')->group(function () {
-        Route::get('/', [QuestionController::class, 'index'])->name('index');
-        Route::get('/filter', [QuestionController::class, 'filter'])->name('filter');
-        Route::post('/', [QuestionController::class, 'store'])->name('store');
-        Route::get('/{question}', [QuestionController::class, 'show'])->name('show');
-        Route::get('/{question}/edit', [QuestionController::class, 'edit'])->name('edit');
-        Route::put('/course-management/{question}', [QuestionController::class, 'update'])->name('questions.update');
-        Route::get('/questions/{id}/details', [QuestionController::class, 'getQuestionDetails'])->name('questions.details');
-        Route::delete('/{question}', [QuestionController::class, 'destroy'])->name('destroy');
+    Route::prefix('course-management')->group(function () {
+        Route::get('/', [QuestionController::class, 'index'])->name('questions.index');
+        Route::get('/filter', [QuestionController::class, 'filter'])->name('questions.filter');
+        Route::post('/', [QuestionController::class, 'store'])->name('questions.store');
+        Route::get('/{question}', [QuestionController::class, 'show'])->name('questions.show');
+        Route::get('/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
+        Route::put('/{question}', [QuestionController::class, 'update'])->name('questions.update');
+        Route::delete('/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+        Route::get('/{id}/details', [QuestionController::class, 'getQuestionDetails'])->name('questions.details'); // Route untuk AJAX
     });
 
     // Test Timing Management

@@ -127,31 +127,31 @@
                         Daftar Kursus
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/courses-one-on-one">One on One</a></li>
+                        {{-- <li><a class="dropdown-item" href="/courses-one-on-one">One on One</a></li> --}}
                         <li><a class="dropdown-item" href="/courses-certification-test">Certification Test</a></li>
-                        <li><a class="dropdown-item" href="/courses-live-class">Live Class</a></li>
-                        <li><a class="dropdown-item" href="/courses-learning-package">Learning Package</a></li>
-                        <li><a class="dropdown-item" href="/courses-smart-book">Smart Book</a></li>
-                        <li><a class="dropdown-item" href="/courses-subscription">Subscription</a></li>
+                        {{-- <li><a class="dropdown-item" href="/courses-live-class">Live Class</a></li> --}}
+                        {{-- <li><a class="dropdown-item" href="/courses-learning-package">Learning Package</a></li> --}}
+                        {{-- <li><a class="dropdown-item" href="/courses-smart-book">Smart Book</a></li> --}}
+                        {{-- <li><a class="dropdown-item" href="/courses-subscription">Subscription</a></li> --}}
                     </ul>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="/Promo">Promo</a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="/Karir">Karir</a>
-                </li>
+                </li> --}}
 
                 @if(Auth::check())
                 <li class="nav-item">
                     <a class="nav-link" href="/member">Kelas Saya</a>
                 </li>
-                <li class="nav-item me-2">
+                {{-- <li class="nav-item me-2">
                     <a class="nav-link cart-button" href="/checkout">
                         <i class="bi bi-cart fs-5"></i>
                         <span class="cart-count">3</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item dropdown user-profile-nav">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{ asset(Auth::user()->profile_image ?? 'assets/images/profile.jpg') }}" alt="profile">

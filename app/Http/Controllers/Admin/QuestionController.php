@@ -112,58 +112,70 @@ class QuestionController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
+            \Log::error('Validation failed for new question:', $validator->errors()->toArray());
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $data = $request->except(['audio_file', 'image_file']);
+        try {
+            $data = $request->except(['audio_file', 'image_file']);
 
-        if ($request->section == 'Listening' && $request->hasFile('audio_file')) {
-            $audioPath = $request->file('audio_file')->store('audio', 'public');
-            $data['audio_file'] = $audioPath;
-            $data['image_file'] = null;
+            if ($request->section == 'Listening' && $request->hasFile('audio_file')) {
+                $audioPath = $request->file('audio_file')->store('audio', 'public');
+                $data['audio_file'] = $audioPath;
+                $data['image_file'] = null;
+            }
+
+            if (in_array($request->section, ['Structure', 'Reading']) && $request->hasFile('image_file')) {
+                $imagePath = $request->file('image_file')->store('images', 'public');
+                $data['image_file'] = $imagePath;
+                $data['audio_file'] = null;
+            }
+
+            $question = ToeflQuestion::create($data);
+
+            \Log::info('New question created successfully:', ['id' => $question->id, 'data' => $data]);
+
+            return redirect()->route('questions.index')->with('success', 'Question created successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Failed to create question:', ['error' => $e->getMessage(), 'data' => $request->all()]);
+            return redirect()->back()->withErrors(['error' => 'Failed to add question: ' . $e->getMessage()])->withInput();
         }
-
-        if (in_array($request->section, ['Structure', 'Reading']) && $request->hasFile('image_file')) {
-            $imagePath = $request->file('image_file')->store('images', 'public');
-            $data['image_file'] = $imagePath;
-            $data['audio_file'] = null;
-        }
-
-        ToeflQuestion::create($data);
-
-        return redirect()->route('questions.index')->with('success', 'Question created successfully!');
     }
 
     public function show(ToeflQuestion $question)
-    {
-        $viewQuestion = $question;
-        $totalQuestions = ToeflQuestion::count();
-        $listeningQuestions = ToeflQuestion::where('section', 'Listening')->count();
-        $structureQuestions = ToeflQuestion::where('section', 'Structure')->count();
-        $readingQuestions = ToeflQuestion::where('section', 'Reading')->count();
+{
+    // Log the question data to verify it's being retrieved
+    \Log::info('Show method called for question ID: ' . $question->id, [
+        'question' => $question->toArray()
+    ]);
 
-        $testSettings = ToeflTestSetting::first();
-        $listeningTime = $testSettings ? $testSettings->listening_time : 35;
-        $structureTime = $testSettings ? $testSettings->structure_time : 25;
-        $readingTime = $testSettings ? $testSettings->reading_time : 55;
-        $lastTimingUpdate = $testSettings ? $testSettings->last_updated : now();
+    $viewQuestion = $question;
+    $totalQuestions = ToeflQuestion::count();
+    $listeningQuestions = ToeflQuestion::where('section', 'Listening')->count();
+    $structureQuestions = ToeflQuestion::where('section', 'Structure')->count();
+    $readingQuestions = ToeflQuestion::where('section', 'Reading')->count();
 
-        $questions = ToeflQuestion::latest()->paginate(10);
+    $testSettings = ToeflTestSetting::first();
+    $listeningTime = $testSettings ? $testSettings->listening_time : 35;
+    $structureTime = $testSettings ? $testSettings->structure_time : 25;
+    $readingTime = $testSettings ? $testSettings->reading_time : 55;
+    $lastTimingUpdate = $testSettings ? $testSettings->last_updated : now();
 
-        return view('Admin.Course-Management', compact(
-            'questions',
-            'viewQuestion',
-            'totalQuestions',
-            'listeningQuestions',
-            'structureQuestions',
-            'readingQuestions',
-            'listeningTime',
-            'structureTime',
-            'readingTime',
-            'lastTimingUpdate'
-        ));
-    }
+    $questions = ToeflQuestion::latest()->paginate(10);
 
+    return view('Admin.Course-Management', compact(
+        'questions',
+        'viewQuestion',
+        'totalQuestions',
+        'listeningQuestions',
+        'structureQuestions',
+        'readingQuestions',
+        'listeningTime',
+        'structureTime',
+        'readingTime',
+        'lastTimingUpdate'
+    ));
+}
     public function edit(ToeflQuestion $question)
     {
         $editQuestion = $question;
@@ -280,36 +292,6 @@ class QuestionController extends Controller
         }
     }
 
-    public function getQuestionDetails($id)
-{
-    try {
-        $question = ToeflQuestion::findOrFail($id);
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'id' => $question->id,
-                'section' => $question->section ?? 'N/A',
-                'difficulty' => $question->difficulty ?? 'N/A',
-                'question_text' => $question->question_text ?? 'N/A',
-                'option_a' => $question->option_a ?? 'N/A',
-                'option_b' => $question->option_b ?? 'N/A',
-                'option_c' => $question->option_c ?? 'N/A',
-                'option_d' => $question->option_d ?? 'N/A',
-                'correct_answer' => $question->correct_answer ?? 'N/A',
-                'audio_file' => $question->audio_file ? Storage::url($question->audio_file) : '',
-                'image_file' => $question->image_file ? Storage::url($question->image_file) : '',
-                'explanation' => $question->explanation ?? ''
-            ]
-        ], 200);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to fetch question details: ' . $e->getMessage()
-        ], 500);
-    }
-}
-
     public function destroy(ToeflQuestion $question)
     {
         if ($question->audio_file) {
@@ -320,5 +302,37 @@ class QuestionController extends Controller
         }
         $question->delete();
         return redirect()->route('questions.index')->with('success', 'Question deleted successfully!');
+    }
+
+    // Method baru untuk mengambil detail soal via AJAX
+    public function getQuestionDetails($id)
+    {
+        try {
+            $question = ToeflQuestion::findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $question->id,
+                    'section' => $question->section ?? 'N/A',
+                    'difficulty' => $question->difficulty ?? 'N/A',
+                    'question_text' => $question->question_text ?? 'N/A',
+                    'option_a' => $question->option_a ?? 'N/A',
+                    'option_b' => $question->option_b ?? 'N/A',
+                    'option_c' => $question->option_c ?? 'N/A',
+                    'option_d' => $question->option_d ?? 'N/A',
+                    'correct_answer' => $question->correct_answer ?? 'N/A',
+                    'audio_file' => $question->audio_file ? Storage::url($question->audio_file) : '',
+                    'image_file' => $question->image_file ? Storage::url($question->image_file) : '',
+                    'explanation' => $question->explanation ?? ''
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            \Log::error('Failed to fetch question details:', ['id' => $id, 'error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch question details: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

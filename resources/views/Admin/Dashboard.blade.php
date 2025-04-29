@@ -67,7 +67,7 @@ Admin Dashboard
     </div>
 
     <!-- Course Management Section -->
-    <div class="card shadow-lg border-0 rounded-lg mb-4" data-aos="fade-up">
+    {{-- <div class="card shadow-lg border-0 rounded-lg mb-4" data-aos="fade-up">
         <div class="card-header bg-white p-4 border-0">
             <h5 class="mb-0">Course Management</h5>
         </div>
@@ -119,7 +119,7 @@ Admin Dashboard
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Transaction Section -->
     <div class="card shadow-lg border-0 rounded-lg mb-4" data-aos="fade-up">
@@ -221,7 +221,7 @@ Admin Dashboard
     </div>
 
     <!-- Content Management Section -->
-    <div class="card shadow-lg border-0 rounded-lg mb-4" data-aos="fade-up">
+    {{-- <div class="card shadow-lg border-0 rounded-lg mb-4" data-aos="fade-up">
         <div class="card-header bg-white p-4 border-0">
             <h5 class="mb-0">Content Management</h5>
         </div>
@@ -262,10 +262,10 @@ Admin Dashboard
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Reports & Analytics Section -->
-    <div class="card shadow-lg border-0 rounded-lg" data-aos="fade-up">
+    {{-- <div class="card shadow-lg border-0 rounded-lg" data-aos="fade-up">
         <div class="card-header bg-white p-4 border-0">
             <h5 class="mb-0">Conversion Funnel Analytics</h5>
         </div>
@@ -317,7 +317,7 @@ Admin Dashboard
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 @endsection
 

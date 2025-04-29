@@ -13,29 +13,84 @@
     <!-- Custom CSS -->
     <style>
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #2d3748;
+        }
+        .container-fluid {
+            max-width: 1400px;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
         }
         .aspect-ratio-1x1 {
             position: relative;
             width: 100%;
-            padding-bottom: 0;
+            padding-bottom: 100%;
             font-size: 14px;
             font-weight: 500;
+            border-radius: 8px;
+        }
+        .aspect-ratio-1x1 button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .answer-option {
+            transition: all 0.3s ease;
         }
         .answer-option:hover {
-            border-color: #0d6efd !important;
+            border-color: #5a67d8 !important;
             background-color: #f8f9ff;
         }
         .answer-option.selected {
-            border-color: #0d6efd !important;
+            border-color: #5a67d8 !important;
             background-color: #f0f7ff;
         }
         .sticky-lg-top {
             top: 20px;
         }
+        .progress {
+            height: 8px;
+            border-radius: 5px;
+        }
+        .progress-bar {
+            background-color: #5a67d8;
+        }
+        .audio-player {
+            background: #f1f3f5;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .btn-primary {
+            background: #5a67d8;
+            border: none;
+            border-radius: 10px;
+        }
+        .btn-primary:hover {
+            background: #4c51bf;
+        }
+        .btn-outline-warning, .btn-warning {
+            border-radius: 10px;
+        }
+        .nav-pills .nav-link {
+            border-radius: 10px;
+            margin: 5px;
+            font-weight: 500;
+        }
+        .nav-pills .nav-link.active {
+            background: #5a67d8;
+            color: #ffffff;
+        }
         @media (max-width: 767px) {
             .question-button-wrapper {
-                width: 20% !important;
+                width: 25% !important;
             }
         }
     </style>
@@ -43,7 +98,7 @@
 <body>
     <div class="container-fluid py-4">
         <!-- Exam Header -->
-        <div class="card shadow-lg border-0 rounded-lg mb-4" data-aos="fade-up">
+        <div class="card shadow-lg border-0 mb-4" data-aos="fade-up">
             <div class="card-header bg-white p-4 border-0">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -55,7 +110,7 @@
                             <div class="me-3">
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-clock me-1 text-primary"></i>
-                                    <span id="timer" class="fw-bold">02:00:00</span>
+                                    <span id="timer" class="fw-bold">00:00:00</span>
                                 </div>
                                 <div class="small text-muted">Time Remaining</div>
                             </div>
@@ -68,98 +123,140 @@
             </div>
         </div>
 
-        <!-- Test Progress -->
-        <div class="card shadow border-0 rounded-lg mb-4" data-aos="fade-up">
-            <div class="card-body p-4">
-                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0">Section 1: Listening Comprehension</h5>
-                    <div class="badge bg-primary px-3 py-2">Question 5 of 50</div>
-                </div>
-                <div class="progress" style="height: 8px;">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 10%;"
-                         aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="d-flex justify-content-between mt-2">
-                    <div class="small text-muted">10% completed</div>
-                    <div class="small text-muted">40 questions remaining</div>
-                </div>
-            </div>
-        </div>
-
         <!-- Exam Content -->
         <div class="row">
             <!-- Questions Panel -->
             <div class="col-lg-8 mb-4">
-                <div class="card shadow-lg border-0 rounded-lg" data-aos="fade-up">
+                <div class="card shadow-lg border-0" data-aos="fade-up">
                     <div class="card-header bg-white p-4 border-0">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Question #5</h5>
-                            <span class="badge bg-dark px-3 py-2">
+                            <h5 class="mb-0" id="question-title">Question #1</h5>
+                            <span class="badge bg-dark px-3 py-2" id="section-badge">
                                 <i class="bi bi-soundwave me-1"></i> Listening
                             </span>
                         </div>
                     </div>
                     <div class="card-body p-4">
-                        <!-- Audio Player for Listening Section -->
-                        <div class="bg-light p-4 rounded-3 mb-4">
-                            <div class="text-center mb-3">
-                                <i class="bi bi-volume-up-fill text-primary" style="font-size: 2.5rem;"></i>
-                            </div>
-                            <div class="d-flex justify-content-center align-items-center mb-3">
-                                <button class="btn btn-primary rounded-circle me-3" id="playButton">
-                                    <i class="bi bi-play-fill"></i>
-                                </button>
-                                <div class="progress flex-grow-1" style="height: 8px;">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 0%;"
-                                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="audioProgress"></div>
+                        <!-- Question Content -->
+                        <div id="question-content">
+                            @foreach ($listeningQuestions as $index => $question)
+                                <div class="question-container {{ $index == 0 ? '' : 'd-none' }}" data-question="{{ $index }}" data-section="listening" data-id="{{ $question->id }}">
+                                    @if ($question->audio_file)
+                                        <div class="audio-player mb-4">
+                                            <div class="text-center mb-3">
+                                                <i class="bi bi-volume-up-fill text-primary" style="font-size: 2.5rem;"></i>
+                                            </div>
+                                            <div class="d-flex justify-content-center align-items-center mb-3">
+                                                <button class="btn btn-primary rounded-circle me-3 play-button" data-plays="2">
+                                                    <i class="bi bi-play-fill"></i>
+                                                </button>
+                                                <div class="progress flex-grow-1">
+                                                    <div class="progress-bar" role="progressbar" style="width: 0%;" id="audio-progress-{{ $question->id }}"></div>
+                                                </div>
+                                                <div class="ms-3 text-muted small" id="audio-time-{{ $question->id }}">00:00 / 01:30</div>
+                                            </div>
+                                            <div class="text-center text-muted small">
+                                                <i class="bi bi-info-circle me-1"></i> You can play this audio only twice
+                                                <span class="ms-2 badge bg-light text-dark" id="plays-remaining-{{ $question->id }}">2 plays remaining</span>
+                                            </div>
+                                            <audio id="audio-{{ $question->id }}" src="{{ asset('storage/' . $question->audio_file) }}" preload="auto"></audio>
+                                        </div>
+                                    @endif
+                                    <div class="mb-4">
+                                        <p class="mb-2 fw-bold">Listen to the conversation and answer the question:</p>
+                                        <p>{!! nl2br(e($question->question_text)) !!}</p>
+                                    </div>
+                                    <form class="question-form">
+                                        <div class="mb-3">
+                                            <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_a_{{ $question->id }}" value="A">
+                                                <label class="form-check-label w-100" for="option_a_{{ $question->id }}">{{ $question->option_a }}</label>
+                                            </div>
+                                            <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_b_{{ $question->id }}" value="B">
+                                                <label class="form-check-label w-100" for="option_b_{{ $question->id }}">{{ $question->option_b }}</label>
+                                            </div>
+                                            <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_c_{{ $question->id }}" value="C">
+                                                <label class="form-check-label w-100" for="option_c_{{ $question->id }}">{{ $question->option_c }}</label>
+                                            </div>
+                                            <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_d_{{ $question->id }}" value="D">
+                                                <label class="form-check-label w-100" for="option_d_{{ $question->id }}">{{ $question->option_d }}</label>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="ms-3 text-muted small" id="audioTime">00:00 / 01:30</div>
-                            </div>
-                            <div class="text-center text-muted small">
-                                <i class="bi bi-info-circle me-1"></i> You can play this audio only twice
-                                <span class="ms-2 badge bg-light text-dark">1 play remaining</span>
-                            </div>
-                        </div>
+                            @endforeach
 
-                        <!-- Question Text -->
-                        <div class="mb-4">
-                            <p class="mb-2 fw-bold">Listen to the conversation and answer the question:</p>
-                            <p>What is the woman primarily discussing?</p>
-                        </div>
+                            @foreach ($structureQuestions as $index => $question)
+                                <div class="question-container d-none" data-question="{{ $index }}" data-section="structure" data-id="{{ $question->id }}">
+                                    <div class="mb-4">
+                                        <p class="mb-2 fw-bold">{{ $question->structureTypeDisplay }}:</p>
+                                        <p>{!! nl2br(e($question->question_text)) !!}</p>
+                                    </div>
+                                    <form class="question-form">
+                                        <div class="mb-3">
+                                            <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_a_{{ $question->id }}" value="A">
+                                                <label class="form-check-label w-100" for="option_a_{{ $question->id }}">{{ $question->option_a }}</label>
+                                            </div>
+                                            <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_b_{{ $question->id }}" value="B">
+                                                <label class="form-check-label w-100" for="option_b_{{ $question->id }}">{{ $question->option_b }}</label>
+                                            </div>
+                                            <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_c_{{ $question->id }}" value="C">
+                                                <label class="form-check-label w-100" for="option_c_{{ $question->id }}">{{ $question->option_c }}</label>
+                                            </div>
+                                            <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_d_{{ $question->id }}" value="D">
+                                                <label class="form-check-label w-100" for="option_d_{{ $question->id }}">{{ $question->option_d }}</label>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endforeach
 
-                        <!-- Answer Choices -->
-                        <form id="questionForm">
-                            <div class="mb-3">
-                                <div class="form-check p-3 border rounded mb-3 answer-option">
-                                    <input class="form-check-input" type="radio" name="question5" id="q5a" value="a">
-                                    <label class="form-check-label w-100" for="q5a">
-                                        A research paper she needs to complete
-                                    </label>
+                            @foreach ($readingPassages as $passage)
+                                <div class="passage-content d-none" data-passage="{{ $passage->id }}">
+                                    <h5 class="fw-bold mb-3">{{ $passage->title }}</h5>
+                                    <p>{!! nl2br(e($passage->content)) !!}</p>
                                 </div>
-                                <div class="form-check p-3 border rounded mb-3 answer-option">
-                                    <input class="form-check-input" type="radio" name="question5" id="q5b" value="b">
-                                    <label class="form-check-label w-100" for="q5b">
-                                        A schedule change for the upcoming semester
-                                    </label>
-                                </div>
-                                <div class="form-check p-3 border rounded mb-3 answer-option">
-                                    <input class="form-check-input" type="radio" name="question5" id="q5c" value="c">
-                                    <label class="form-check-label w-100" for="q5c">
-                                        Her difficulties with a science course
-                                    </label>
-                                </div>
-                                <div class="form-check p-3 border rounded mb-3 answer-option">
-                                    <input class="form-check-input" type="radio" name="question5" id="q5d" value="d">
-                                    <label class="form-check-label w-100" for="q5d">
-                                        A plan to join a study group
-                                    </label>
-                                </div>
-                            </div>
-                        </form>
+                                @foreach ($passage->questions as $index => $question)
+                                    <div class="question-container d-none" data-question="{{ $index }}" data-section="reading" data-passage="{{ $passage->id }}" data-id="{{ $question->id }}">
+                                        <div class="mb-4">
+                                            <p class="mb-2 fw-bold">Reading Comprehension:</p>
+                                            <p>{!! nl2br(e($question->question_text)) !!}</p>
+                                        </div>
+                                        <form class="question-form">
+                                            <div class="mb-3">
+                                                <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                    <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_a_{{ $question->id }}" value="A">
+                                                    <label class="form-check-label w-100" for="option_a_{{ $question->id }}">{{ $question->option_a }}</label>
+                                                </div>
+                                                <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                    <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_b_{{ $question->id }}" value="B">
+                                                    <label class="form-check-label w-100" for="option_b_{{ $question->id }}">{{ $question->option_b }}</label>
+                                                </div>
+                                                <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                    <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_c_{{ $question->id }}" value="C">
+                                                    <label class="form-check-label w-100" for="option_c_{{ $question->id }}">{{ $question->option_c }}</label>
+                                                </div>
+                                                <div class="form-check p-3 border rounded mb-3 answer-option">
+                                                    <input class="form-check-input" type="radio" name="question_{{ $question->id }}" id="option_d_{{ $question->id }}" value="D">
+                                                    <label class="form-check-label w-100" for="option_d_{{ $question->id }}">{{ $question->option_d }}</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                @endforeach
+                            @endforeach
+                        </div>
 
                         <!-- Navigation Buttons -->
                         <div class="d-flex justify-content-between mt-5">
-                            <button class="btn btn-outline-secondary rounded-pill px-4" id="prevButton">
+                            <button class="btn btn-outline-secondary rounded-pill px-4" id="prevButton" disabled>
                                 <i class="bi bi-arrow-left me-1"></i> Previous
                             </button>
                             <div>
@@ -184,52 +281,42 @@
                     <div class="card-body p-3">
                         <!-- Section Navigation -->
                         <div class="nav nav-pills nav-fill mb-3" id="section-tab" role="tablist">
-                            <button class="nav-link active" id="listening-tab" data-bs-toggle="pill" data-bs-target="#listening" type="button" role="tab">
-                                Listening
-                            </button>
-                            <button class="nav-link" id="structure-tab" data-bs-toggle="pill" data-bs-target="#structure" type="button" role="tab">
-                                Structure
-                            </button>
-                            <button class="nav-link" id="reading-tab" data-bs-toggle="pill" data-bs-target="#reading" type="button" role="tab">
-                                Reading
-                            </button>
+                            <button class="nav-link active" id="listening-tab" data-bs-toggle="pill" data-bs-target="#listening-nav" type="button" role="tab">Listening</button>
+                            <button class="nav-link" id="structure-tab" data-bs-toggle="pill" data-bs-target="#structure-nav" type="button" role="tab">Structure</button>
+                            <button class="nav-link" id="reading-tab" data-bs-toggle="pill" data-bs-target="#reading-nav" type="button" role="tab">Reading</button>
                         </div>
 
                         <!-- Question Buttons -->
                         <div class="tab-content p-2" id="section-tabContent">
-                            <div class="tab-pane fade show active" id="listening" role="tabpanel" aria-labelledby="listening-tab">
+                            <div class="tab-pane fade show active" id="listening-nav" role="tabpanel" aria-labelledby="listening-tab">
                                 <div class="d-flex flex-wrap">
-                                    <?php for ($i = 1; $i <= 50; $i++): ?>
+                                    @foreach ($listeningQuestions as $index => $question)
                                         <div class="question-button-wrapper" style="width: 20%; padding: 4px;">
-                                            <?php if ($i == 5): ?>
-                                                <button class="btn btn-primary w-100 aspect-ratio-1x1 d-flex align-items-center justify-content-center" style="height: 40px;"><?php echo $i; ?></button>
-                                            <?php elseif ($i < 5): ?>
-                                                <button class="btn btn-success w-100 aspect-ratio-1x1 d-flex align-items-center justify-content-center" style="height: 40px;"><?php echo $i; ?></button>
-                                            <?php elseif ($i == 7 || $i == 12): ?>
-                                                <button class="btn btn-warning w-100 aspect-ratio-1x1 d-flex align-items-center justify-content-center" style="height: 40px;"><?php echo $i; ?></button>
-                                            <?php else: ?>
-                                                <button class="btn btn-outline-secondary w-100 aspect-ratio-1x1 d-flex align-items-center justify-content-center" style="height: 40px;"><?php echo $i; ?></button>
-                                            <?php endif; ?>
+                                            <button class="btn {{ $index == 0 ? 'btn-primary' : 'btn-outline-secondary' }} w-100 aspect-ratio-1x1" data-index="{{ $index }}" data-section="listening" data-id="{{ $question->id }}">{{ $index + 1 }}</button>
                                         </div>
-                                    <?php endfor; ?>
+                                    @endforeach
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="structure" role="tabpanel" aria-labelledby="structure-tab">
+                            <div class="tab-pane fade" id="structure-nav" role="tabpanel" aria-labelledby="structure-tab">
                                 <div class="d-flex flex-wrap">
-                                    <?php for ($i = 1; $i <= 40; $i++): ?>
+                                    @foreach ($structureQuestions as $index => $question)
                                         <div class="question-button-wrapper" style="width: 20%; padding: 4px;">
-                                            <button class="btn btn-outline-secondary w-100 aspect-ratio-1x1 d-flex align-items-center justify-content-center" style="height: 40px;"><?php echo $i; ?></button>
+                                            <button class="btn btn-outline-secondary w-100 aspect-ratio-1x1" data-index="{{ $index }}" data-section="structure" data-id="{{ $question->id }}">{{ $index + 1 }}</button>
                                         </div>
-                                    <?php endfor; ?>
+                                    @endforeach
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="reading" role="tabpanel" aria-labelledby="reading-tab">
+                            <div class="tab-pane fade" id="reading-nav" role="tabpanel" aria-labelledby="reading-tab">
                                 <div class="d-flex flex-wrap">
-                                    <?php for ($i = 1; $i <= 50; $i++): ?>
-                                        <div class="question-button-wrapper" style="width: 20%; padding: 4px;">
-                                            <button class="btn btn-outline-secondary w-100 aspect-ratio-1x1 d-flex align-items-center justify-content-center" style="height: 40px;"><?php echo $i; ?></button>
-                                        </div>
-                                    <?php endfor; ?>
+                                    @php $globalIndex = 0; @endphp
+                                    @foreach ($readingPassages as $passage)
+                                        @foreach ($passage->questions as $index => $question)
+                                            <div class="question-button-wrapper" style="width: 20%; padding: 4px;">
+                                                <button class="btn btn-outline-secondary w-100 aspect-ratio-1x1" data-index="{{ $globalIndex }}" data-section="reading" data-passage="{{ $passage->id }}" data-id="{{ $question->id }}">{{ $index + 1 }}</button>
+                                            </div>
+                                            @php $globalIndex++; @endphp
+                                        @endforeach
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -261,11 +348,11 @@
                         <div class="mt-4 pt-3 border-top">
                             <div class="d-flex justify-content-between mb-2">
                                 <div class="small">Questions answered:</div>
-                                <div class="fw-bold">4/140</div>
+                                <div class="fw-bold" id="answered-count">0/140</div>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <div class="small">Questions flagged:</div>
-                                <div class="fw-bold text-warning">2</div>
+                                <div class="fw-bold text-warning" id="flagged-count">0</div>
                             </div>
                             <button class="btn btn-success w-100 rounded-pill" id="submitTestBtn">
                                 <i class="bi bi-check2-circle me-1"></i> Submit Test
@@ -289,7 +376,7 @@
                         </div>
                         <h4 class="mb-3" id="submitModalLabel">Submit Your Test?</h4>
                         <p class="text-muted mb-4">
-                            You have only answered 4 out of 140 questions.
+                            You have only answered <span id="modal-answered-count">0</span> out of 140 questions.
                             Are you sure you want to submit your test now?
                         </p>
                         <div class="d-grid gap-2">
@@ -343,193 +430,265 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize AOS animations
-            AOS.init({
-                duration: 800,
-                once: true
-            });
+            AOS.init({ duration: 800, once: true });
 
-            // Store the test ID or any needed data from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const testId = urlParams.get('testId') || '0';
-
-            // Set initial time (2 hours)
-            let totalSeconds = 2 * 60 * 60;
+            // Timer
+            let totalSeconds = {{ $testSettings->listening_time + $testSettings->structure_time + $testSettings->reading_time }} * 60;
             const timerElement = document.getElementById('timer');
 
             function updateTimer() {
                 const hours = Math.floor(totalSeconds / 3600);
                 const minutes = Math.floor((totalSeconds % 3600) / 60);
                 const seconds = totalSeconds % 60;
-
                 timerElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
                 if (totalSeconds <= 0) {
                     clearInterval(timerInterval);
-                    // Auto-submit when time runs out
                     autoSubmitTest();
                 } else {
                     totalSeconds--;
                 }
             }
 
-            // Update timer every second
             const timerInterval = setInterval(updateTimer, 1000);
 
-            // Audio player simulation
-            const playButton = document.getElementById('playButton');
-            const audioProgress = document.getElementById('audioProgress');
-            const audioTime = document.getElementById('audioTime');
-            let audioPlaying = false;
-            let audioInterval;
-            let currentAudioTime = 0;
-            const totalAudioTime = 90; // 1:30 in seconds
+            // Question navigation
+            const questions = document.querySelectorAll('.question-container');
+            const passages = document.querySelectorAll('.passage-content');
+            const navButtons = document.querySelectorAll('.question-button-wrapper button');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const flagButton = document.getElementById('flagButton');
+            const questionTitle = document.getElementById('question-title');
+            const sectionBadge = document.getElementById('section-badge');
+            const answeredCount = document.getElementById('answered-count');
+            const flaggedCount = document.getElementById('flagged-count');
+            const modalAnsweredCount = document.getElementById('modal-answered-count');
+            let currentIndex = 0;
+            let answers = {};
+            let flagged = new Set();
 
-            playButton.addEventListener('click', function() {
-                if (audioPlaying) {
-                    // Pause audio
-                    clearInterval(audioInterval);
-                    playButton.innerHTML = '<i class="bi bi-play-fill"></i>';
-                    audioPlaying = false;
+            function showQuestion(index) {
+                questions.forEach(q => q.classList.add('d-none'));
+                passages.forEach(p => p.classList.add('d-none'));
+                navButtons.forEach(b => b.classList.remove('btn-primary', 'btn-success', 'btn-warning'));
+                navButtons.forEach(b => b.classList.add('btn-outline-secondary'));
+
+                const currentQuestion = questions[index];
+                currentQuestion.classList.remove('d-none');
+                const navButton = navButtons[index];
+                navButton.classList.remove('btn-outline-secondary');
+                navButton.classList.add(answers[currentQuestion.dataset.id] ? 'btn-success' : 'btn-primary');
+
+                if (flagged.has(currentQuestion.dataset.id)) {
+                    navButton.classList.remove('btn-primary', 'btn-success');
+                    navButton.classList.add('btn-warning');
+                    flagButton.classList.remove('btn-outline-warning');
+                    flagButton.classList.add('btn-warning');
                 } else {
-                    // Play audio
-                    audioPlaying = true;
-                    playButton.innerHTML = '<i class="bi bi-pause-fill"></i>';
+                    flagButton.classList.remove('btn-warning');
+                    flagButton.classList.add('btn-outline-warning');
+                }
 
-                    audioInterval = setInterval(function() {
-                        currentAudioTime++;
-                        const progressPercent = (currentAudioTime / totalAudioTime) * 100;
-                        audioProgress.style.width = `${progressPercent}%`;
+                if (currentQuestion.dataset.section === 'reading') {
+                    const passage = document.querySelector(`.passage-content[data-passage="${currentQuestion.dataset.passage}"]`);
+                    passage.classList.remove('d-none');
+                }
 
-                        const minutes = Math.floor(currentAudioTime / 60);
-                        const seconds = currentAudioTime % 60;
-                        audioTime.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} / 01:30`;
+                questionTitle.textContent = `Question #${index + 1}`;
+                sectionBadge.innerHTML = currentQuestion.dataset.section === 'listening' ?
+                    '<i class="bi bi-soundwave me-1"></i> Listening' :
+                    currentQuestion.dataset.section === 'structure' ?
+                    '<i class="bi bi-pencil-square me-1"></i> Structure' :
+                    '<i class="bi bi-book me-1"></i> Reading';
 
-                        if (currentAudioTime >= totalAudioTime) {
-                            clearInterval(audioInterval);
-                            playButton.innerHTML = '<i class="bi bi-play-fill"></i>';
-                            audioPlaying = false;
-                            currentAudioTime = 0;
-                        }
-                    }, 1000);
+                prevButton.disabled = index === 0;
+                if (index === questions.length - 1) {
+                    nextButton.classList.add('d-none');
+                    nextButton.insertAdjacentHTML('afterend', '<button class="btn btn-primary rounded-pill px-4" id="submitButton">Submit <i class="bi bi-check2-circle ms-1"></i></button>');
+                    document.getElementById('submitButton').addEventListener('click', () => {
+                        const submitModal = new bootstrap.Modal(document.getElementById('submitModal'));
+                        submitModal.show();
+                    });
+                } else {
+                    document.querySelector('#submitButton')?.remove();
+                    nextButton.classList.remove('d-none');
+                }
+
+                updateSummary();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateSummary() {
+                const answered = Object.keys(answers).length;
+                answeredCount.textContent = `${answered}/140`;
+                modalAnsweredCount.textContent = answered;
+                flaggedCount.textContent = flagged.size;
+            }
+
+            // Audio player
+            document.querySelectorAll('.play-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const question = this.closest('.question-container');
+                    const audio = document.getElementById(`audio-${question.dataset.id}`);
+                    const progress = document.getElementById(`audio-progress-${question.dataset.id}`);
+                    const timeDisplay = document.getElementById(`audio-time-${question.dataset.id}`);
+                    const playsRemaining = document.getElementById(`plays-remaining-${question.dataset.id}`);
+                    let plays = parseInt(this.dataset.plays);
+
+                    if (plays <= 0) {
+                        alert('No plays remaining for this audio.');
+                        return;
+                    }
+
+                    if (audio.paused) {
+                        audio.play();
+                        this.innerHTML = '<i class="bi bi-pause-fill"></i>';
+                        const updateProgress = () => {
+                            const percent = (audio.currentTime / audio.duration) * 100;
+                            progress.style.width = `${percent}%`;
+                            const minutes = Math.floor(audio.currentTime / 60);
+                            const seconds = Math.floor(audio.currentTime % 60);
+                            const durationMinutes = Math.floor(audio.duration / 60);
+                            const durationSeconds = Math.floor(audio.duration % 60);
+                            timeDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} / ${String(durationMinutes).padStart(2, '0')}:${String(durationSeconds).padStart(2, '0')}`;
+                        };
+                        audio.addEventListener('timeupdate', updateProgress);
+                        audio.onended = () => {
+                            this.innerHTML = '<i class="bi bi-play-fill"></i>';
+                            plays--;
+                            this.dataset.plays = plays;
+                            playsRemaining.textContent = `${plays} plays remaining`;
+                            audio.currentTime = 0;
+                            progress.style.width = '0%';
+                            audio.removeEventListener('timeupdate', updateProgress);
+                        };
+                    } else {
+                        audio.pause();
+                        this.innerHTML = '<i class="bi bi-play-fill"></i>';
+                    }
+                });
+            });
+
+            // Answer handling
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const question = this.closest('.question-container');
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                    question.querySelectorAll('.answer-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    answers[question.dataset.id] = radio.value;
+                    const navButton = Array.from(navButtons).find(b => b.dataset.id === question.dataset.id);
+                    navButton.classList.remove('btn-primary', 'btn-warning');
+                    navButton.classList.add(flagged.has(question.dataset.id) ? 'btn-warning' : 'btn-success');
+                    updateSummary();
+                    saveProgress();
+                });
+            });
+
+            // Flag handling
+            flagButton.addEventListener('click', function() {
+                const question = questions[currentIndex];
+                const navButton = Array.from(navButtons).find(b => b.dataset.id === question.dataset.id);
+                if (flagged.has(question.dataset.id)) {
+                    flagged.delete(question.dataset.id);
+                    this.classList.remove('btn-warning');
+                    this.classList.add('btn-outline-warning');
+                    navButton.classList.remove('btn-warning');
+                    navButton.classList.add(answers[question.dataset.id] ? 'btn-success' : 'btn-primary');
+                } else {
+                    flagged.add(question.dataset.id);
+                    this.classList.remove('btn-outline-warning');
+                    this.classList.add('btn-warning');
+                    navButton.classList.remove('btn-primary', 'btn-success');
+                    navButton.classList.add('btn-warning');
+                }
+                updateSummary();
+                saveProgress();
+            });
+
+            // Navigation
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    currentIndex = parseInt(button.dataset.index);
+                    showQuestion(currentIndex);
+                });
+            });
+
+            prevButton.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    showQuestion(currentIndex);
                 }
             });
 
-            // Exit button functionality
-            document.getElementById('exitButton').addEventListener('click', function() {
+            nextButton.addEventListener('click', () => {
+                if (currentIndex < questions.length - 1) {
+                    currentIndex++;
+                    showQuestion(currentIndex);
+                }
+            });
+
+            // Modals
+            document.getElementById('exitButton').addEventListener('click', () => {
                 const exitModal = new bootstrap.Modal(document.getElementById('exitModal'));
                 exitModal.show();
             });
 
-            // Submit test button functionality
-            document.getElementById('submitTestBtn').addEventListener('click', function() {
+            document.getElementById('submitTestBtn').addEventListener('click', () => {
                 const submitModal = new bootstrap.Modal(document.getElementById('submitModal'));
                 submitModal.show();
             });
 
-            // Confirm submit button functionality
-            document.getElementById('confirmSubmitBtn').addEventListener('click', function() {
-                finishExam('submit');
+            document.getElementById('confirmSubmitBtn').addEventListener('click', () => {
+                submitTest();
             });
 
-            // Confirm exit button functionality
-            document.getElementById('confirmExitBtn').addEventListener('click', function() {
-                finishExam('exit');
+            document.getElementById('confirmExitBtn').addEventListener('click', () => {
+                window.location.href = '/certification-test?examCompleted=true&reason=exit&testId={{ $testId }}';
             });
 
-            // Answer option highlighting
-            const answerOptions = document.querySelectorAll('.answer-option');
-            answerOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    // Add highlighting when selected
-                    answerOptions.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
-
-                    // Ensure the radio button is checked
-                    const radio = this.querySelector('input[type="radio"]');
-                    radio.checked = true;
-                });
-            });
-
-            // Flag button functionality
-            const flagButton = document.getElementById('flagButton');
-            let isQuestionFlagged = false;
-
-            flagButton.addEventListener('click', function() {
-                isQuestionFlagged = !isQuestionFlagged;
-
-                if (isQuestionFlagged) {
-                    flagButton.classList.remove('btn-outline-warning');
-                    flagButton.classList.add('btn-warning');
-                    // Update the current question button to flagged state
-                    const currentQuestionBtn = document.querySelector('.btn-primary:not(.rounded-pill)');
-                    if (currentQuestionBtn) {
-                        currentQuestionBtn.classList.remove('btn-primary');
-                        currentQuestionBtn.classList.add('btn-warning');
-                    }
-                } else {
-                    flagButton.classList.remove('btn-warning');
-                    flagButton.classList.add('btn-outline-warning');
-                    // Revert to normal state
-                    const currentQuestionBtn = document.querySelector('.btn-warning:not(.rounded-pill)');
-                    if (currentQuestionBtn) {
-                        currentQuestionBtn.classList.remove('btn-warning');
-                        // Determine if it should be answered (success) or current (primary)
-                        const isAnswered = document.querySelector('input[name="question5"]:checked') !== null;
-                        currentQuestionBtn.classList.add(isAnswered ? 'btn-success' : 'btn-primary');
-                    }
-                }
-            });
-
-            // Navigation buttons functionality (simplified)
-            document.getElementById('nextButton').addEventListener('click', function() {
-                // Simulate moving to next question
-                alert('Moving to next question - this would be implemented with actual question data');
-            });
-
-            document.getElementById('prevButton').addEventListener('click', function() {
-                // Simulate moving to previous question
-                alert('Moving to previous question - this would be implemented with actual question data');
-            });
-
-            // Function to auto-submit when time runs out
             function autoSubmitTest() {
                 alert('Time is up! Your test will be submitted automatically.');
-                finishExam('timeout');
+                submitTest();
             }
 
-            // Function to handle exam completion and redirect specifically to /certification-test
-            function finishExam(reason) {
-                // In a real application, you'd submit the answers to the server first
-                // For this example, we'll just simulate the submission
-
-                // Create AJAX request to submit answers (in a real implementation)
-                // For demonstration purposes, we'll just do a timeout to simulate processing
-                setTimeout(function() {
-                    // Redirect to specified route with parameters
-                    window.location.href = '/certification-test?examCompleted=true&reason=' + reason + '&testId=' + testId;
-                }, 500);
-            }
-
-            // Save exam progress periodically (every 30 seconds)
-            setInterval(function() {
-                // This would save the current exam state to the server or localStorage
-                console.log('Saving exam progress...');
-                // In a real implementation, collect and save all answers and current question
-
-                const answersData = {
-                    testId: testId,
-                    currentQuestion: 5,
-                    answers: {
-                        // Collect all answers here
-                        'question5': document.querySelector('input[name="question5"]:checked')?.value || null
+            function saveProgress() {
+                fetch('{{ route('exam.saveProgress') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    flagged: [7, 12], // Example of flagged questions
-                    timeRemaining: totalSeconds
-                };
+                    body: JSON.stringify({
+                        testId: '{{ $testId }}',
+                        currentQuestion: currentIndex,
+                        answers: answers,
+                        flagged: Array.from(flagged),
+                        timeRemaining: totalSeconds
+                    })
+                }).then(response => response.json()).catch(error => console.error('Error saving progress:', error));
+            }
 
-                // This would typically be an AJAX request to save progress
-                console.log('Progress data:', answersData);
-            }, 30000);
+            function submitTest() {
+                fetch('{{ route('exam.submit') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        testId: '{{ $testId }}',
+                        answers: answers,
+                        flagged: Array.from(flagged)
+                    })
+                }).then(response => response.json()).then(data => {
+                    window.location.href = '/certification-test?examCompleted=true&reason=submit&testId={{ $testId }}';
+                }).catch(error => console.error('Error submitting test:', error));
+            }
+
+            // Initialize
+            showQuestion(0);
         });
     </script>
 </body>

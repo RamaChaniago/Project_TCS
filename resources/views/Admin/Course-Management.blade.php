@@ -187,22 +187,9 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
+                                            <!-- Tombol View hanya menyimpan data-id -->
                                             <button class="btn btn-sm btn-info view-question-btn" data-bs-toggle="modal"
-                                                data-bs-target="#viewQuestionModal" data-id="{{ $question->id }}"
-                                                data-section="{{ $question->section ?? 'N/A' }}"
-                                                data-difficulty="{{ $question->difficulty ?? 'N/A' }}"
-                                                data-question-text="{{ htmlspecialchars($question->question_text ?? 'N/A') }}"
-                                                data-option-a="{{ htmlspecialchars($question->option_a ?? 'N/A') }}"
-                                                data-option-b="{{ htmlspecialchars($question->option_b ?? 'N/A') }}"
-                                                data-option-c="{{ htmlspecialchars($question->option_c ?? 'N/A') }}"
-                                                data-option-d="{{ htmlspecialchars($question->option_d ?? 'N/A') }}"
-                                                data-correct-answer="{{ $question->correct_answer ?? 'N/A' }}"
-                                                data-audio-file="{{ $question->audio_file ? Storage::url($question->audio_file) : '' }}"
-                                                data-image-file="{{ $question->image_file ? Storage::url($question->image_file) : '' }}"
-                                                data-explanation="{{ htmlspecialchars($question->explanation ?? '') }}"
-                                                data-bs-toggle="modal" data-bs-target="#viewQuestionModal"
-                                                data-id="{{ $question->id }}"
-                                                onclick="console.log('View Button Data for ID {{ $question->id }}:', { section: '{{ $question->section ?? 'N/A' }}', question_text: '{{ htmlspecialchars($question->question_text ?? 'N/A') }}', option_a: '{{ htmlspecialchars($question->option_a ?? 'N/A') }}', correct_answer: '{{ $question->correct_answer ?? 'N/A' }}' })">
+                                                data-bs-target="#viewQuestionModal" data-id="{{ $question->id }}">
                                                 <i class="bi bi-eye"></i>
                                             </button>
                                             <button class="btn btn-sm btn-warning edit-question-btn"
@@ -481,43 +468,66 @@
         </div>
     </div>
 
-    <div class="modal fade" id="viewQuestionModal" tabindex="-1" aria-labelledby="viewQuestionModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="viewQuestionModal" tabindex="-1" aria-labelledby="viewQuestionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
                     <h5 class="modal-title" id="viewQuestionModalLabel">View Question Details</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="viewErrorMessage" class="alert alert-danger d-none"></div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-muted">Section:</h6>
-                            <p class="fw-bold" id="view-section">N/A</p>
+                            <p class="fw-bold" id="view-section">
+                                @if(isset($viewQuestion))
+                                    {{ $viewQuestion->section ?? 'N/A' }}
+                                @else
+                                    N/A
+                                @endif
+                            </p>
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-muted">Difficulty Level:</h6>
-                            <span class="badge" id="view-difficulty">N/A</span>
+                            <span class="badge" id="view-difficulty">
+                                @if(isset($viewQuestion))
+                                    @if($viewQuestion->difficulty == 'Easy')
+                                        <span class="badge bg-success">Easy</span>
+                                    @elseif($viewQuestion->difficulty == 'Medium')
+                                        <span class="badge bg-warning text-dark">Medium</span>
+                                    @elseif($viewQuestion->difficulty == 'Hard')
+                                        <span class="badge bg-danger">Hard</span>
+                                    @else
+                                        N/A
+                                    @endif
+                                @else
+                                    N/A
+                                @endif
+                            </span>
                         </div>
                     </div>
                     <div class="mb-3" id="view-audio" style="display: none;">
                         <h6 class="text-muted">Audio:</h6>
                         <audio controls class="w-100 mb-3" id="view-audio-player">
-                            <source src="" type="audio/mpeg">
+                            <source src="@if(isset($viewQuestion) && $viewQuestion->section == 'Listening' && $viewQuestion->audio_file){{ Storage::url($viewQuestion->audio_file) }}@endif" type="audio/mpeg">
                             Your browser does not support the audio element.
                         </audio>
                     </div>
                     <div class="mb-3" id="view-image" style="display: none;">
                         <h6 class="text-muted">Image:</h6>
-                        <img id="view-image-src" alt="Question Image" class="img-fluid mb-3" style="max-height: 300px;"
-                            onerror="this.src='/images/placeholder.png';">
+                        <img id="view-image-src" src="@if(isset($viewQuestion) && in_array($viewQuestion->section, ['Structure', 'Reading']) && $viewQuestion->image_file){{ Storage::url($viewQuestion->image_file) }}@endif" alt="Question Image" class="img-fluid mb-3" style="max-height: 300px;" onerror="this.src='/images/placeholder.png';">
                     </div>
                     <div class="mb-3">
                         <h6 class="text-muted">Question:</h6>
                         <div class="card bg-light p-3">
-                            <p class="mb-0" id="view-question-text">N/A</p>
+                            <p class="mb-0" id="view-question-text">
+                                @if(isset($viewQuestion))
+                                    {{ $viewQuestion->question_text ?? 'N/A' }}
+                                @else
+                                    N/A
+                                @endif
+                            </p>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -527,7 +537,13 @@
                                 <div class="card mb-2">
                                     <div class="card-body py-2 px-3">
                                         <span class="fw-bold me-2">A:</span>
-                                        <span id="view-option-a">N/A</span>
+                                        <span id="view-option-a">
+                                            @if(isset($viewQuestion))
+                                                {{ $viewQuestion->option_a ?? 'N/A' }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -535,7 +551,13 @@
                                 <div class="card mb-2">
                                     <div class="card-body py-2 px-3">
                                         <span class="fw-bold me-2">B:</span>
-                                        <span id="view-option-b">N/A</span>
+                                        <span id="view-option-b">
+                                            @if(isset($viewQuestion))
+                                                {{ $viewQuestion->option_b ?? 'N/A' }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -543,7 +565,13 @@
                                 <div class="card mb-2">
                                     <div class="card-body py-2 px-3">
                                         <span class="fw-bold me-2">C:</span>
-                                        <span id="view-option-c">N/A</span>
+                                        <span id="view-option-c">
+                                            @if(isset($viewQuestion))
+                                                {{ $viewQuestion->option_c ?? 'N/A' }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -551,7 +579,13 @@
                                 <div class="card mb-2">
                                     <div class="card-body py-2 px-3">
                                         <span class="fw-bold me-2">D:</span>
-                                        <span id="view-option-d">N/A</span>
+                                        <span id="view-option-d">
+                                            @if(isset($viewQuestion))
+                                                {{ $viewQuestion->option_d ?? 'N/A' }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -559,18 +593,30 @@
                     </div>
                     <div class="mb-3">
                         <h6 class="text-muted">Correct Answer:</h6>
-                        <p class="fw-bold text-success" id="view-correct-answer">N/A</p>
+                        <p class="fw-bold text-success" id="view-correct-answer">
+                            @if(isset($viewQuestion))
+                                {{ $viewQuestion->correct_answer ? 'Option ' . $viewQuestion->correct_answer : 'N/A' }}
+                            @else
+                                N/A
+                            @endif
+                        </p>
                     </div>
                     <div class="mb-3" id="view-explanation" style="display: none;">
                         <h6 class="text-muted">Explanation:</h6>
                         <div class="card bg-light p-3">
-                            <p class="mb-0" id="view-explanation-text">N/A</p>
+                            <p class="mb-0" id="view-explanation-text">
+                                @if(isset($viewQuestion) && $viewQuestion->explanation)
+                                    {{ $viewQuestion->explanation }}
+                                @else
+                                    N/A
+                                @endif
+                            </p>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-warning edit-from-view" data-id="">Edit Question</button>
+                    <button type="button" class="btn btn-warning edit-from-view" data-id="@if(isset($viewQuestion)){{ $viewQuestion->id }}@endif">Edit Question</button>
                 </div>
             </div>
         </div>
@@ -762,8 +808,8 @@
     </script>
 
     <script>
-
         document.addEventListener('DOMContentLoaded', function() {
+            // Logika untuk update total time
             const listeningTimeInput = document.getElementById('listeningTime');
             const structureTimeInput = document.getElementById('structureTime');
             const readingTimeInput = document.getElementById('readingTime');
@@ -782,6 +828,7 @@
                 readingTimeInput.addEventListener('input', updateTotalTime);
             }
 
+            // Form validation
             const forms = document.querySelectorAll('.needs-validation');
             forms.forEach(form => {
                 form.addEventListener('submit', function(event) {
@@ -793,60 +840,72 @@
                 }, false);
             });
 
-            function decodeHtml(html) {
-                const txt = document.createElement('textarea');
-                txt.innerHTML = html || '';
-                return txt.value;
-            }
-
+            // Logika untuk View Question Modal
             const viewModal = document.getElementById('viewQuestionModal');
             viewModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
+                const questionId = button.getAttribute('data-id');
                 const errorMessage = document.getElementById('viewErrorMessage');
                 errorMessage.classList.add('d-none');
                 errorMessage.textContent = '';
 
-                try {
-                    const data = {
-                        id: button.getAttribute('data-id') || '',
-                        section: button.getAttribute('data-section') || 'N/A',
-                        difficulty: button.getAttribute('data-difficulty') || 'N/A',
-                        questionText: decodeHtml(button.getAttribute('data-question-text')) || 'N/A',
-                        optionA: decodeHtml(button.getAttribute('data-option-a')) || 'N/A',
-                        optionB: decodeHtml(button.getAttribute('data-option-b')) || 'N/A',
-                        optionC: decodeHtml(button.getAttribute('data-option-c')) || 'N/A',
-                        optionD: decodeHtml(button.getAttribute('data-option-d')) || 'N/A',
-                        correctAnswer: button.getAttribute('data-correct-answer') || 'N/A',
-                        audioFile: button.getAttribute('data-audio-file') || '',
-                        imageFile: button.getAttribute('data-image-file') || '',
-                        explanation: decodeHtml(button.getAttribute('data-explanation')) || 'N/A'
-                    };
+                // Log the question ID being fetched
+                console.log('Fetching details for question ID:', questionId);
 
-                    // Debugging: Log data to console to verify values
-                    console.log('View Modal Data for ID ' + data.id + ':', data);
+                // Reset modal fields
+                document.getElementById('view-section').textContent = 'N/A';
+                const difficultyBadge = document.getElementById('view-difficulty');
+                difficultyBadge.textContent = 'N/A';
+                difficultyBadge.className = 'badge';
+                document.getElementById('view-question-text').textContent = 'N/A';
+                document.getElementById('view-option-a').textContent = 'N/A';
+                document.getElementById('view-option-b').textContent = 'N/A';
+                document.getElementById('view-option-c').textContent = 'N/A';
+                document.getElementById('view-option-d').textContent = 'N/A';
+                document.getElementById('view-correct-answer').textContent = 'N/A';
+                document.getElementById('view-audio').style.display = 'none';
+                document.getElementById('view-image').style.display = 'none';
+                document.getElementById('view-explanation').style.display = 'none';
+                document.querySelector('.edit-from-view').setAttribute('data-id', '');
 
-                    // Check if essential fields are N/A
-                    if (data.section === 'N/A' && data.questionText === 'N/A' && data.correctAnswer ===
-                        'N/A') {
-                        throw new Error(
-                        'No valid data found for this question. Please check the database.');
+                // Fetch data via AJAX
+                fetch(`/course-management/${questionId}/details`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(response => {
+                    console.log('AJAX Response Status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('AJAX Response Data:', data);
+                    if (!data.success) {
+                        throw new Error(data.message || 'Failed to load question details.');
                     }
 
+                    const question = data.data;
+
                     // Populate Section
-                    document.getElementById('view-section').textContent = data.section;
+                    document.getElementById('view-section').textContent = question.section;
 
                     // Populate Difficulty
                     const difficultyBadge = document.getElementById('view-difficulty');
-                    difficultyBadge.textContent = data.difficulty;
-                    difficultyBadge.className = 'badge ' + (data.difficulty === 'Easy' ? 'bg-success' :
-                        data.difficulty === 'Medium' ? 'bg-warning text-dark' : 'bg-danger');
+                    difficultyBadge.textContent = question.difficulty;
+                    difficultyBadge.className = 'badge ' + (question.difficulty === 'Easy' ? 'bg-success' :
+                        question.difficulty === 'Medium' ? 'bg-warning text-dark' : 'bg-danger');
 
                     // Populate Audio
                     const audioSection = document.getElementById('view-audio');
                     const audioPlayer = document.getElementById('view-audio-player');
-                    if (data.section === 'Listening' && data.audioFile) {
-                        audioPlayer.querySelector('source').src = data.audioFile;
-                        audioPlayer.load(); // Reload audio element to apply new source
+                    if (question.section === 'Listening' && question.audio_file) {
+                        audioPlayer.querySelector('source').src = question.audio_file;
+                        audioPlayer.load();
                         audioSection.style.display = 'block';
                     } else {
                         audioSection.style.display = 'none';
@@ -855,8 +914,8 @@
                     // Populate Image
                     const imageSection = document.getElementById('view-image');
                     const imageSrc = document.getElementById('view-image-src');
-                    if (['Structure', 'Reading'].includes(data.section) && data.imageFile) {
-                        imageSrc.src = data.imageFile;
+                    if (['Structure', 'Reading'].includes(question.section) && question.image_file) {
+                        imageSrc.src = question.image_file;
                         imageSection.style.display = 'block';
                     } else {
                         imageSrc.src = '';
@@ -864,38 +923,38 @@
                     }
 
                     // Populate Question Text
-                    document.getElementById('view-question-text').textContent = data.questionText;
+                    document.getElementById('view-question-text').textContent = question.question_text;
 
                     // Populate Answer Options
-                    document.getElementById('view-option-a').textContent = data.optionA;
-                    document.getElementById('view-option-b').textContent = data.optionB;
-                    document.getElementById('view-option-c').textContent = data.optionC;
-                    document.getElementById('view-option-d').textContent = data.optionD;
+                    document.getElementById('view-option-a').textContent = question.option_a;
+                    document.getElementById('view-option-b').textContent = question.option_b;
+                    document.getElementById('view-option-c').textContent = question.option_c;
+                    document.getElementById('view-option-d').textContent = question.option_d;
 
                     // Populate Correct Answer
-                    document.getElementById('view-correct-answer').textContent = data.correctAnswer !==
-                        'N/A' ? `Option ${data.correctAnswer}` : 'N/A';
+                    document.getElementById('view-correct-answer').textContent = question.correct_answer !== 'N/A' ? `Option ${question.correct_answer}` : 'N/A';
 
                     // Populate Explanation
                     const explanationSection = document.getElementById('view-explanation');
                     const explanationText = document.getElementById('view-explanation-text');
-                    if (data.explanation && data.explanation !== 'N/A') {
-                        explanationText.textContent = data.explanation;
+                    if (question.explanation && question.explanation !== '') {
+                        explanationText.textContent = question.explanation;
                         explanationSection.style.display = 'block';
                     } else {
                         explanationSection.style.display = 'none';
                     }
 
                     // Set Edit Button ID
-                    document.querySelector('.edit-from-view').setAttribute('data-id', data.id);
-                } catch (error) {
-                    console.error('Error populating view modal:', error);
-                    errorMessage.textContent = error.message ||
-                        'Failed to load question details. Please try again.';
+                    document.querySelector('.edit-from-view').setAttribute('data-id', question.id);
+                })
+                .catch(error => {
+                    console.error('Error fetching question details:', error);
+                    errorMessage.textContent = error.message || 'Failed to load question details. Please try again.';
                     errorMessage.classList.remove('d-none');
-                }
+                });
             });
 
+            // Logika untuk Edit Question Modal
             const editModal = document.getElementById('editQuestionModal');
             editModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
@@ -903,15 +962,15 @@
                     id: button.getAttribute('data-id'),
                     section: button.getAttribute('data-section'),
                     difficulty: button.getAttribute('data-difficulty'),
-                    questionText: decodeHtml(button.getAttribute('data-question-text')) || '',
-                    optionA: decodeHtml(button.getAttribute('data-option-a')) || '',
-                    optionB: decodeHtml(button.getAttribute('data-option-b')) || '',
-                    optionC: decodeHtml(button.getAttribute('data-option-c')) || '',
-                    optionD: decodeHtml(button.getAttribute('data-option-d')) || '',
+                    questionText: decodeURIComponent(button.getAttribute('data-question-text')) || '',
+                    optionA: decodeURIComponent(button.getAttribute('data-option-a')) || '',
+                    optionB: decodeURIComponent(button.getAttribute('data-option-b')) || '',
+                    optionC: decodeURIComponent(button.getAttribute('data-option-c')) || '',
+                    optionD: decodeURIComponent(button.getAttribute('data-option-d')) || '',
                     correctAnswer: button.getAttribute('data-correct-answer'),
                     audioFile: button.getAttribute('data-audio-file'),
                     imageFile: button.getAttribute('data-image-file'),
-                    explanation: decodeHtml(button.getAttribute('data-explanation')) || ''
+                    explanation: decodeURIComponent(button.getAttribute('data-explanation')) || ''
                 };
 
                 const editForm = document.getElementById('editQuestionForm');
@@ -988,6 +1047,7 @@
                 });
             }
 
+            // Logika untuk Edit dari View Modal
             document.querySelector('.edit-from-view').addEventListener('click', function() {
                 const questionId = this.getAttribute('data-id');
                 const editButton = document.querySelector(`.edit-question-btn[data-id="${questionId}"]`);
@@ -997,6 +1057,7 @@
                 }
             });
 
+            // Logika untuk Edit Form Submission
             const editForm = document.getElementById('editQuestionForm');
             editForm.addEventListener('submit', function(event) {
                 event.preventDefault();
@@ -1029,11 +1090,11 @@
 
                         if (data.success) {
                             messagesContainer.innerHTML = `
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${data.message}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    `;
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    ${data.message}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            `;
 
                             const row = document.querySelector(
                                 `#questionsTable tr[data-id="${questionId}"]`);
@@ -1089,29 +1150,6 @@
                                     '');
                                 editButton.setAttribute('data-explanation', encodeURIComponent(
                                     updatedQuestion.explanation || ''));
-
-                                const viewButton = row.querySelector('.view-question-btn');
-                                viewButton.setAttribute('data-section', updatedQuestion.section || '');
-                                viewButton.setAttribute('data-difficulty', updatedQuestion.difficulty ||
-                                    '');
-                                viewButton.setAttribute('data-question-text', encodeURIComponent(
-                                    updatedQuestion.question_text || ''));
-                                viewButton.setAttribute('data-option-a', encodeURIComponent(
-                                    updatedQuestion.option_a || ''));
-                                viewButton.setAttribute('data-option-b', encodeURIComponent(
-                                    updatedQuestion.option_b || ''));
-                                viewButton.setAttribute('data-option-c', encodeURIComponent(
-                                    updatedQuestion.option_c || ''));
-                                viewButton.setAttribute('data-option-d', encodeURIComponent(
-                                    updatedQuestion.option_d || ''));
-                                viewButton.setAttribute('data-correct-answer', updatedQuestion
-                                    .correct_answer || '');
-                                viewButton.setAttribute('data-audio-file', updatedQuestion.audio_file ||
-                                    '');
-                                viewButton.setAttribute('data-image-file', updatedQuestion.image_file ||
-                                    '');
-                                viewButton.setAttribute('data-explanation', encodeURIComponent(
-                                    updatedQuestion.explanation || ''));
                             }
 
                             setTimeout(() => {
@@ -1123,164 +1161,24 @@
                                 general: ['Failed to update question']
                             };
                             messagesContainer.innerHTML = `
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <ul class="mb-0">
-                                ${Object.values(errors).flat().map(error => `<li>${error}</li>`).join('')}
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    `;
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <ul class="mb-0">
+                                        ${Object.values(errors).flat().map(error => `<li>${error}</li>`).join('')}
+                                    </ul>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            `;
                         }
                     })
                     .catch(error => {
                         const messagesContainer = document.getElementById('editFormMessages');
                         messagesContainer.innerHTML = `
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        An error occurred while updating the question: ${error.message}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                `;
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                An error occurred while updating the question: ${error.message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        `;
                     });
-            });
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-        const listeningTimeInput = document.getElementById('listeningTime');
-        const structureTimeInput = document.getElementById('structureTime');
-        const readingTimeInput = document.getElementById('readingTime');
-        const totalTestTime = document.getElementById('totalTestTime');
-
-        function updateTotalTime() {
-            const listening = parseInt(listeningTimeInput.value) || 0;
-            const structure = parseInt(structureTimeInput.value) || 0;
-            const reading = parseInt(readingTimeInput.value) || 0;
-            totalTestTime.textContent = listening + structure + reading;
-        }
-
-        if (listeningTimeInput && structureTimeInput && readingTimeInput) {
-            listeningTimeInput.addEventListener('input', updateTotalTime);
-            structureTimeInput.addEventListener('input', updateTotalTime);
-            readingTimeInput.addEventListener('input', updateTotalTime);
-        }
-
-        const forms = document.querySelectorAll('.needs-validation');
-        forms.forEach(form => {
-            form.addEventListener('submit', function(event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-
-        const viewModal = document.getElementById('viewQuestionModal');
-        viewModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const questionId = button.getAttribute('data-id');
-            const errorMessage = document.getElementById('viewErrorMessage');
-            errorMessage.classList.add('d-none');
-            errorMessage.textContent = '';
-
-            // Reset modal fields
-            document.getElementById('view-section').textContent = 'N/A';
-            const difficultyBadge = document.getElementById('view-difficulty');
-            difficultyBadge.textContent = 'N/A';
-            difficultyBadge.className = 'badge';
-            document.getElementById('view-question-text').textContent = 'N/A';
-            document.getElementById('view-option-a').textContent = 'N/A';
-            document.getElementById('view-option-b').textContent = 'N/A';
-            document.getElementById('view-option-c').textContent = 'N/A';
-            document.getElementById('view-option-d').textContent = 'N/A';
-            document.getElementById('view-correct-answer').textContent = 'N/A';
-            document.getElementById('view-audio').style.display = 'none';
-            document.getElementById('view-image').style.display = 'none';
-            document.getElementById('view-explanation').style.display = 'none';
-            document.querySelector('.edit-from-view').setAttribute('data-id', '');
-
-            // Fetch data via AJAX
-            fetch(`/questions/${questionId}/details`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!data.success) {
-                    throw new Error(data.message || 'Failed to load question details.');
-                }
-
-                const question = data.data;
-
-                // Debugging: Log data to console
-                console.log('Fetched Question Data for ID ' + question.id + ':', question);
-
-                // Populate Section
-                document.getElementById('view-section').textContent = question.section;
-
-                // Populate Difficulty
-                const difficultyBadge = document.getElementById('view-difficulty');
-                difficultyBadge.textContent = question.difficulty;
-                difficultyBadge.className = 'badge ' + (question.difficulty === 'Easy' ? 'bg-success' :
-                    question.difficulty === 'Medium' ? 'bg-warning text-dark' : 'bg-danger');
-
-                // Populate Audio
-                const audioSection = document.getElementById('view-audio');
-                const audioPlayer = document.getElementById('view-audio-player');
-                if (question.section === 'Listening' && question.audio_file) {
-                    audioPlayer.querySelector('source').src = question.audio_file;
-                    audioPlayer.load();
-                    audioSection.style.display = 'block';
-                } else {
-                    audioSection.style.display = 'none';
-                }
-
-                // Populate Image
-                const imageSection = document.getElementById('view-image');
-                const imageSrc = document.getElementById('view-image-src');
-                if (['Structure', 'Reading'].includes(question.section) && question.image_file) {
-                    imageSrc.src = question.image_file;
-                    imageSection.style.display = 'block';
-                } else {
-                    imageSrc.src = '';
-                    imageSection.style.display = 'none';
-                }
-
-                // Populate Question Text
-                document.getElementById('view-question-text').textContent = question.question_text;
-
-                // Populate Answer Options
-                document.getElementById('view-option-a').textContent = question.option_a;
-                document.getElementById('view-option-b').textContent = question.option_b;
-                document.getElementById('view-option-c').textContent = question.option_c;
-                document.getElementById('view-option-d').textContent = question.option_d;
-
-                // Populate Correct Answer
-                document.getElementById('view-correct-answer').textContent = question.correct_answer !== 'N/A' ? `Option ${question.correct_answer}` : 'N/A';
-
-                // Populate Explanation
-                const explanationSection = document.getElementById('view-explanation');
-                const explanationText = document.getElementById('view-explanation-text');
-                if (question.explanation && question.explanation !== '') {
-                    explanationText.textContent = question.explanation;
-                    explanationSection.style.display = 'block';
-                } else {
-                    explanationSection.style.display = 'none';
-                }
-
-                // Set Edit Button ID
-                document.querySelector('.edit-from-view').setAttribute('data-id', question.id);
-            })
-            .catch(error => {
-                console.error('Error fetching question details:', error);
-                errorMessage.textContent = error.message || 'Failed to load question details. Please try again.';
-                errorMessage.classList.remove('d-none');
             });
         });
     </script>

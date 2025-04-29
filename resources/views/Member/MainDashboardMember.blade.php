@@ -429,24 +429,24 @@
                         <span class="sidebar-item-text">Transaction</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="/learning-package" class="nav-link">
                         <i class="bi bi-book"></i>
                         <span class="sidebar-item-text">Learning Package</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a href="/certification-test" class="nav-link">
                         <i class="bi bi-award"></i>
                         <span class="sidebar-item-text">Certification Test</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="/smart-book" class="nav-link">
                         <i class="bi bi-journal-text"></i>
                         <span class="sidebar-item-text">Smart Book</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a href="/sertifikat" class="nav-link">
                         <i class="bi bi-patch-check"></i>
