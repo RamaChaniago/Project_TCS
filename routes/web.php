@@ -11,8 +11,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KarirController;
 use App\Http\Controllers\LearningPackageController;
 use App\Http\Controllers\LiveClassesController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\OneOnOneController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\SmartBookController;
 use App\Http\Controllers\SubscriptionController;
@@ -83,7 +83,7 @@ Route::get('/program/live-class', [SubscriptionController::class, 'index'])->nam
 
 // ------------------ Authenticated Shared Routes ------------------ //
 Route::middleware(['auth', 'cekRole:admin,member,instructor'])->group(function () {
-    Route::post('/logout', [authController::class, 'logout'])->name('logout');
+    Route::get('/logout', [authController::class, 'logout'])->name('logout');
 });
 
 // ------------------ Member Routes ------------------ //
@@ -112,14 +112,12 @@ Route::middleware(['auth', 'cekRole:admin,member'])->group(function () {
         return view('Member.Sertifikat');
     })->name('member.sertifikat');
 
-    Route::get('/profile-member', function () {
-        return view('Profile.Profile_Member.MainProfil');
-    })->name('profile.member');
+    Route::get('/profile-member', [MemberController::class, 'index'])->name('profile.member');
 
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/update-image', [ProfileController::class, 'updateImage'])->name('profile.update.image');
-    Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
+    Route::get('/profile', [MemberController::class, 'index'])->name('member.index');
+    Route::put('/profile', [MemberController::class, 'update'])->name('member.update');
+    Route::put('/profile/image', [MemberController::class, 'updateImage'])->name('member.update.image');
+    Route::put('/profile/password', [MemberController::class, 'updatePassword'])->name('member.update.password');
 
     // Commented-out routes for non-existent controllers
     // Route::get('/exam-toefl', [MemberToeflExamController::class, 'startExam'])->name('exam.start');

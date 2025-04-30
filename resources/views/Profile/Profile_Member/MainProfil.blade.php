@@ -15,7 +15,7 @@
         body {
             background-color: #f4f6f9;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding-top: 70px; /* Add padding to account for fixed navbar height */
+            padding-top: 70px;
         }
         .profile-sidebar {
             background-color: #ffffff;
@@ -23,7 +23,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             position: sticky;
-            top: 80px; /* Adjust this value based on your navbar height + desired spacing */
+            top: 80px;
         }
         .profile-sidebar:hover {
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
@@ -135,21 +135,15 @@
         .content-section.active {
             display: block;
         }
-
-        /* Ensure navbar doesn't overlap content */
         .navbar {
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1030;
         }
-
-        /* Main container spacing */
         .main-container {
             margin-top: 20px;
         }
-
-        /* Profile image preview */
         .preview-container {
             width: 200px;
             height: 200px;
@@ -249,7 +243,7 @@
                 <div class="profile-sidebar p-4">
                     <!-- Profile Image -->
                     <div class="profile-image-container">
-                        <img src="{{ Auth::user()->profile_image ? asset('storage/profile_images/' . Auth::user()->profile_image) : 'https://via.placeholder.com/150' }}" alt="Profile Image" class="profile-image">
+                        <img src="{{ Auth::user()->getMemberInfo && Auth::user()->getMemberInfo->profile_image ? asset('storage/profile_images/' . Auth::user()->getMemberInfo->profile_image) : 'https://via.placeholder.com/150' }}" alt="Profile Image" class="profile-image">
                         <div class="edit-profile-image" data-bs-toggle="modal" data-bs-target="#changeProfileImageModal">
                             <i class="bi bi-camera-fill"></i>
                         </div>
@@ -370,7 +364,7 @@
                         <div class="row mb-4">
                             <div class="col-md-4 text-center">
                                 <div class="mb-3">
-                                    <img src="{{ Auth::user()->profile_image ? asset('storage/profile_images/' . Auth::user()->profile_image) : 'https://via.placeholder.com/150' }}"
+                                    <img src="{{ Auth::user()->getMemberInfo && Auth::user()->getMemberInfo->profile_image ? asset('storage/profile_images/' . Auth::user()->getMemberInfo->profile_image) : 'https://via.placeholder.com/150' }}"
                                          alt="Profile Image" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
                                 </div>
                                 <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#changeProfileImageModal">
@@ -378,7 +372,7 @@
                                 </button>
                             </div>
                             <div class="col-md-8">
-                                <form action="{{ route('profile.update') }}" method="POST">
+                                <form action="{{ route('member.update') }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-3">
@@ -408,7 +402,7 @@
                         <h3 class="mb-3">Ubah Password</h3>
                         <p class="text-muted mb-4">Pastikan password Anda kuat dan aman</p>
 
-                        <form action="{{ route('profile.update.password') }}" method="POST">
+                        <form action="{{ route('member.update.password') }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
@@ -432,7 +426,6 @@
                         <h3 class="mb-3">Pengaturan</h3>
                         <p class="text-muted mb-4">Kelola pengaturan akun Anda</p>
 
-                        <!-- Add settings content here -->
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Pengaturan Tampilan</h5>
@@ -453,7 +446,6 @@
                         <h3 class="mb-3">Notifikasi</h3>
                         <p class="text-muted mb-4">Kelola preferensi notifikasi Anda</p>
 
-                        <!-- Add notification settings here -->
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Preferensi Email</h5>
@@ -478,7 +470,6 @@
                         <h3 class="mb-3">Privasi</h3>
                         <p class="text-muted mb-4">Kelola pengaturan privasi Anda</p>
 
-                        <!-- Add privacy settings here -->
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Pengaturan Akun</h5>
@@ -511,12 +502,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('profile.update.image') }}" method="POST" enctype="multipart/form-data" id="modalProfileImageForm">
+                    <form action="{{ route('member.update.image') }}" method="POST" enctype="multipart/form-data" id="modalProfileImageForm">
                         @csrf
                         @method('PUT')
                         <div class="image-upload-container">
                             <div class="preview-container">
-                                <img id="modal-preview-image" src="{{ Auth::user()->profile_image ? asset('storage/profile_images/' . Auth::user()->profile_image) : 'https://via.placeholder.com/200' }}" class="preview-image" alt="Profile Image Preview">
+                                <img id="modal-preview-image" src="{{ Auth::user()->getMemberInfo && Auth::user()->getMemberInfo->profile_image ? asset('storage/profile_images/' . Auth::user()->getMemberInfo->profile_image) : 'https://via.placeholder.com/200' }}" class="preview-image" alt="Profile Image Preview">
                                 <div class="remove-image" id="modal-remove-image" style="display: none;">
                                     <i class="bi bi-x"></i>
                                 </div>
@@ -551,9 +542,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Fade in animation for content
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto-hide flash messages after 5 seconds
             setTimeout(function() {
                 const flashMessages = document.querySelectorAll('.alert-flash');
                 flashMessages.forEach(message => {
@@ -562,7 +551,6 @@
                 });
             }, 5000);
 
-            // Initial fade in
             setTimeout(function() {
                 const fadeElements = document.querySelectorAll('.fade-in');
                 fadeElements.forEach(element => {
@@ -570,45 +558,28 @@
                 });
             }, 200);
 
-            // Menu navigation
             const navLinks = document.querySelectorAll('.nav-link[data-section]');
-
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    // Remove active class from all links
-                    navLinks.forEach(item => {
-                        item.classList.remove('active');
-                    });
-
-                    // Add active class to clicked link
+                    navLinks.forEach(item => item.classList.remove('active'));
                     this.classList.add('active');
 
-                    // Get the section to show
                     const sectionId = this.getAttribute('data-section');
-
-                    // Hide all sections
                     const allSections = document.querySelectorAll('.content-section');
-                    allSections.forEach(section => {
-                        section.classList.remove('active');
-                    });
+                    allSections.forEach(section => section.classList.remove('active'));
 
-                    // Show selected section with animation
                     const contentElement = document.querySelector('.profile-content');
                     contentElement.style.opacity = '0';
 
                     setTimeout(function() {
-                        // Show the selected section
                         const activeSection = document.getElementById(sectionId + '-section');
                         activeSection.classList.add('active');
-
-                        // Fade in the content
                         contentElement.style.opacity = '1';
                     }, 300);
                 });
             });
 
-            // Subtle animation for sidebar items on hover
             const sidebarItems = document.querySelectorAll('.profile-nav .nav-link');
             sidebarItems.forEach(item => {
                 item.addEventListener('mouseenter', function() {
@@ -621,7 +592,6 @@
                 });
             });
 
-            // Modal profile image preview
             const modalProfileImageInput = document.getElementById('modal-profile-image-input');
             const modalPreviewImage = document.getElementById('modal-preview-image');
             const modalFileSelectedName = document.getElementById('modal-file-selected-name');
@@ -632,21 +602,19 @@
             modalProfileImageInput.addEventListener('change', function() {
                 if (this.files && this.files[0]) {
                     const reader = new FileReader();
-
                     reader.onload = function(e) {
                         modalPreviewImage.src = e.target.result;
                         modalFileSelectedName.style.display = 'block';
                         modalSelectedFileName.textContent = modalProfileImageInput.files[0].name;
                         modalRemoveImage.style.display = 'flex';
-                    }
-
+                    };
                     reader.readAsDataURL(this.files[0]);
                 }
             });
 
             modalRemoveImage.addEventListener('click', function() {
                 modalProfileImageInput.value = '';
-                modalPreviewImage.src = "{{ Auth::user()->profile_image ? asset('storage/profile_images/' . Auth::user()->profile_image) : 'https://via.placeholder.com/200' }}";
+                modalPreviewImage.src = "{{ Auth::user()->getMemberInfo && Auth::user()->getMemberInfo->profile_image ? asset('storage/profile_images/' . Auth::user()->getMemberInfo->profile_image) : 'https://via.placeholder.com/200' }}";
                 modalFileSelectedName.style.display = 'none';
                 modalRemoveImage.style.display = 'none';
             });

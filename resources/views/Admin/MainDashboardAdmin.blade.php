@@ -368,8 +368,8 @@
                             <img src="{{ asset('storage/' . Auth::user()->getAdminInfo->profile_image) }}" alt="Admin Profile">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Admin Profile</a></li>
-                            <li><a class="dropdown-item" href="#">System Settings</a></li>
+                            {{-- <li><a class="dropdown-item" href="#">Admin Profile</a></li>
+                            <li><a class="dropdown-item" href="#">System Settings</a></li> --}}
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
