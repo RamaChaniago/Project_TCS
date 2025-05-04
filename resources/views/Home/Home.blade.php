@@ -288,7 +288,6 @@
         </div>
     </section>
 
-    <!-- Lembaga dan Instansi -->
     <!-- Partners Section -->
     <section class="partners-section py-5">
         <div class="container py-4">
