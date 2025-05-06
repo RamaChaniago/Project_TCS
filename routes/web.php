@@ -12,6 +12,8 @@ use App\Http\Controllers\KarirController;
 use App\Http\Controllers\LearningPackageController;
 use App\Http\Controllers\LiveClassesController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberScoreExamController;
+use App\Http\Controllers\MemberToeflExamController;
 use App\Http\Controllers\OneOnOneController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\SmartBookController;
@@ -120,13 +122,18 @@ Route::middleware(['auth', 'cekRole:admin,member'])->group(function () {
     Route::put('/profile/password', [MemberController::class, 'updatePassword'])->name('member.update.password');
 
     // Commented-out routes for non-existent controllers
-    // Route::get('/exam-toefl', [MemberToeflExamController::class, 'startExam'])->name('exam.start');
-    // Route::post('/exam-toefl/submit', [MemberToeflExamController::class, 'submitExam'])->name('exam.submit');
+    Route::get('/exam-toefl', [MemberToeflExamController::class, 'index'])->name('exam');
+    Route::get('/exam-toefl/{id}', [MemberToeflExamController::class, 'show']);
+    Route::get('/exam-toefl/submit', [MemberToeflExamController::class, 'submitExam'])->name('exam.submit');
     // Route::get('/payment', [BayarController::class, 'index'])->name('payment.index');
     // Route::post('/payment', [BayarController::class, 'store'])->name('payment.store');
     // Route::post('/payment/check-status', [BayarController::class, 'checkStatus'])->name('payment.checkStatus');
     // Route::post('/payment/mark-paid', [BayarController::class, 'markPaid'])->name('payment.markPaid');
     // Route::get('/payment/success', [BayarController::class, 'success'])->name('payment.success');
+
+
+    Route::get('/exam-toefl/result', [MemberScoreExamController::class, 'index'])->name('result');     //hapus jika ada login id
+    // Route::get('/exam-toefl/{id}/result', [MemberScoreExamController::class, 'index'])->name('result');
 });
 
 // ------------------ Admin Routes ------------------ //
