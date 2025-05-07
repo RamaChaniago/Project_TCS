@@ -21,11 +21,11 @@ Certification Tests
             <div class="border-bottom p-4">
                 <div class="d-flex justify-content-between mb-2">
                     <div class="text-muted">
-                        <i class="bi bi-calendar3 me-1"></i> Completed: 15 Maret 2025
+                        <i class="bi bi-calendar3 me-1"></i> Started: 15 Maret 2025
                     </div>
                     <div>
-                        <span class="badge bg-success text-white">
-                            <i class="bi bi-check-circle me-1"></i> Passed
+                        <span class="badge bg-info text-white">
+                            <i class="bi bi-hourglass-split me-1"></i> In Progress
                         </span>
                     </div>
                 </div>
@@ -37,16 +37,16 @@ Certification Tests
                     </div>
                     <div class="flex-grow-1 mb-2">
                         <h6 class="mb-1">TOEFL Certification Test</h6>
-                        <div class="text-muted small mb-1">Score: 92/120</div>
+                        <div class="text-muted small mb-1">Progress: 2 of 4 sections completed</div>
                         <div class="progress" style="height: 6px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 76%;" 
-                                 aria-valuenow="76" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%;"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <div class="text-muted small mt-1">Performance: 76%</div>
+                        <div class="text-muted small mt-1">Completion: 50%</div>
                     </div>
                     <div class="d-flex flex-column align-items-end justify-content-between">
-                        <a href="#" class="btn btn-primary rounded-pill mb-2">
-                            <i class="bi bi-file-earmark-pdf me-1"></i> Download Certificate
+                        <a href="/exam-toefl" class="btn btn-primary rounded-pill mb-2">
+                            <i class="bi bi-arrow-right-circle me-1"></i> Continue the Test
                         </a>
                         <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill">
                             <i class="bi bi-eye me-1"></i> Test Details
@@ -62,8 +62,8 @@ Certification Tests
                         <i class="bi bi-calendar3 me-1"></i> Completed: 10 Februari 2025
                     </div>
                     <div>
-                        <span class="badge bg-warning text-white">
-                            <i class="bi bi-exclamation-triangle me-1"></i> Pending
+                        <span class="badge bg-success text-white">
+                            <i class="bi bi-check-circle me-1"></i> Completed
                         </span>
                     </div>
                 </div>
@@ -75,16 +75,92 @@ Certification Tests
                     </div>
                     <div class="flex-grow-1 mb-2">
                         <h6 class="mb-1">IELTS Academic Test</h6>
-                        <div class="text-muted small mb-1">Waiting for Results</div>
+                        <div class="text-muted small mb-1">Score: 7.5/9.0</div>
                         <div class="progress" style="height: 6px;">
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: 50%;" 
-                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 83%;"
+                                 aria-valuenow="83" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <div class="text-muted small mt-1">Processing: 50%</div>
+                        <div class="text-muted small mt-1">Performance: 83%</div>
                     </div>
                     <div class="d-flex flex-column align-items-end justify-content-between">
-                        <span class="btn btn-outline-secondary rounded-pill mb-2 disabled">
-                            <i class="bi bi-file-earmark-pdf me-1"></i> Certificate Pending
+                        <a href="#" class="btn btn-success rounded-pill mb-2">
+                            <i class="bi bi-download me-1"></i> Download Certificate
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill">
+                            <i class="bi bi-eye me-1"></i> Test Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Third Test Entry (Not Started) -->
+            <div class="border-bottom p-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <div class="text-muted">
+                        <i class="bi bi-calendar3 me-1"></i> Registered: 25 April 2025
+                    </div>
+                    <div>
+                        <span class="badge bg-secondary text-white">
+                            <i class="bi bi-clock-history me-1"></i> Not Started
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap align-items-center">
+                    <div class="me-3 mb-2">
+                        <img src="images/pte-cert.jpg" alt="PTE Certification"
+                             class="rounded" width="100" height="80"
+                             style="object-fit: cover; background-color: #f0f0f0;">
+                    </div>
+                    <div class="flex-grow-1 mb-2">
+                        <h6 class="mb-1">PTE Academic Test</h6>
+                        <div class="text-muted small mb-1">Scheduled: 10 Mei 2025</div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%;"
+                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="text-muted small mt-1">Status: Ready to start</div>
+                    </div>
+                    <div class="d-flex flex-column align-items-end justify-content-between">
+                        <a href="#" class="btn btn-primary rounded-pill mb-2">
+                            <i class="bi bi-play-circle me-1"></i> Start Test
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill">
+                            <i class="bi bi-eye me-1"></i> Test Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fourth Test Entry (Pending Review) -->
+            <div class="border-bottom p-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <div class="text-muted">
+                        <i class="bi bi-calendar3 me-1"></i> Completed: 2 April 2025
+                    </div>
+                    <div>
+                        <span class="badge bg-warning text-white">
+                            <i class="bi bi-exclamation-triangle me-1"></i> Pending Review
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap align-items-center">
+                    <div class="me-3 mb-2">
+                        <img src="images/duolingo-cert.jpg" alt="Duolingo Certification"
+                             class="rounded" width="100" height="80"
+                             style="object-fit: cover; background-color: #f0f0f0;">
+                    </div>
+                    <div class="flex-grow-1 mb-2">
+                        <h6 class="mb-1">Duolingo English Test</h6>
+                        <div class="text-muted small mb-1">Awaiting Results</div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%;"
+                                 aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="text-muted small mt-1">Processing: 75%</div>
+                    </div>
+                    <div class="d-flex flex-column align-items-end justify-content-between">
+                        <span class="btn btn-warning rounded-pill mb-2 disabled">
+                            <i class="bi bi-hourglass me-1"></i> Results Processing
                         </span>
                         <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill">
                             <i class="bi bi-eye me-1"></i> Test Details
@@ -146,7 +222,50 @@ Certification Tests
                             <div class="fw-bold text-primary mb-2">Rp 2.200.000</div>
                         </div>
                         <a href="#" class="btn btn-primary rounded-pill">
-                            <i class="bi bi-pencil-square me-1"></i> Register for Test
+                            <i class="bi bi-plus-circle me-1"></i> Register for Test
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Another Available Test -->
+            <div class="border-bottom p-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <div>
+                        <h5 class="fw-bold mb-0">Cambridge C1 Advanced</h5>
+                    </div>
+                    <div>
+                        <span class="badge bg-success text-white">
+                            <i class="bi bi-patch-check-fill me-1"></i> Popular
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="me-3 mb-2">
+                        <img src="images/cambridge-test.jpg" alt="Cambridge Test"
+                             class="rounded" width="120" height="90"
+                             style="object-fit: cover; background-color: #f0f0f0;">
+                    </div>
+                    <div class="flex-grow-1 mb-2">
+                        <div class="text-muted mb-2">High-level qualification showing advanced English ability for academic or professional settings.</div>
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <div class="badge bg-light text-dark">
+                                <i class="bi bi-clock me-1"></i> 3.5 Hours Duration
+                            </div>
+                            <div class="badge bg-light text-dark">
+                                <i class="bi bi-bar-chart me-1"></i> 5 Sections
+                            </div>
+                            <div class="badge bg-light text-dark">
+                                <i class="bi bi-mortarboard me-1"></i> University Accepted
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column align-items-end justify-content-between">
+                        <div class="text-end">
+                            <div class="fw-bold text-primary mb-2">Rp 2.750.000</div>
+                        </div>
+                        <a href="#" class="btn btn-primary rounded-pill">
+                            <i class="bi bi-plus-circle me-1"></i> Register for Test
                         </a>
                     </div>
                 </div>
