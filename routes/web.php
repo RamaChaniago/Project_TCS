@@ -131,9 +131,17 @@ Route::middleware(['auth', 'cekRole:admin,member'])->group(function () {
     // Route::post('/payment/mark-paid', [BayarController::class, 'markPaid'])->name('payment.markPaid');
     // Route::get('/payment/success', [BayarController::class, 'success'])->name('payment.success');
 
+    // ========================================================================================================================================================
+    // = Route::get('/exam-toefl/result', [MemberScoreExamController::class, 'index'])->name('result');     //hapus jika ada login id                         = 
+    // = Route::post('/exam-toefl/result', [MemberScoreExamController::class, 'store'])->name('result_store');                                                =
+    // ========================================================================================================================================================
+    
 
-    Route::get('/exam-toefl/result', [MemberScoreExamController::class, 'index'])->name('result');     //hapus jika ada login id
+
+
+
     // Route::get('/exam-toefl/{id}/result', [MemberScoreExamController::class, 'index'])->name('result');
+
 });
 
 // ------------------ Admin Routes ------------------ //
